@@ -14930,6 +14930,9 @@ var Game = exports.Game = {
     for (var i = 0; i < 10; i++) {
       d.drawText(5, i + 5, "hello world");
     }
+    for (var _i = 5; _i < 10; _i++) {
+      d.drawText(11, _i + 5, "Chewie");
+    }
   }
 
 };

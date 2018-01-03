@@ -42,7 +42,10 @@ export let Game = {
     for (let i = 0; i < 10; i++) {
       d.drawText(5,i+5,"hello world");
     }
-  },
+    for (let i = 5; i < 10; i++) {
+      d.drawText(11,i+5,"Chewie");
+    }
+  }
 
 };
 
