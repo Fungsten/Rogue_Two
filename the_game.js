@@ -9355,7 +9355,7 @@ var _game = __webpack_require__(330);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 window.onload = function () {
-  console.log("starting WSRL - window loaded");
+  console.log("starting RTRL - window loaded");
   // Check if rot.js can work on this browser
   if (!_rotJs2.default.isSupported()) {
     alert("The rot.js library isn't supported by your browser.");
@@ -9365,7 +9365,13 @@ window.onload = function () {
   _game.Game.init();
 
   // Add the containers to our HTML page
+  document.getElementById('ws-avatar-display').appendChild(_game.Game.getDisplay('main').getContainer());
   document.getElementById('ws-main-display').appendChild(_game.Game.getDisplay('main').getContainer());
+  document.getElementById('ws-message-display').appendChild(_game.Game.getDisplay('main').getContainer());
+
+  _game.Game.bindEvent('keypress');
+  _game.Game.bindEvent('keydown');
+  _game.Game.bindEvent('keyup');
 
   _game.Game.render();
 };
@@ -14897,8 +14903,8 @@ var Game = exports.Game = {
   display: {
     SPACING: 1.1,
     main: {
-      w: 200,
-      h: 32,
+      w: 150,
+      h: 40,
       o: null
     }
   },
@@ -14927,10 +14933,10 @@ var Game = exports.Game = {
   },
 
   setupModes: function setupModes() {
-    this.modes.startup = new _ui_mode.StartupMode();
-    this.modes.play = new _ui_mode.PlayMode();
-    this.modes.lose = new _ui_mode.LoseMode();
-    this.modes.win = new _ui_mode.WinMode();
+    this.modes.startup = new _ui_mode.StartupMode(this);
+    this.modes.play = new _ui_mode.PlayMode(this);
+    this.modes.lose = new _ui_mode.LoseMode(this);
+    this.modes.win = new _ui_mode.WinMode(this);
   },
 
   switchMode: function switchMode(newModeName) {
@@ -14952,7 +14958,7 @@ var Game = exports.Game = {
 
   render: function render() {
     this.renderMain();
-    U.existentialCrisis();
+    //U.existentialCrisis();
   },
 
   renderMain: function renderMain() {
@@ -14980,10 +14986,10 @@ var Game = exports.Game = {
 
   eventHandler: function eventHandler(eventType, evt) {
     // When an event is received have the current ui handle it
-    if (this._curMode !== null && this._curMode != '') {
-      if (this._curMode.handleInput(eventType, evt)) {
+    if (this.curMode !== null && this.curMode != '') {
+      if (this.curMode.handleInput(eventType, evt)) {
         this.render();
-        Message.ageMessages();
+        //Message.ageMessages();
       }
     }
   }
@@ -15038,10 +15044,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 //text
 var UIMode = function () {
-  function UIMode() {
+  function UIMode(thegame) {
     _classCallCheck(this, UIMode);
 
     console.log("created " + this.constructor.name);
+    this.game = thegame;
   }
 
   _createClass(UIMode, [{
@@ -15058,8 +15065,11 @@ var UIMode = function () {
 
   }, {
     key: "handleInput",
-    value: function handleInput() {
+    value: function handleInput(eventType, evt) {
       console.log("handling input for " + this.constructor.name);
+      console.log("event type is " + eventType);
+      console.dir(evt);
+      return false;
     } //take input from user / player
 
   }, {
@@ -15077,15 +15087,16 @@ var UIMode = function () {
 var StartupMode = exports.StartupMode = function (_UIMode) {
   _inherits(StartupMode, _UIMode);
 
-  //defines how an object exists
   function StartupMode() {
     _classCallCheck(this, StartupMode);
 
-    return _possibleConstructorReturn(this, (StartupMode.__proto__ || Object.getPrototypeOf(StartupMode)).call(this)); //access the class's parents with super()
+    return _possibleConstructorReturn(this, (StartupMode.__proto__ || Object.getPrototypeOf(StartupMode)).apply(this, arguments));
   }
 
   _createClass(StartupMode, [{
     key: "render",
+    //defines how an object exists
+
     value: function render(display) {
       display.drawText(2, 3, "Welcome to ");
       display.drawText(2, 5, "____    __    ____  __    __       ___   .___________.        ___      .______     ______    __    __  .___________.          ");
@@ -15115,6 +15126,16 @@ var StartupMode = exports.StartupMode = function (_UIMode) {
       display.drawText(4, 29, "  \\            /  |  |  |  | |  |  |  | |    <   |  | |   __|     \\   \\                                                       ");
       display.drawText(5, 30, "   \\    /\\    /   |  `--'  | |  `--'  | |  .  \\  |  | |  |____.----)   |                                                      ");
       display.drawText(6, 31, "    \\__/  \\__/     \\______/   \\______/  |__|\\__\\ |__| |_______|_______/                                                       ");
+      display.drawText(6, 33, "Press any key to continue");
+    }
+  }, {
+    key: "handleInput",
+    value: function handleInput(eventType, evt) {
+      if (eventType == "keyup") {
+        console.dir(this);
+        this.game.switchMode('play');
+        return true;
+      }
     }
   }]);
 
@@ -15127,13 +15148,29 @@ var PlayMode = exports.PlayMode = function (_UIMode2) {
   function PlayMode() {
     _classCallCheck(this, PlayMode);
 
-    return _possibleConstructorReturn(this, (PlayMode.__proto__ || Object.getPrototypeOf(PlayMode)).call(this));
+    return _possibleConstructorReturn(this, (PlayMode.__proto__ || Object.getPrototypeOf(PlayMode)).apply(this, arguments));
   }
 
   _createClass(PlayMode, [{
     key: "render",
     value: function render(display) {
-      display.drawText(0, 0, "GAME IN PROGRESS");
+      display.clear();
+      display.drawText(4, 4, "GAME IN PROGRESS");
+      display.drawText(4, 5, "PRESS W TO WIN, L TO LOSE");
+    }
+  }, {
+    key: "handleInput",
+    value: function handleInput(eventType, evt) {
+      if (evt.key == 'l') {
+        console.dir(this);
+        this.game.switchMode('lose');
+        return true;
+      }
+      if (evt.key == 'w') {
+        console.dir(this);
+        this.game.switchMode('win');
+        return true;
+      }
     }
   }]);
 
@@ -15147,13 +15184,14 @@ var LoseMode = exports.LoseMode = function (_UIMode3) {
   function LoseMode() {
     _classCallCheck(this, LoseMode);
 
-    return _possibleConstructorReturn(this, (LoseMode.__proto__ || Object.getPrototypeOf(LoseMode)).call(this));
+    return _possibleConstructorReturn(this, (LoseMode.__proto__ || Object.getPrototypeOf(LoseMode)).apply(this, arguments));
   }
 
   _createClass(LoseMode, [{
     key: "render",
     value: function render(display) {
-      display.drawText(3, 3, "YOU LOSE. GOOD DAY.");
+      display.clear();
+      display.drawText(4, 4, "YOU LOSE. GOOD DAY.");
     }
   }]);
 
@@ -15166,13 +15204,14 @@ var WinMode = exports.WinMode = function (_UIMode4) {
   function WinMode() {
     _classCallCheck(this, WinMode);
 
-    return _possibleConstructorReturn(this, (WinMode.__proto__ || Object.getPrototypeOf(WinMode)).call(this));
+    return _possibleConstructorReturn(this, (WinMode.__proto__ || Object.getPrototypeOf(WinMode)).apply(this, arguments));
   }
 
   _createClass(WinMode, [{
     key: "render",
     value: function render(display) {
-      display.drawText(3, 3, "A WINNER IS YOU");
+      display.clear();
+      display.drawText(4, 4, "A WINNER IS YOU");
     }
   }]);
 

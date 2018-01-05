@@ -10,8 +10,8 @@ export let Game = {
   display: {
     SPACING: 1.1,
     main: {
-      w: 200,
-      h: 32,
+      w: 150,
+      h: 40,
       o: null
     }
   },
@@ -41,10 +41,10 @@ export let Game = {
   },
 
   setupModes: function() {
-    this.modes.startup = new StartupMode();
-    this.modes.play = new PlayMode();
-    this.modes.lose = new LoseMode();
-    this.modes.win = new WinMode();
+    this.modes.startup = new StartupMode(this);
+    this.modes.play = new PlayMode(this);
+    this.modes.lose = new LoseMode(this);
+    this.modes.win = new WinMode(this);
   },
 
 
@@ -67,7 +67,7 @@ export let Game = {
 
   render: function() {
     this.renderMain();
-    U.existentialCrisis();
+    //U.existentialCrisis();
   },
 
   renderMain: function() {
@@ -93,10 +93,10 @@ export let Game = {
 
   eventHandler: function (eventType, evt) {
       // When an event is received have the current ui handle it
-      if (this._curMode !== null && this._curMode != '') {
-        if (this._curMode.handleInput(eventType, evt)) {
+      if (this.curMode !== null && this.curMode != '') {
+        if (this.curMode.handleInput(eventType, evt)) {
           this.render();
-          Message.ageMessages();
+          //Message.ageMessages();
         }
       }
   }
