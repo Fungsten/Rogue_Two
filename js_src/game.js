@@ -1,5 +1,9 @@
 import * as U from './util.js';
 import ROT from 'rot-js';
+import {StartupMode} from './ui_mode.js';
+import {PlayMode} from './ui_mode.js';
+import {LoseMode} from './ui_mode.js';
+import {WinMode} from './ui_mode.js';
 
 export let Game = {
 
@@ -12,6 +16,13 @@ export let Game = {
     }
   },
 
+  modes: {
+    startup: '',
+    curMode: ''
+  },
+
+
+
   init: function() {
     this._randomSeed = 5 + Math.floor(Math.random()*100000);
     //this._randomSeed = 76250;
@@ -22,8 +33,33 @@ export let Game = {
       width: this.display.main.w,
       height: this.display.main.h,
       spacing: this.display.SPACING});
+
+    this.setupModes();
+
+    this.switchMode("startup");
+    this.switchMode("play");
+    this.switchMode("lose");
+    this.switchMode("win");
+
   },
 
+  setupModes: function() {
+    this.modes.startup = new StartupMode();
+    this.modes.play = new PlayMode();
+    this.modes.lose = new LoseMode();
+    this.modes.win = new WinMode();
+  },
+
+
+  switchMode: function(newModeName) {
+    if (this.curMode) {
+      this.curMode.exit();
+    }
+    this.curMode = this.modes[newModeName];
+    if (this.curMode) {
+      this.curMode.enter();
+    }
+  },
 
   getDisplay: function (displayId) {
     if (this.display.hasOwnProperty(displayId)) {
@@ -38,13 +74,18 @@ export let Game = {
   },
 
   renderMain: function() {
-    let d = this.display.main.o;
-    for (let i = 0; i < 10; i++) {
-      d.drawText(5,i+5,"hello world");
-    }
-    for (let i = 5; i < 10; i++) {
-      d.drawText(11,i+5,"Chewie");
-    }
+    console.log("renderMain");
+
+    //if (this.curMode.hasOwnProperty('render')) {
+      this.curMode.render(this.display.main.o);
+    //}
+    // let d = this.display.main.o;
+    // for (let i = 0; i < 10; i++) {
+    //   d.drawText(5,i+5,"hello world");
+    // }
+    // for (let i = 5; i < 10; i++) {
+    //   d.drawText(11,i+5,"Chewie");
+    // }
   }
 
 };
