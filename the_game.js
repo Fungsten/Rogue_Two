@@ -14886,6 +14886,8 @@ var _rotJs = __webpack_require__(125);
 
 var _rotJs2 = _interopRequireDefault(_rotJs);
 
+var _ui_mode = __webpack_require__(332);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
@@ -14895,10 +14897,14 @@ var Game = exports.Game = {
   display: {
     SPACING: 1.1,
     main: {
-      w: 80,
-      h: 24,
+      w: 200,
+      h: 32,
       o: null
     }
+  },
+  modes: {
+    startup: '',
+    curMode: ''
   },
 
   init: function init() {
@@ -14911,6 +14917,30 @@ var Game = exports.Game = {
       width: this.display.main.w,
       height: this.display.main.h,
       spacing: this.display.SPACING });
+
+    this.setupModes();
+
+    this.switchMode("startup");
+    // this.switchMode("play");
+    // this.switchMode("lose");
+    // this.switchMode("win");
+  },
+
+  setupModes: function setupModes() {
+    this.modes.startup = new _ui_mode.StartupMode();
+    this.modes.play = new _ui_mode.PlayMode();
+    this.modes.lose = new _ui_mode.LoseMode();
+    this.modes.win = new _ui_mode.WinMode();
+  },
+
+  switchMode: function switchMode(newModeName) {
+    if (this.curMode) {
+      this.curMode.exit();
+    }
+    this.curMode = this.modes[newModeName];
+    if (this.curMode) {
+      this.curMode.enter();
+    }
   },
 
   getDisplay: function getDisplay(displayId) {
@@ -14926,12 +14956,35 @@ var Game = exports.Game = {
   },
 
   renderMain: function renderMain() {
-    var d = this.display.main.o;
-    for (var i = 0; i < 10; i++) {
-      d.drawText(5, i + 5, "hello world");
-    }
-    for (var _i = 5; _i < 10; _i++) {
-      d.drawText(11, _i + 5, "Chewie");
+    console.log("renderMain");
+
+    //if (this.curMode.hasOwnProperty('render')) {
+    this.curMode.render(this.display.main.o);
+    //}
+    // let d = this.display.main.o;
+    // for (let i = 0; i < 10; i++) {
+    //   d.drawText(5,i+5,"hello world");
+    // }
+    // for (let i = 5; i < 10; i++) {
+    //   d.drawText(11,i+5,"Chewie");
+    // }
+  },
+
+  bindEvent: function bindEvent(eventType) {
+    var _this = this;
+
+    window.addEventListener(eventType, function (evt) {
+      _this.eventHandler(eventType, evt);
+    });
+  },
+
+  eventHandler: function eventHandler(eventType, evt) {
+    // When an event is received have the current ui handle it
+    if (this._curMode !== null && this._curMode != '') {
+      if (this._curMode.handleInput(eventType, evt)) {
+        this.render();
+        Message.ageMessages();
+      }
     }
   }
 
@@ -14963,6 +15016,168 @@ function utilAlert() {
 function existentialCrisis() {
   console.log("please work or else this will be the end of me");
 }
+
+/***/ }),
+/* 332 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+//text
+var UIMode = function () {
+  function UIMode() {
+    _classCallCheck(this, UIMode);
+
+    console.log("created " + this.constructor.name);
+  }
+
+  _createClass(UIMode, [{
+    key: "enter",
+    value: function enter() {
+      console.log("entered " + this.constructor.name);
+    } //do something when entering this state
+
+  }, {
+    key: "exit",
+    value: function exit() {
+      console.log("exitted " + this.constructor.name);
+    } //do something when leaving this state
+
+  }, {
+    key: "handleInput",
+    value: function handleInput() {
+      console.log("handling input for " + this.constructor.name);
+    } //take input from user / player
+
+  }, {
+    key: "render",
+    value: function render(display) {
+      console.log("rendering " + this.constructor.name);
+      display.drawText(2, 2, "rendering " + this.constructor.name);
+    } //render
+
+  }]);
+
+  return UIMode;
+}();
+
+var StartupMode = exports.StartupMode = function (_UIMode) {
+  _inherits(StartupMode, _UIMode);
+
+  //defines how an object exists
+  function StartupMode() {
+    _classCallCheck(this, StartupMode);
+
+    return _possibleConstructorReturn(this, (StartupMode.__proto__ || Object.getPrototypeOf(StartupMode)).call(this)); //access the class's parents with super()
+  }
+
+  _createClass(StartupMode, [{
+    key: "render",
+    value: function render(display) {
+      display.drawText(2, 3, "Welcome to ");
+      display.drawText(2, 5, "____    __    ____  __    __       ___   .___________.        ___      .______     ______    __    __  .___________.          ");
+      display.drawText(2, 6, "\\   \\  /  \\  /   / |  |  |  |     /   \\  |           |       /   \\     |   _  \\   /  __  \\  |  |  |  | |           |          ");
+      display.drawText(3, 7, " \\   \\/    \\/   /  |  |__|  |    /  ^  \\ `---|  |----`      /  ^  \\    |  |_)  | |  |  |  | |  |  |  | `---|  |----`          ");
+      display.drawText(4, 8, "  \\            /   |   __   |   /  /_\\  \\    |  |          /  /_\\  \\   |   _  <  |  |  |  | |  |  |  |     |  |               ");
+      display.drawText(5, 9, "   \\    /\\    /    |  |  |  |  /  _____  \\   |  |         /  _____  \\  |  |_)  | |  `--'  | |  `--'  |     |  |               ");
+      display.drawText(6, 10, "    \\__/  \\__/     |__|  |__| /__/     \\__\\  |__|        /__/     \\__\\ |______/   \\______/   \\______/      |__|               ");
+      display.drawText(2, 11, "                                                                                                                              ");
+      display.drawText(2, 12, ".___________. __    __   _______     _______  .______        ______    __   _______                                           ");
+      display.drawText(2, 13, "|           ||  |  |  | |   ____|   |       \\ |   _  \\      /  __  \\  |  | |       \\                                          ");
+      display.drawText(2, 14, "`---|  |----`|  |__|  | |  |__      |  .--.  ||  |_)  |    |  |  |  | |  | |  .--.  |                                         ");
+      display.drawText(6, 15, "    |  |     |   __   | |   __|     |  |  |  ||      /     |  |  |  | |  | |  |  |  |                                         ");
+      display.drawText(6, 16, "    |  |     |  |  |  | |  |____    |  '--'  ||  |\\  \\----.|  `--'  | |  | |  '--'  |                                         ");
+      display.drawText(6, 17, "    |__|     |__|  |__| |_______|   |_______/ | _| `._____| \\______/  |__| |_______/                                          ");
+      display.drawText(2, 18, "                                                                                                                              ");
+      display.drawText(7, 19, "     ___   .___________.___________.    ___       ______  __  ___      ______   .__   __.    .___________. __    __   _______ ");
+      display.drawText(6, 20, "    /   \\  |           |           |   /   \\     /      ||  |/  /     /  __  \\  |  \\ |  |    |           ||  |  |  | |   ____|");
+      display.drawText(5, 21, "   /  ^  \\ `---|  |----`---|  |----`  /  ^  \\   |  ,----'|  '  /     |  |  |  | |   \\|  |    `---|  |----`|  |__|  | |  |__   ");
+      display.drawText(4, 22, "  /  /_\\  \\    |  |        |  |      /  /_\\  \\  |  |     |    <      |  |  |  | |  . `  |        |  |     |   __   | |   __|  ");
+      display.drawText(3, 23, " /  _____  \\   |  |        |  |     /  _____  \\ |  `----.|  .  \\     |  `--'  | |  |\\   |        |  |     |  |  |  | |  |____ ");
+      display.drawText(2, 24, "/__/     \\__\\  |__|        |__|    /__/     \\__\\ \\______||__|\\__\\     \\______/  |__| \\__|        |__|     |__|  |__| |_______|");
+      display.drawText(2, 25, "                                                                                                                              ");
+      display.drawText(2, 26, "____    __    ____  ______     ______    __  ___  __   _______     _______.                                                   ");
+      display.drawText(2, 27, "\\   \\  /  \\  /   / /  __  \\   /  __  \\  |  |/  / |  | |   ____|   /       |                                                   ");
+      display.drawText(3, 28, " \\   \\/    \\/   / |  |  |  | |  |  |  | |  '  /  |  | |  |__     |   (----`                                                   ");
+      display.drawText(4, 29, "  \\            /  |  |  |  | |  |  |  | |    <   |  | |   __|     \\   \\                                                       ");
+      display.drawText(5, 30, "   \\    /\\    /   |  `--'  | |  `--'  | |  .  \\  |  | |  |____.----)   |                                                      ");
+      display.drawText(6, 31, "    \\__/  \\__/     \\______/   \\______/  |__|\\__\\ |__| |_______|_______/                                                       ");
+    }
+  }]);
+
+  return StartupMode;
+}(UIMode);
+
+var PlayMode = exports.PlayMode = function (_UIMode2) {
+  _inherits(PlayMode, _UIMode2);
+
+  function PlayMode() {
+    _classCallCheck(this, PlayMode);
+
+    return _possibleConstructorReturn(this, (PlayMode.__proto__ || Object.getPrototypeOf(PlayMode)).call(this));
+  }
+
+  _createClass(PlayMode, [{
+    key: "render",
+    value: function render(display) {
+      display.drawText(0, 0, "GAME IN PROGRESS");
+    }
+  }]);
+
+  return PlayMode;
+}(UIMode);
+//don't need to export parent classes to export subclasses
+
+var LoseMode = exports.LoseMode = function (_UIMode3) {
+  _inherits(LoseMode, _UIMode3);
+
+  function LoseMode() {
+    _classCallCheck(this, LoseMode);
+
+    return _possibleConstructorReturn(this, (LoseMode.__proto__ || Object.getPrototypeOf(LoseMode)).call(this));
+  }
+
+  _createClass(LoseMode, [{
+    key: "render",
+    value: function render(display) {
+      display.drawText(3, 3, "YOU LOSE. GOOD DAY.");
+    }
+  }]);
+
+  return LoseMode;
+}(UIMode);
+
+var WinMode = exports.WinMode = function (_UIMode4) {
+  _inherits(WinMode, _UIMode4);
+
+  function WinMode() {
+    _classCallCheck(this, WinMode);
+
+    return _possibleConstructorReturn(this, (WinMode.__proto__ || Object.getPrototypeOf(WinMode)).call(this));
+  }
+
+  _createClass(WinMode, [{
+    key: "render",
+    value: function render(display) {
+      display.drawText(3, 3, "A WINNER IS YOU");
+    }
+  }]);
+
+  return WinMode;
+}(UIMode);
 
 /***/ })
 /******/ ]);

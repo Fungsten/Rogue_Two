@@ -10,18 +10,15 @@ export let Game = {
   display: {
     SPACING: 1.1,
     main: {
-      w: 80,
-      h: 24,
+      w: 200,
+      h: 32,
       o: null
     }
   },
-
   modes: {
     startup: '',
     curMode: ''
   },
-
-
 
   init: function() {
     this._randomSeed = 5 + Math.floor(Math.random()*100000);
@@ -37,9 +34,9 @@ export let Game = {
     this.setupModes();
 
     this.switchMode("startup");
-    this.switchMode("play");
-    this.switchMode("lose");
-    this.switchMode("win");
+    // this.switchMode("play");
+    // this.switchMode("lose");
+    // this.switchMode("win");
 
   },
 
@@ -86,10 +83,25 @@ export let Game = {
     // for (let i = 5; i < 10; i++) {
     //   d.drawText(11,i+5,"Chewie");
     // }
+  },
+
+  bindEvent: function(eventType) {
+      window.addEventListener(eventType, (evt) => {
+        this.eventHandler(eventType, evt);
+      });
+  },
+
+  eventHandler: function (eventType, evt) {
+      // When an event is received have the current ui handle it
+      if (this._curMode !== null && this._curMode != '') {
+        if (this._curMode.handleInput(eventType, evt)) {
+          this.render();
+          Message.ageMessages();
+        }
+      }
   }
 
 };
-
 
 
 
