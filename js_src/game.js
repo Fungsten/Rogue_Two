@@ -10,10 +10,21 @@ export let Game = {
   display: {
     SPACING: 1.1,
     main: {
-      w: 150,
+      w: 140,
       h: 40,
       o: null
+    },
+    avatar: {
+      w: 20,
+      h: 40,
+      o: null
+    },
+    message: {
+      w: 160,
+      h: 6,
+      o: null
     }
+
   },
   modes: {
     startup: '',
@@ -30,6 +41,16 @@ export let Game = {
       width: this.display.main.w,
       height: this.display.main.h,
       spacing: this.display.SPACING});
+
+    this.display.avatar.o = new ROT.Display({
+     width: this.display.avatar.w,
+     height: this.display.avatar.h,
+     spacing: this.display.SPACING});
+
+    this.display.message.o = new ROT.Display({
+     width: this.display.message.w,
+     height: this.display.message.h,
+     spacing: this.display.SPACING});
 
     this.setupModes();
 
@@ -83,6 +104,22 @@ export let Game = {
     // for (let i = 5; i < 10; i++) {
     //   d.drawText(11,i+5,"Chewie");
     // }
+  },
+
+  renderAvatar: function() {
+    let d = this.display.avatar.o;
+    d.clear();
+    for (let i = 0; i < 10; i++) {
+      d.drawText(5,i+5,"avatar");
+    }
+  },
+
+  renderMessage: function() {
+    let d = this.display.avatar.o;
+    d.clear();
+    for (let i = 0; i < 10; i++) {
+      d.drawText(5,i+5,"message");
+    }
   },
 
   bindEvent: function(eventType) {

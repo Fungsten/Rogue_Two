@@ -9365,9 +9365,9 @@ window.onload = function () {
   _game.Game.init();
 
   // Add the containers to our HTML page
-  document.getElementById('ws-avatar-display').appendChild(_game.Game.getDisplay('main').getContainer());
+  document.getElementById('ws-avatar-display').appendChild(_game.Game.getDisplay('avatar').getContainer());
   document.getElementById('ws-main-display').appendChild(_game.Game.getDisplay('main').getContainer());
-  document.getElementById('ws-message-display').appendChild(_game.Game.getDisplay('main').getContainer());
+  document.getElementById('ws-message-display').appendChild(_game.Game.getDisplay('message').getContainer());
 
   _game.Game.bindEvent('keypress');
   _game.Game.bindEvent('keydown');
@@ -14903,10 +14903,21 @@ var Game = exports.Game = {
   display: {
     SPACING: 1.1,
     main: {
-      w: 150,
+      w: 140,
       h: 40,
       o: null
+    },
+    avatar: {
+      w: 20,
+      h: 40,
+      o: null
+    },
+    message: {
+      w: 160,
+      h: 6,
+      o: null
     }
+
   },
   modes: {
     startup: '',
@@ -14922,6 +14933,16 @@ var Game = exports.Game = {
     this.display.main.o = new _rotJs2.default.Display({
       width: this.display.main.w,
       height: this.display.main.h,
+      spacing: this.display.SPACING });
+
+    this.display.avatar.o = new _rotJs2.default.Display({
+      width: this.display.avatar.w,
+      height: this.display.avatar.h,
+      spacing: this.display.SPACING });
+
+    this.display.message.o = new _rotJs2.default.Display({
+      width: this.display.message.w,
+      height: this.display.message.h,
       spacing: this.display.SPACING });
 
     this.setupModes();
@@ -14974,6 +14995,22 @@ var Game = exports.Game = {
     // for (let i = 5; i < 10; i++) {
     //   d.drawText(11,i+5,"Chewie");
     // }
+  },
+
+  renderAvatar: function renderAvatar() {
+    var d = this.display.avatar.o;
+    d.clear();
+    for (var i = 0; i < 10; i++) {
+      d.drawText(5, i + 5, "avatar");
+    }
+  },
+
+  renderMessage: function renderMessage() {
+    var d = this.display.avatar.o;
+    d.clear();
+    for (var i = 0; i < 10; i++) {
+      d.drawText(5, i + 5, "message");
+    }
   },
 
   bindEvent: function bindEvent(eventType) {
