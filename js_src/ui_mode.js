@@ -188,6 +188,12 @@ export class LoseMode extends UIMode {
     display.clear();
     display.drawText(4,4,"YOU LOSE. GOOD DAY.");
   }
+  handleInput(eventType, evt) {
+    if (evt.key == 'Escape' && eventType == 'keyup'){
+      this.game.switchMode('persistence');
+      return true;
+    }
+  }
 }
 
 //-----------------------------------------------------
@@ -198,5 +204,11 @@ export class WinMode extends UIMode {
   render(display){
     display.clear();
     display.drawText(4,4,"A WINNER IS YOU");
+  }
+  handleInput(eventType, evt) {
+    if (evt.key == 'Escape' && eventType == 'keyup'){
+      this.game.switchMode('persistence');
+      return true;
+    }
   }
 }

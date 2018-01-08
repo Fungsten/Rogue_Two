@@ -15039,7 +15039,6 @@ var Game = exports.Game = {
 
   fromJSON: function fromJSON(json) {
     var state = JSON.parse(json);
-    //state = JSON.parse(state);
     this._randomSeed = state.rseed;
     console.log("the random seed is " + this._randomSeed);
   }
@@ -15371,6 +15370,14 @@ var LoseMode = exports.LoseMode = function (_UIMode5) {
       display.clear();
       display.drawText(4, 4, "YOU LOSE. GOOD DAY.");
     }
+  }, {
+    key: "handleInput",
+    value: function handleInput(eventType, evt) {
+      if (evt.key == 'Escape' && eventType == 'keyup') {
+        this.game.switchMode('persistence');
+        return true;
+      }
+    }
   }]);
 
   return LoseMode;
@@ -15393,6 +15400,14 @@ var WinMode = exports.WinMode = function (_UIMode6) {
     value: function render(display) {
       display.clear();
       display.drawText(4, 4, "A WINNER IS YOU");
+    }
+  }, {
+    key: "handleInput",
+    value: function handleInput(eventType, evt) {
+      if (evt.key == 'Escape' && eventType == 'keyup') {
+        this.game.switchMode('persistence');
+        return true;
+      }
     }
   }]);
 

@@ -142,7 +142,6 @@ export let Game = {
 
   fromJSON: function(json) {
     let state = JSON.parse(json);
-    //state = JSON.parse(state);
     this._randomSeed = state.rseed;
     console.log("the random seed is " + this._randomSeed);
   }
