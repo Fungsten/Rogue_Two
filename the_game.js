@@ -14932,6 +14932,7 @@ var Game = exports.Game = {
     // //this._randomSeed = 76250;
     // console.log("using random seed "+this._randomSeed);
     // ROT.RNG.setSeed(this._randomSeed);
+    console.dir(this);
 
     this.display.main.o = new _rotJs2.default.Display({
       width: this.display.main.w,
@@ -15039,8 +15040,8 @@ var Game = exports.Game = {
   fromJSON: function fromJSON(json) {
     var state = JSON.parse(json);
     //state = JSON.parse(state);
-    console.log("the random seed is " + this._randomSeed);
     this._randomSeed = state.rseed;
+    console.log("the random seed is " + this._randomSeed);
   }
 
 };
