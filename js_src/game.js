@@ -4,13 +4,14 @@ import {StartupMode} from './ui_mode.js';
 import {PlayMode} from './ui_mode.js';
 import {LoseMode} from './ui_mode.js';
 import {WinMode} from './ui_mode.js';
+import {Message} from './message.js';
 
 export let Game = {
 
   display: {
     SPACING: 1.1,
     main: {
-      w: 140,
+      w: 80,
       h: 40,
       o: null
     },
@@ -20,7 +21,7 @@ export let Game = {
       o: null
     },
     message: {
-      w: 160,
+      w: 100,
       h: 6,
       o: null
     }
@@ -53,6 +54,8 @@ export let Game = {
      spacing: this.display.SPACING});
 
     this.setupModes();
+
+    Message.send("DUMMILY");
 
     this.switchMode("startup");
     // this.switchMode("play");
@@ -88,7 +91,7 @@ export let Game = {
 
   render: function() {
     this.renderMain();
-    //U.existentialCrisis();
+    this.renderMessage();
   },
 
   renderMain: function() {
@@ -104,6 +107,7 @@ export let Game = {
     // for (let i = 5; i < 10; i++) {
     //   d.drawText(11,i+5,"Chewie");
     // }
+
   },
 
   renderAvatar: function() {
@@ -115,11 +119,8 @@ export let Game = {
   },
 
   renderMessage: function() {
-    let d = this.display.avatar.o;
-    d.clear();
-    for (let i = 0; i < 10; i++) {
-      d.drawText(5,i+5,"message");
-    }
+    console.log("render message");
+    Message.render(this.display.message.o);
   },
 
   bindEvent: function(eventType) {
