@@ -14928,10 +14928,10 @@ var Game = exports.Game = {
   },
 
   init: function init() {
-    this._randomSeed = 5 + Math.floor(Math.random() * 100000);
-    //this._randomSeed = 76250;
-    console.log("using random seed " + this._randomSeed);
-    _rotJs2.default.RNG.setSeed(this._randomSeed);
+    // this._randomSeed = 5 + Math.floor(Math.random()*100000);
+    // //this._randomSeed = 76250;
+    // console.log("using random seed "+this._randomSeed);
+    // ROT.RNG.setSeed(this._randomSeed);
 
     this.display.main.o = new _rotJs2.default.Display({
       width: this.display.main.w,
@@ -14950,7 +14950,7 @@ var Game = exports.Game = {
 
     this.setupModes();
 
-    _message.Message.send("What about the droid attack on the wookies?");
+    _message.Message.send("What about the droid attack on the Wookies?");
 
     this.switchMode("startup");
     // this.switchMode("play");
@@ -14974,6 +14974,13 @@ var Game = exports.Game = {
     if (this.curMode) {
       this.curMode.enter();
     }
+  },
+
+  setupNewGame: function setupNewGame() {
+    this._randomSeed = 5 + Math.floor(Math.random() * 100000);
+    //this._randomSeed = 76250;
+    console.log("using random seed " + this._randomSeed);
+    _rotJs2.default.RNG.setSeed(this._randomSeed);
   },
 
   getDisplay: function getDisplay(displayId) {
@@ -15024,12 +15031,15 @@ var Game = exports.Game = {
 
   toJSON: function toJSON() {
     var json = '';
-    json = JSON.stringify({ rsee: this._randomSeed });
+    console.log("the random seed is " + this._randomSeed);
+    json = JSON.stringify({ rseed: this._randomSeed });
     return json;
   },
 
   fromJSON: function fromJSON(json) {
     var state = JSON.parse(json);
+    //state = JSON.parse(state);
+    console.log("the random seed is " + this._randomSeed);
     this._randomSeed = state.rseed;
   }
 
@@ -15205,14 +15215,17 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
       if (inputType == 'keyup') {
         if (inputData.key == 'n' || inputData.key == 'N') {
           console.log('new game');
+          this.game.setupNewGame();
+          this.game.switchMode('play');
           return true;
         }
         if (inputData.key == 's' || inputData.key == 'S') {
-          console.log('save game');
+          this.handleSave();
           return true;
         }
         if (inputData.key == 'l' || inputData.key == 'L') {
-          console.log('load game');
+          this.handleRestore();
+          this.game.switchMode('play');
           return true;
         }
         if (inputData.key == 'Escape') {
@@ -15221,6 +15234,41 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
         }
       }
       return false;
+    }
+  }, {
+    key: "handleSave",
+    value: function handleSave() {
+      console.log('save game');
+      if (!this.localStorageAvailable()) {
+        return false;
+      }
+
+      window.localStorage.setItem('roguetwogame', this.game.toJSON());
+    }
+  }, {
+    key: "handleRestore",
+    value: function handleRestore() {
+      console.log('load game');
+      if (!this.localStorageAvailable()) {
+        return false;
+      }
+
+      var restorationString = window.localStorage.getItem('roguetwogame');
+      this.game.fromJSON(restorationString);
+    }
+  }, {
+    key: "localStorageAvailable",
+    value: function localStorageAvailable() {
+      // NOTE: see https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
+      try {
+        var x = '__storage_test__';
+        window.localStorage.setItem(x, x);
+        window.localStorage.removeItem(x);
+        return true;
+      } catch (e) {
+        Message.send('Sorry, no local data storage is available for this browser so game save/load is not possible');
+        return false;
+      }
     }
   }]);
 
@@ -15259,7 +15307,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
         this.game.switchMode('win');
         return true;
       }
-      if (evt.key == 'Escape') {
+      if (evt.key == 'Escape' && eventType == 'keyup') {
         this.game.switchMode('persistence');
         return true;
       }

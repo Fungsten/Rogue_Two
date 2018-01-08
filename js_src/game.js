@@ -31,10 +31,10 @@ export let Game = {
   },
 
   init: function() {
-    this._randomSeed = 5 + Math.floor(Math.random()*100000);
-    //this._randomSeed = 76250;
-    console.log("using random seed "+this._randomSeed);
-    ROT.RNG.setSeed(this._randomSeed);
+    // this._randomSeed = 5 + Math.floor(Math.random()*100000);
+    // //this._randomSeed = 76250;
+    // console.log("using random seed "+this._randomSeed);
+    // ROT.RNG.setSeed(this._randomSeed);
 
     this.display.main.o = new ROT.Display({
       width: this.display.main.w,
@@ -81,6 +81,13 @@ export let Game = {
     }
   },
 
+  setupNewGame: function() {
+    this._randomSeed = 5 + Math.floor(Math.random()*100000);
+    //this._randomSeed = 76250;
+    console.log("using random seed "+this._randomSeed);
+    ROT.RNG.setSeed(this._randomSeed);
+  },
+
   getDisplay: function (displayId) {
     if (this.display.hasOwnProperty(displayId)) {
       return this.display[displayId].o;
@@ -115,7 +122,7 @@ export let Game = {
       });
   },
 
-  eventHandler: function (eventType, evt) {
+  eventHandler: function(eventType, evt) {
       // When an event is received have the current ui handle it
       if (this.curMode !== null && this.curMode != '') {
         if (this.curMode.handleInput(eventType, evt)) {
@@ -127,12 +134,15 @@ export let Game = {
 
   toJSON: function() {
     let json = '';
-    json = JSON.stringify({rsee: this._randomSeed});
+    console.log("the random seed is " + this._randomSeed);
+    json = JSON.stringify({rseed: this._randomSeed});
     return json;
   },
 
   fromJSON: function(json) {
     let state = JSON.parse(json);
+    //state = JSON.parse(state);
+    console.log("the random seed is " + this._randomSeed);
     this._randomSeed = state.rseed;
   }
 

@@ -73,14 +73,17 @@ export class PersistenceMode extends UIMode {
     if (inputType == 'keyup') {
       if (inputData.key == 'n' || inputData.key == 'N') {
         console.log('new game');
+        this.game.setupNewGame();
+        this.game.switchMode('play');
         return true;
       }
       if (inputData.key == 's' || inputData.key == 'S') {
-        console.log('save game');
+        this.handleSave();
         return true;
       }
       if (inputData.key == 'l' || inputData.key == 'L') {
-        console.log('load game');
+        this.handleRestore();
+        this.game.switchMode('play');
         return true;
       }
       if (inputData.key == 'Escape'){
@@ -91,6 +94,36 @@ export class PersistenceMode extends UIMode {
     }
     return false;
   }
+
+  handleSave(){
+    console.log('save game');
+    if (!this.localStorageAvailable()) {return false;}
+
+    window.localStorage.setItem('roguetwogame',this.game.toJSON());
+  }
+
+  handleRestore(){
+    console.log('load game');
+    if (!this.localStorageAvailable()) {return false;}
+
+    let restorationString = window.localStorage.getItem('roguetwogame');
+    this.game.fromJSON(restorationString);
+  }
+
+  localStorageAvailable() {
+    // NOTE: see https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
+    try {
+      var x = '__storage_test__';
+      window.localStorage.setItem( x, x);
+      window.localStorage.removeItem(x);
+      return true;
+    }
+    catch(e) {
+      Message.send('Sorry, no local data storage is available for this browser so game save/load is not possible');
+      return false;
+    }
+  }
+
 }
 
 //-----------------------------------------------------
@@ -115,7 +148,7 @@ export class PlayMode extends UIMode {
       this.game.switchMode('win');
       return true;
     }
-    if (evt.key == 'Escape'){
+    if (evt.key == 'Escape' && eventType == 'keyup'){
       this.game.switchMode('persistence');
       return true;
     }
@@ -140,6 +173,9 @@ export class UIModeMessages extends UIMode {
       return false;
     }
   }
+
+
+
 }
 //don't need to export parent classes to export subclasses
 
