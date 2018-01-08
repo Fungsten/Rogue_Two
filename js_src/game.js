@@ -1,9 +1,6 @@
 import * as U from './util.js';
 import ROT from 'rot-js';
-import {StartupMode} from './ui_mode.js';
-import {PlayMode} from './ui_mode.js';
-import {LoseMode} from './ui_mode.js';
-import {WinMode} from './ui_mode.js';
+import {StartupMode, PlayMode, LoseMode, WinMode, PersistenceMode} from './ui_mode.js';
 import {Message} from './message.js';
 
 export let Game = {
@@ -29,7 +26,8 @@ export let Game = {
   },
   modes: {
     startup: '',
-    curMode: ''
+    curMode: '',
+    persistence: ''
   },
 
   init: function() {
@@ -69,6 +67,7 @@ export let Game = {
     this.modes.play = new PlayMode(this);
     this.modes.lose = new LoseMode(this);
     this.modes.win = new WinMode(this);
+    this.modes.persistence = new PersistenceMode(this);
   },
 
 
