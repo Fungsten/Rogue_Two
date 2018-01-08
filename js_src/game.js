@@ -12,12 +12,12 @@ export let Game = {
     SPACING: 1.1,
     main: {
       w: 80,
-      h: 40,
+      h: 24,
       o: null
     },
     avatar: {
       w: 20,
-      h: 40,
+      h: 24,
       o: null
     },
     message: {
@@ -55,7 +55,7 @@ export let Game = {
 
     this.setupModes();
 
-    Message.send("DUMMILY");
+    Message.send("What about the droid attack on the wookies?");
 
     this.switchMode("startup");
     // this.switchMode("play");
@@ -95,19 +95,7 @@ export let Game = {
   },
 
   renderMain: function() {
-    console.log("renderMain");
-
-    //if (this.curMode.hasOwnProperty('render')) {
-      this.curMode.render(this.display.main.o);
-    //}
-    // let d = this.display.main.o;
-    // for (let i = 0; i < 10; i++) {
-    //   d.drawText(5,i+5,"hello world");
-    // }
-    // for (let i = 5; i < 10; i++) {
-    //   d.drawText(11,i+5,"Chewie");
-    // }
-
+    this.curMode.render(this.display.main.o);
   },
 
   renderAvatar: function() {
@@ -119,7 +107,6 @@ export let Game = {
   },
 
   renderMessage: function() {
-    console.log("render message");
     Message.render(this.display.message.o);
   },
 
