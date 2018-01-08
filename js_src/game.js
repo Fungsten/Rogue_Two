@@ -53,7 +53,7 @@ export let Game = {
 
     this.setupModes();
 
-    Message.send("What about the droid attack on the wookies?");
+    Message.send("What about the droid attack on the Wookies?");
 
     this.switchMode("startup");
     // this.switchMode("play");
@@ -123,6 +123,17 @@ export let Game = {
           //Message.ageMessages();
         }
       }
+  },
+
+  toJSON: function() {
+    let json = '';
+    json = JSON.stringify({rsee: this._randomSeed});
+    return json;
+  },
+
+  fromJSON: function(json) {
+    let state = JSON.parse(json);
+    this._randomSeed = state.rseed;
   }
 
 };

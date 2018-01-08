@@ -15020,6 +15020,17 @@ var Game = exports.Game = {
         //Message.ageMessages();
       }
     }
+  },
+
+  toJSON: function toJSON() {
+    var json = '';
+    json = JSON.stringify({ rsee: this._randomSeed });
+    return json;
+  },
+
+  fromJSON: function fromJSON(json) {
+    var state = JSON.parse(json);
+    this._randomSeed = state.rseed;
   }
 
 };
