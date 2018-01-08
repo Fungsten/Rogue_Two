@@ -1,9 +1,6 @@
 import * as U from './util.js';
 import ROT from 'rot-js';
-import {StartupMode} from './ui_mode.js';
-import {PlayMode} from './ui_mode.js';
-import {LoseMode} from './ui_mode.js';
-import {WinMode} from './ui_mode.js';
+import {StartupMode, PlayMode, LoseMode, WinMode, PersistenceMode} from './ui_mode.js';
 import {Message} from './message.js';
 
 export let Game = {
@@ -29,14 +26,16 @@ export let Game = {
   },
   modes: {
     startup: '',
-    curMode: ''
+    curMode: '',
+    persistence: ''
   },
 
   init: function() {
-    this._randomSeed = 5 + Math.floor(Math.random()*100000);
-    //this._randomSeed = 76250;
-    console.log("using random seed "+this._randomSeed);
-    ROT.RNG.setSeed(this._randomSeed);
+    // this._randomSeed = 5 + Math.floor(Math.random()*100000);
+    // //this._randomSeed = 76250;
+    // console.log("using random seed "+this._randomSeed);
+    // ROT.RNG.setSeed(this._randomSeed);
+    console.dir(this);
 
     this.display.main.o = new ROT.Display({
       width: this.display.main.w,
@@ -55,7 +54,7 @@ export let Game = {
 
     this.setupModes();
 
-    Message.send("What about the droid attack on the wookies?");
+    Message.send("What about the droid attack on the Wookies?");
 
     this.switchMode("startup");
     // this.switchMode("play");
@@ -69,6 +68,7 @@ export let Game = {
     this.modes.play = new PlayMode(this);
     this.modes.lose = new LoseMode(this);
     this.modes.win = new WinMode(this);
+    this.modes.persistence = new PersistenceMode(this);
   },
 
 
@@ -80,6 +80,13 @@ export let Game = {
     if (this.curMode) {
       this.curMode.enter();
     }
+  },
+
+  setupNewGame: function() {
+    this._randomSeed = 5 + Math.floor(Math.random()*100000);
+    //this._randomSeed = 76250;
+    console.log("using random seed "+this._randomSeed);
+    ROT.RNG.setSeed(this._randomSeed);
   },
 
   getDisplay: function (displayId) {
@@ -116,7 +123,7 @@ export let Game = {
       });
   },
 
-  eventHandler: function (eventType, evt) {
+  eventHandler: function(eventType, evt) {
       // When an event is received have the current ui handle it
       if (this.curMode !== null && this.curMode != '') {
         if (this.curMode.handleInput(eventType, evt)) {
@@ -124,6 +131,20 @@ export let Game = {
           //Message.ageMessages();
         }
       }
+  },
+
+  toJSON: function() {
+    let json = '';
+    console.log("the random seed is " + this._randomSeed);
+    json = JSON.stringify({rseed: this._randomSeed});
+    return json;
+  },
+
+  fromJSON: function(json) {
+    let state = JSON.parse(json);
+    //state = JSON.parse(state);
+    this._randomSeed = state.rseed;
+    console.log("the random seed is " + this._randomSeed);
   }
 
 };
