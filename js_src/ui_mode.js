@@ -1,5 +1,6 @@
 import ROT from 'rot-js';
-import {game} from './game.js';
+import {Game} from './game.js';
+import {Map} from './map.js';
 //import {DATASTORE,initializeDatastore} from './datastore.js';
 
 class UIMode {
@@ -132,11 +133,17 @@ export class PersistenceMode extends UIMode {
 
 export class PlayMode extends UIMode {
 
+  enter() {
+    if(! this.map) {
+      this.map = new Map(20,12);
+    }
+  }
+
   render(display){
     display.clear();
     display.drawText(4,4,"GAME IN PROGRESS");
     display.drawText(4,5,"PRESS W TO WIN, L TO LOSE");
-    //for (i in )
+    this.map.render(display,0,0);
   }
 
   handleInput(eventType, evt) {

@@ -1,4 +1,4 @@
-import {Color} from '.colors.js'
+import {Color} from './colors.js'
 
 export class DisplaySymbol {
    constructor(chr, fg, bg) {

@@ -2,15 +2,15 @@
 
 import {DisplaySymbol} from './display_symbol.js';
 
-class Tile extends DisplaySymbol {
+export class Tile extends DisplaySymbol {
   constructor(name, chr, fg, bg) {
-    super(chr, fb, bg);
+    super(chr, fg, bg);
     this.name = name;
   }
 }
 
-let TILES = {
-  NULLTILE: new Tile('nulltile', 'X');
-  WALL: new Tile('wall', '#');
-  FLOOR: new Tile('floor', '.');
+export let TILES = {
+  NULLTILE: new Tile('nulltile', 'x'),
+  WALL: new Tile('wall', '#'),
+  FLOOR: new Tile('floor', '.')
 }
