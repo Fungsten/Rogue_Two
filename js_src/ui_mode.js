@@ -2,6 +2,7 @@ import ROT from 'rot-js';
 import {Game} from './game.js';
 import {Map} from './map.js';
 import {Message} from './message.js';
+import {DisplaySymbol} from './display_symbol';
 //import {DATASTORE,initializeDatastore} from './datastore.js';
 
 class UIMode {
@@ -35,19 +36,15 @@ export class StartupMode extends UIMode { //defines how an object exists
 
   render(display) {
     display.drawText(2,3,"Welcome to ");
-    display.drawText(2,5,".______        ______     _______  __    __   _______ ");
-    display.drawText(2,6,"|   _  \\      /  __  \\   /  _____||  |  |  | |   ____|");
-    display.drawText(2,7,"|  |_)  |    |  |  |  | |  |  __  |  |  |  | |  |__   ");
-    display.drawText(2,8,"|      /     |  |  |  | |  | |_ | |  |  |  | |   __|  ");
-    display.drawText(2,9,"|  |\\  \\----.|  `--'  | |  |__| | |  `--'  | |  |____ ");
-    display.drawText(2,10,"| _| `._____| \\______/   \\______|  \\______/  |_______|");
-    display.drawText(2,11,"                                                      ");
-    display.drawText(8,12,"      .___________.____    __    ____  ______         ");
-    display.drawText(8,13,"      |           |\\   \\  /  \\  /   / /  __  \\        ");
-    display.drawText(8,14,"      `---|  |----` \\   \\/    \\/   / |  |  |  |       ");
-    display.drawText(12,15,"          |  |       \\            /  |  |  |  |       ");
-    display.drawText(12,16,"          |  |        \\    /\\    /   |  `--'  |       ");
-    display.drawText(12,17,"          |__|         \\__/  \\__/     \\______/        ");
+    display.drawText(2,5," _______  _______ _________          _______  _______ ");
+    display.drawText(2,6,"(  ___  )(  ____ \\\\__   __/|\\     /|(  ____ \\(  ____ )");
+    display.drawText(2,7,"| (   ) || (    \\/   ) (   | )   ( || (    \\/| (    )|");
+    display.drawText(2,8,"| (___) || (__       | |   | (___) || (__    | (____)|");
+    display.drawText(2,9,"|  ___  ||  __)      | |   |  ___  ||  __)   |     __)");
+    display.drawText(2,10,"| (   ) || (         | |   | (   ) || (      | (\\ (   ");
+    display.drawText(2,11,"| )   ( || (____/\\   | |   | )   ( || (____/\\| ) \\ \\__");
+    display.drawText(2,12,"|/     \\|(_______/   )_(   |/     \\|(_______/|/   \\__/");
+
     display.drawText(6,20,"Press any key to continue");
   }
 
@@ -136,16 +133,20 @@ export class PlayMode extends UIMode {
 
   enter() {
     if(! this.map) {
-      this.map = new Map(80,24);
+      this.map = new Map(80,40);
     }
     // this.map = new Map(80,24);
+    this.camerax = 5;
+    this.cameray = 8;
+    this.cameraSymbol = new DisplaySymbol('@', '#eb4');
   }
 
   render(display){
     display.clear();
     display.drawText(33,4,"GAME IN PROGRESS");
     display.drawText(33,5,"PRESS W TO WIN, L TO LOSE");
-    this.map.render(display,0,0);
+    this.map.render(display, this.camerax, this.cameray);
+    this.cameraSymbol.render(display, display.getOptions().width / 2, display.getOptions().height / 2);
   }
 
   handleInput(eventType, evt) {
@@ -163,8 +164,65 @@ export class PlayMode extends UIMode {
       this.game.switchMode('persistence');
       return true;
     }
+
+    //upper left
+    console.dir(evt);
+    if (evt.key == '7' && eventType == 'keydown') {
+      this.moveCamera(-1, -1);
+      return true;
+    }
+    //up
+    console.dir(evt);
+    if (evt.key == '8' && eventType == 'keydown') {
+      this.moveCamera(0, -1);
+      return true;
+    }
+    //upper right
+    console.dir(evt);
+    if (evt.key == '9' && eventType == 'keydown') {
+      this.moveCamera(1, -1);
+      return true;
+    }
+    //left
+    console.dir(evt);
+    if (evt.key == '4' && eventType == 'keydown') {
+      this.moveCamera(-1, 0);
+      return true;
+    }
+    //right
+    console.dir(evt);
+    if (evt.key == '6' && eventType == 'keydown') {
+      this.moveCamera(1, 0);
+      return true;
+    }
+    //lower left
+    console.dir(evt);
+    if (evt.key == '1' && eventType == 'keydown') {
+      this.moveCamera(-1, 1);
+      return true;
+    }
+    //down
+    console.dir(evt);
+    if (evt.key == '2' && eventType == 'keydown') {
+      this.moveCamera(0, 1);
+      return true;
+    }
+    //lower right
+    console.dir(evt);
+    if (evt.key == '3' && eventType == 'keydown') {
+      this.moveCamera(1, 1);
+      return true;
+    }
+  }
+
+  moveCamera(x,y) {
+      console.log(x + y);
+      this.camerax += x;
+      this.cameray += y;
   }
 }
+
+
 
 //-----------------------------------------------------
 //-----------------------------------------------------
