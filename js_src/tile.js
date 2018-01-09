@@ -10,7 +10,7 @@ class Tile extends DisplaySymbol {
 }
 
 let TILES = {
-  NULLTILE: new Tile('nulltile', ' ');
+  NULLTILE: new Tile('nulltile', 'X');
   WALL: new Tile('wall', '#');
   FLOOR: new Tile('floor', '.');
 }
