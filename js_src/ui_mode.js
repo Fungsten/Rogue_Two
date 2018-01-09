@@ -1,4 +1,5 @@
 import ROT from 'rot-js';
+import {game} from './game.js';
 //import {DATASTORE,initializeDatastore} from './datastore.js';
 
 class UIMode {
@@ -135,6 +136,7 @@ export class PlayMode extends UIMode {
     display.clear();
     display.drawText(4,4,"GAME IN PROGRESS");
     display.drawText(4,5,"PRESS W TO WIN, L TO LOSE");
+    //for (i in )
   }
 
   handleInput(eventType, evt) {
