@@ -165,6 +165,9 @@ export class PlayMode extends UIMode {
       return true;
     }
 
+    //-----------------------------------------------------
+    //-----------------------------------------------------
+
     //upper left
     console.dir(evt);
     if (evt.key == '7' && eventType == 'keydown') {
@@ -213,6 +216,9 @@ export class PlayMode extends UIMode {
       this.moveCamera(1, 1);
       return true;
     }
+
+    //-----------------------------------------------------
+    //-----------------------------------------------------
   }
 
   moveCamera(x,y) {
