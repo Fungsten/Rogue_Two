@@ -1,6 +1,7 @@
 import ROT from 'rot-js';
 import {Game} from './game.js';
 import {Map} from './map.js';
+import {Message} from './message.js';
 //import {DATASTORE,initializeDatastore} from './datastore.js';
 
 class UIMode {
@@ -135,14 +136,15 @@ export class PlayMode extends UIMode {
 
   enter() {
     if(! this.map) {
-      this.map = new Map(20,12);
+      this.map = new Map(80,24);
     }
+    // this.map = new Map(80,24);
   }
 
   render(display){
     display.clear();
-    display.drawText(4,4,"GAME IN PROGRESS");
-    display.drawText(4,5,"PRESS W TO WIN, L TO LOSE");
+    display.drawText(33,4,"GAME IN PROGRESS");
+    display.drawText(33,5,"PRESS W TO WIN, L TO LOSE");
     this.map.render(display,0,0);
   }
 
@@ -195,7 +197,8 @@ export class LoseMode extends UIMode {
 
   render(display){
     display.clear();
-    display.drawText(4,4,"YOU LOSE. GOOD DAY.");
+    display.drawText(33,4,"YOU LOSE. GOOD DAY.");
+    Message.send("It's treason then.");
   }
   handleInput(eventType, evt) {
     if (evt.key == 'Escape' && eventType == 'keyup'){
@@ -212,8 +215,10 @@ export class WinMode extends UIMode {
 
   render(display){
     display.clear();
-    display.drawText(4,4,"A WINNER IS YOU");
+    display.drawText(33,4,"A WINNER IS YOU");
+    Message.send("He's right. It's a system we can't afford to lose.");
   }
+
   handleInput(eventType, evt) {
     if (evt.key == 'Escape' && eventType == 'keyup'){
       this.game.switchMode('persistence');
