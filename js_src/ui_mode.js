@@ -113,10 +113,18 @@ export class PersistenceMode extends UIMode {
 
     let state = JSON.parse(restorationString);
     clearDatastore();
-    DATASTORE.ID_SEQ = state.ID_SEQ;
-    this.game.fromJson(state.GAME);
 
-    DATASTORE.MAPS = state.MAPS;
+    DATASTORE.GAME = this.game;
+
+    DATASTORE.ID_SEQ = state.ID_SEQ;
+    this.game.fromJSON(state.GAME);
+
+    for (let mapid in state.MAPS) {
+      let mapData = JSON.parse(state.MAPS[mapid]);
+
+      DATASTORE.MAPS[mapid] = MapMaker(mapData.xdim, mapData.ydim);
+      DATASTORE.MAPS[mapid].build();
+    }
 
     console.log('post-save datastore:');
     console.dir(DATASTORE);
@@ -154,7 +162,7 @@ export class PlayMode extends UIMode {
   enter() {
     if(! this.state.map) {
       let m = MapMaker(80,40);
-      this.mapID = m.getID();
+      this.state.mapID = m.getID();
       m.build();
     }
     this.state.camerax = 5;
@@ -176,7 +184,7 @@ export class PlayMode extends UIMode {
     display.clear();
     display.drawText(33,4,"GAME IN PROGRESS");
     display.drawText(33,5,"PRESS W TO WIN, L TO LOSE");
-    DATASTORE.MAPS[this.state.mapID].render(display, this.state.cameraxmapx, this.state.cameramapy);
+    DATASTORE.MAPS[this.state.mapID].render(display, this.state.camerax, this.state.cameray);
     this.cameraSymbol.render(display, display.getOptions().width / 2, display.getOptions().height / 2);
   }
 
@@ -254,8 +262,8 @@ export class PlayMode extends UIMode {
 
   moveCamera(x,y) {
       console.log(x + y);
-      this.camerax += x;
-      this.cameray += y;
+      this.state.camerax += x;
+      this.state.cameray += y;
   }
 }
 
