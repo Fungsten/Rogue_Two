@@ -4,7 +4,7 @@ import {TILES} from './tile.js';
 import {init2DArray} from './util.js';
 import ROT from 'rot-js';
 
-export class Map {
+class Map {
   constructor(xdim, ydim) {
     this.xdim = xdim || 1;
     this.ydim = ydim || 1;
@@ -58,4 +58,9 @@ let TILE_GRID_GENERATOR = {
     //ROT.RNG.setState(origRngState);
     return tg;
   }
+}
+
+export function MapMaker(mapWidth,mapHeight) {
+  let m = new Map(mapWidth,mapHeight);
+  return m;
 }

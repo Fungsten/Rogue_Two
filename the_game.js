@@ -15399,9 +15399,8 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
     key: 'enter',
     value: function enter() {
       if (!this.map) {
-        this.map = new _map.Map(80, 40);
+        this.map = (0, _map.MapMaker)(80, 40);
       }
-      // this.map = new Map(80,24);
       this.camerax = 5;
       this.cameray = 8;
       this.cameraSymbol = new _display_symbol.DisplaySymbol('@', '#eb4');
@@ -15432,6 +15431,9 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
         this.game.switchMode('persistence');
         return true;
       }
+
+      //-----------------------------------------------------
+      //-----------------------------------------------------
 
       //upper left
       console.dir(evt);
@@ -15481,6 +15483,9 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
         this.moveCamera(1, 1);
         return true;
       }
+
+      //-----------------------------------------------------
+      //-----------------------------------------------------
     }
   }, {
     key: 'moveCamera',
@@ -15603,9 +15608,10 @@ var WinMode = exports.WinMode = function (_UIMode6) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Map = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // This is the map class for maps
+
+exports.MapMaker = MapMaker;
 
 var _tile = __webpack_require__(336);
 
@@ -15619,7 +15625,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Map = exports.Map = function () {
+var Map = function () {
   function Map(xdim, ydim) {
     _classCallCheck(this, Map);
 
@@ -15681,6 +15687,11 @@ var TILE_GRID_GENERATOR = {
     return tg;
   }
 };
+
+function MapMaker(mapWidth, mapHeight) {
+  var m = new Map(mapWidth, mapHeight);
+  return m;
+}
 
 /***/ }),
 /* 336 */

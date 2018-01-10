@@ -1,6 +1,6 @@
 import ROT from 'rot-js';
 import {Game} from './game.js';
-import {Map} from './map.js';
+import {MapMaker} from './map.js';
 import {Message} from './message.js';
 import {DisplaySymbol} from './display_symbol';
 //import {DATASTORE,initializeDatastore} from './datastore.js';
@@ -133,9 +133,8 @@ export class PlayMode extends UIMode {
 
   enter() {
     if(! this.map) {
-      this.map = new Map(80,40);
+      this.map = MapMaker(80,40);
     }
-    // this.map = new Map(80,24);
     this.camerax = 5;
     this.cameray = 8;
     this.cameraSymbol = new DisplaySymbol('@', '#eb4');
