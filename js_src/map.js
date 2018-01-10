@@ -3,6 +3,7 @@
 import {TILES} from './tile.js';
 import {init2DArray, uniqueID} from './util.js';
 import ROT from 'rot-js';
+import {DATASTORE} from './datastore.js';
 
 class Map {
   constructor(xdim, ydim) {
@@ -11,9 +12,10 @@ class Map {
     //this.tileGrid = init2DArray(this.xdim, this.ydim, TILES.NULLTILE);
     this.tileGrid = TILE_GRID_GENERATOR['basic caves'](xdim, ydim);
     this.mapID = uniqueID();
-
-    console.dir(this);
   }
+
+  getID(){return this.id;}
+  setID(newID) {this.id = newID;}
 
   render(display, camera_map_x, camera_map_y) {
     let cx = 0;
@@ -60,5 +62,6 @@ let TILE_GRID_GENERATOR = {
 
 export function MapMaker(mapWidth,mapHeight) {
   let m = new Map(mapWidth,mapHeight);
+  DATASTORE.MAPS[m.getID()] = m;
   return m;
 }

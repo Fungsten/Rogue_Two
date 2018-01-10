@@ -1,10 +1,4 @@
-export function utilAlert() {
-  document.write("this is a util function<br/>");
-}
-
-export function existentialCrisis() {
-  console.log("please work or else this will be the end of me");
-}
+// Some helpful tools
 
 export function init2DArray(xdim, ydim, initVal) {
   let a = [];

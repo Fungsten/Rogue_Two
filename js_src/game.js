@@ -2,6 +2,7 @@ import * as U from './util.js';
 import ROT from 'rot-js';
 import {StartupMode, PlayMode, LoseMode, WinMode, PersistenceMode} from './ui_mode.js';
 import {Message} from './message.js';
+import {DATASTORE} from './datastore.js';
 
 export let Game = {
 
@@ -57,10 +58,13 @@ export let Game = {
     Message.send("What about the droid attack on the Wookies?");
 
     this.switchMode("startup");
+    console.dir(this);
     // this.switchMode("play");
     // this.switchMode("lose");
     // this.switchMode("win");
 
+    console.log('datastore');
+    console.dir(DATASTORE);
   },
 
   setupModes: function() {

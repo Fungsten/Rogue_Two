@@ -1,3 +1,5 @@
+// Game Modes
+
 import ROT from 'rot-js';
 import {Game} from './game.js';
 import {MapMaker} from './map.js';
