@@ -4,7 +4,7 @@ export let DATASTORE = {};
 
 export function initializeDatastore() {
   DATASTORE = {
-    //ID_SEQ: 0,
+    ID_SEQ: 1,
     //GAME: {},
     MAPS: {},
     //ENTITIES: {}

@@ -1,21 +1,18 @@
 // This is the map class for maps
 
 import {TILES} from './tile.js';
-import {init2DArray, uniqueID} from './util.js';
+import {init2DArray} from './util.js';
 import ROT from 'rot-js';
-import {DATASTORE} from './datastore.js';
 
-class Map {
+export class Map {
   constructor(xdim, ydim) {
     this.xdim = xdim || 1;
     this.ydim = ydim || 1;
     //this.tileGrid = init2DArray(this.xdim, this.ydim, TILES.NULLTILE);
     this.tileGrid = TILE_GRID_GENERATOR['basic caves'](xdim, ydim);
-    this.mapID = uniqueID();
-  }
+    
 
-  getID(){return this.id;}
-  setID(newID) {this.id = newID;}
+  }
 
   render(display, camera_map_x, camera_map_y) {
     let cx = 0;
@@ -25,9 +22,13 @@ class Map {
     let ystart = camera_map_y - Math.trunc(display.getOptions().height / 2);;
     let yend = ystart + display.getOptions().height; //{{display height}};
 
+    //console.log("ystart: " + ystart);
+    //console.log("yend: " + yend);
 
     for(let xi = xstart; xi < xend; xi++){
+      //console.log("xi: " + xi);
       for(let yi = ystart; yi < yend; yi++){
+        //console.log("yi: " + yi);
         this.getTile(xi, yi).render(display, cx, cy);
         cy++;
       }
@@ -58,10 +59,4 @@ let TILE_GRID_GENERATOR = {
     //ROT.RNG.setState(origRngState);
     return tg;
   }
-}
-
-export function MapMaker(mapWidth,mapHeight) {
-  let m = new Map(mapWidth,mapHeight);
-  DATASTORE.MAPS[m.getID()] = m;
-  return m;
 }
