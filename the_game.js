@@ -9527,15 +9527,17 @@ var Game = exports.Game = {
 
   toJSON: function toJSON() {
     var json = '';
+    console.log(this._randomSeed);
     json = JSON.stringify({
       rseed: this._randomSeed,
-      playModestate: this.modes.play });
+      playModeState: this.modes.play });
+    console.log(json);
     return json;
   },
 
   fromJSON: function fromJSON(json) {
     var state = JSON.parse(json);
-    this._randomSeed = state.rseed;
+    this._randomSeed = this.rseed;
     console.log("the random seed is " + this._randomSeed);
     _rotJs2.default.RNG.setSeed(this._randomSeed);
     this.modes.play.restoreFromState(state.playModeState);
@@ -15396,12 +15398,12 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
       //this.game.fromJSON(restorationString);
 
       var state = JSON.parse(restorationString);
-      (0, _datastore.clearDatastore)();
+      //clearDatastore();
 
       _datastore.DATASTORE.GAME = this.game;
 
       _datastore.DATASTORE.ID_SEQ = state.ID_SEQ;
-      this.game.fromJSON(state.GAME);
+      //this.game.fromJSON(state.GAME);
 
       var mapData = void 0;
       for (var mapid in state.MAPS) {
@@ -15490,12 +15492,12 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
     key: 'handleInput',
     value: function handleInput(eventType, evt) {
       if (evt.key == 'l') {
-        console.dir(this);
+        //console.dir(this);
         this.game.switchMode('lose');
         return true;
       }
       if (evt.key == 'w') {
-        console.dir(this);
+        //console.dir(this);
         this.game.switchMode('win');
         return true;
       }
@@ -15508,49 +15510,41 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
       //-----------------------------------------------------
 
       //upper left
-      console.dir(evt);
       if (evt.key == '7' && eventType == 'keydown') {
         this.moveCamera(-1, -1);
         return true;
       }
       //up
-      console.dir(evt);
       if (evt.key == '8' && eventType == 'keydown') {
         this.moveCamera(0, -1);
         return true;
       }
       //upper right
-      console.dir(evt);
       if (evt.key == '9' && eventType == 'keydown') {
         this.moveCamera(1, -1);
         return true;
       }
       //left
-      console.dir(evt);
       if (evt.key == '4' && eventType == 'keydown') {
         this.moveCamera(-1, 0);
         return true;
       }
       //right
-      console.dir(evt);
       if (evt.key == '6' && eventType == 'keydown') {
         this.moveCamera(1, 0);
         return true;
       }
       //lower left
-      console.dir(evt);
       if (evt.key == '1' && eventType == 'keydown') {
         this.moveCamera(-1, 1);
         return true;
       }
       //down
-      console.dir(evt);
       if (evt.key == '2' && eventType == 'keydown') {
         this.moveCamera(0, 1);
         return true;
       }
       //lower right
-      console.dir(evt);
       if (evt.key == '3' && eventType == 'keydown') {
         this.moveCamera(1, 1);
         return true;

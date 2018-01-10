@@ -139,15 +139,17 @@ export let Game = {
 
   toJSON: function() {
     let json = '';
+    console.log(this._randomSeed);
     json = JSON.stringify({
       rseed: this._randomSeed,
-      playModestate: this.modes.play});
+      playModeState: this.modes.play});
+    console.log(json);
     return json;
   },
 
   fromJSON: function(json) {
     let state = JSON.parse(json);
-    this._randomSeed = state.rseed;
+    this._randomSeed = this.rseed;
     console.log("the random seed is " + this._randomSeed);
     ROT.RNG.setSeed(this._randomSeed);
     this.modes.play.restoreFromState(state.playModeState);

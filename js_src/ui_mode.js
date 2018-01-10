@@ -101,7 +101,7 @@ export class PersistenceMode extends UIMode {
     console.log('save game');
     if (!this.localStorageAvailable()) {return false;}
 
-    window.localStorage.setItem('roguetwogame',JSON.stringify(DATASTORE));
+    window.localStorage.setItem('roguetwogame', JSON.stringify(DATASTORE));
   }
 
   handleRestore(){
@@ -112,12 +112,12 @@ export class PersistenceMode extends UIMode {
     //this.game.fromJSON(restorationString);
 
     let state = JSON.parse(restorationString);
-    clearDatastore();
+    //clearDatastore();
 
     DATASTORE.GAME = this.game;
 
     DATASTORE.ID_SEQ = state.ID_SEQ;
-    this.game.fromJSON(state.GAME);
+    //this.game.fromJSON(state.GAME);
 
     let mapData;
     for (let mapid in state.MAPS) {
@@ -192,12 +192,12 @@ export class PlayMode extends UIMode {
 
   handleInput(eventType, evt) {
     if (evt.key == 'l') {
-      console.dir(this);
+      //console.dir(this);
       this.game.switchMode('lose');
       return true;
     }
     if (evt.key == 'w') {
-      console.dir(this);
+      //console.dir(this);
       this.game.switchMode('win');
       return true;
     }
@@ -210,49 +210,41 @@ export class PlayMode extends UIMode {
     //-----------------------------------------------------
 
     //upper left
-    console.dir(evt);
     if (evt.key == '7' && eventType == 'keydown') {
       this.moveCamera(-1, -1);
       return true;
     }
     //up
-    console.dir(evt);
     if (evt.key == '8' && eventType == 'keydown') {
       this.moveCamera(0, -1);
       return true;
     }
     //upper right
-    console.dir(evt);
     if (evt.key == '9' && eventType == 'keydown') {
       this.moveCamera(1, -1);
       return true;
     }
     //left
-    console.dir(evt);
     if (evt.key == '4' && eventType == 'keydown') {
       this.moveCamera(-1, 0);
       return true;
     }
     //right
-    console.dir(evt);
     if (evt.key == '6' && eventType == 'keydown') {
       this.moveCamera(1, 0);
       return true;
     }
     //lower left
-    console.dir(evt);
     if (evt.key == '1' && eventType == 'keydown') {
       this.moveCamera(-1, 1);
       return true;
     }
     //down
-    console.dir(evt);
     if (evt.key == '2' && eventType == 'keydown') {
       this.moveCamera(0, 1);
       return true;
     }
     //lower right
-    console.dir(evt);
     if (evt.key == '3' && eventType == 'keydown') {
       this.moveCamera(1, 1);
       return true;
