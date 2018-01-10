@@ -3,16 +3,21 @@
 import {TILES} from './tile.js';
 import {init2DArray} from './util.js';
 import ROT from 'rot-js';
+import {DATASTORE} from './datastore.js'
 
-export class Map {
+class Map {
   constructor(xdim, ydim) {
+    this.attr = {};
     this.xdim = xdim || 1;
     this.ydim = ydim || 1;
-    //this.tileGrid = init2DArray(this.xdim, this.ydim, TILES.NULLTILE);
-    this.tileGrid = TILE_GRID_GENERATOR['basic caves'](xdim, ydim);
-    
-
+    let mapType = 'basic caves';
+    this.setupRngState = ROT.RNG.getState();
+    this.tileGrid = TILE_GRID_GENERATOR[mapType](xdim, ydim, this.setupRngState);
+    this.id = uniqueID('map-' + mapType);
   }
+
+  getID() {return this.id;}
+  setID(newID) {this.id = newID;}
 
   render(display, camera_map_x, camera_map_y) {
     let cx = 0;
@@ -22,13 +27,8 @@ export class Map {
     let ystart = camera_map_y - Math.trunc(display.getOptions().height / 2);;
     let yend = ystart + display.getOptions().height; //{{display height}};
 
-    //console.log("ystart: " + ystart);
-    //console.log("yend: " + yend);
-
     for(let xi = xstart; xi < xend; xi++){
-      //console.log("xi: " + xi);
       for(let yi = ystart; yi < yend; yi++){
-        //console.log("yi: " + yi);
         this.getTile(xi, yi).render(display, cx, cy);
         cy++;
       }
@@ -46,9 +46,12 @@ export class Map {
 }
 
 let TILE_GRID_GENERATOR = {
-  'basic caves': function(xd, yd) {
+  'basic caves': function(xd, yd, rngState {
     let tg = init2DArray(xd, yd, TILES.NULLTILE);
     let gen = new ROT.Map.Cellular(xd, yd, { connected: true });
+    let origRngState = ROT.RNG.getState();
+    ROT.RNG.setState(rngState);
+
     gen.randomize(.5);
     gen.create();
     gen.create();
@@ -59,4 +62,10 @@ let TILE_GRID_GENERATOR = {
     //ROT.RNG.setState(origRngState);
     return tg;
   }
+}
+
+export function mapMaker(mapWidth, mapHeight) {
+  let m = new Map(mapWidth, mapHeight);
+  DATASTORE.MAPS[m.getId()] = m;
+  return m;
 }

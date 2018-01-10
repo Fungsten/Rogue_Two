@@ -5,7 +5,7 @@ import {Game} from './game.js';
 import {MapMaker} from './map.js';
 import {Message} from './message.js';
 import {DisplaySymbol} from './display_symbol';
-//import {DATASTORE,initializeDatastore} from './datastore.js';
+import {DATASTORE} from './datastore.js';
 
 class UIMode {
   constructor(thegame) {
@@ -135,6 +135,11 @@ export class PlayMode extends UIMode {
 
   enter() {
     if(! this.map) {
+      this.map = MapMaker(80,40);
+      this.map = MapMaker(80,40);
+      this.map = MapMaker(80,40);
+      this.map = MapMaker(80,40);
+      this.map = MapMaker(80,40);
       this.map = MapMaker(80,40);
     }
     this.camerax = 5;

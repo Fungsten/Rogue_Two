@@ -20,7 +20,7 @@ export function uniqueID() {
   for (let i = 0; i < 8; i++) {
     id += randCharSource.random();
   }
-  id = `${DATASTORE.ID_SEQ}-${id}`; //DATASTORE.ID_SEQ + '-' + id;
+  id = `${tag ? tag+'-' : ''}${DATASTORE.ID_SEQ}-${id}`; //DATASTORE.ID_SEQ + '-' + id;
   DATASTORE.ID_SEQ++;
   return id;
 }
