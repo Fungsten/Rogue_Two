@@ -12,11 +12,11 @@ class Map {
     this.state.ydim = ydim || 1;
     this.state.mapType = 'basic caves';
     this.state.setupRngState = ROT.RNG.getState();
-    this.state.id = uniqueID('map-' + this.state.mapType);
+    this.state.id = uniqueID();
   }
 
   build() {
-    this.tileGrid = TILE_GRID_GENERATOR[this.state.mapType](xdim, ydim, this.state.setupRngState);
+    this.tileGrid = TILE_GRID_GENERATOR[this.state.mapType](this.state.xdim, this.state.ydim, this.state.setupRngState);
   }
 
   getID() {return this.state.id;}
@@ -32,7 +32,7 @@ class Map {
   setMapType(newID) {this.state.mapType = newID;}
 
   getRngState() {return this.state.RngState}
-  setRngState(newID) {this.state.id = newID;}
+  setRngState(newID) {this.state.RngState = newID;}
 
   render(display, camera_map_x, camera_map_y) {
     let cx = 0;
@@ -50,6 +50,10 @@ class Map {
       cx++;
       cy = 0;
     }
+  }
+
+  toJSON() {
+    return JSON.stringify(this.state);
   }
 
   getTile(mapx, mapy) {
@@ -81,6 +85,6 @@ let TILE_GRID_GENERATOR = {
 
 export function MapMaker(mapWidth, mapHeight) {
   let m = new Map(mapWidth, mapHeight);
-  DATASTORE.MAPS[m.getId()] = m;
+  DATASTORE.MAPS[m.getID()] = m;
   return m;
 }

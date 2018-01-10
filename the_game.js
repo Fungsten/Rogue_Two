@@ -7476,17 +7476,17 @@ for (var p in ROT) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.initializeDatastore = initializeDatastore;
+exports.clearDatastore = clearDatastore;
 // a generally accessible datastore object
 // NOTE: this holds the objects the game uses, keyed by object ID (and subgroupd - e.g. all maps are in a MAPS sub-namespace). Relationships between game objects (e.g. UI mode play's current map) are tracked via id rather than fully embedding related objects, which greatly eases persistence headaches (among other things).
-var DATASTORE = exports.DATASTORE = {};
+var DATASTORE = exports.DATASTORE = void 0;
+clearDatastore();
 
-function initializeDatastore() {
+function clearDatastore() {
   exports.DATASTORE = DATASTORE = {
     ID_SEQ: 1,
-    //GAME: {},
+    GAME: {},
     MAPS: {}
-    //ENTITIES: {}
   };
 }
 
@@ -9527,8 +9527,9 @@ var Game = exports.Game = {
 
   toJSON: function toJSON() {
     var json = '';
-    console.log("the random seed is " + this._randomSeed);
-    json = JSON.stringify({ rseed: this._randomSeed });
+    json = JSON.stringify({
+      rseed: this._randomSeed,
+      playModestate: this.modes.play });
     return json;
   },
 
@@ -9536,16 +9537,10 @@ var Game = exports.Game = {
     var state = JSON.parse(json);
     this._randomSeed = state.rseed;
     console.log("the random seed is " + this._randomSeed);
+    _rotJs2.default.RNG.setSeed(this._randomSeed);
+    this.modes.play.restoreFromState(state.playModeState);
   }
-
 };
-
-//console.dir(ROT);
-
-//document.write("ROT support status: "+ROT.isSupported()+"<br/>");
-
-//let name = "Bob", time = "today";
-//console.log(`Hello ${name}, how are you ${time}?`);
 
 /***/ }),
 /* 128 */
@@ -9582,7 +9577,7 @@ function uniqueID() {
   for (var i = 0; i < 8; i++) {
     id += randCharSource.random();
   }
-  id = '' + (tag ? tag + '-' : '') + _datastore.DATASTORE.ID_SEQ + '-' + id; //DATASTORE.ID_SEQ + '-' + id;
+  id = _datastore.DATASTORE.ID_SEQ + '-' + id; //DATASTORE.ID_SEQ + '-' + id; ${tag ? tag+'-' : ''}
   _datastore.DATASTORE.ID_SEQ++;
   return id;
 }
@@ -15387,7 +15382,7 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
         return false;
       }
 
-      window.localStorage.setItem('roguetwogame', this.game.toJSON());
+      window.localStorage.setItem('roguetwogame', JSON.stringify(_datastore.DATASTORE));
     }
   }, {
     key: 'handleRestore',
@@ -15398,7 +15393,17 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
       }
 
       var restorationString = window.localStorage.getItem('roguetwogame');
-      this.game.fromJSON(restorationString);
+      //this.game.fromJSON(restorationString);
+
+      var state = JSON.parse(restorationString);
+      (0, _datastore.clearDatastore)();
+      _datastore.DATASTORE.ID_SEQ = state.ID_SEQ;
+      this.game.fromJson(state.GAME);
+
+      _datastore.DATASTORE.MAPS = state.MAPS;
+
+      console.log('post-save datastore:');
+      console.dir(_datastore.DATASTORE);
     }
   }, {
     key: 'localStorageAvailable',
@@ -15425,22 +15430,42 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
 var PlayMode = exports.PlayMode = function (_UIMode3) {
   _inherits(PlayMode, _UIMode3);
 
-  function PlayMode() {
+  function PlayMode(thegame) {
     _classCallCheck(this, PlayMode);
 
-    return _possibleConstructorReturn(this, (PlayMode.__proto__ || Object.getPrototypeOf(PlayMode)).apply(this, arguments));
+    var _this3 = _possibleConstructorReturn(this, (PlayMode.__proto__ || Object.getPrototypeOf(PlayMode)).call(this, thegame));
+
+    _this3.state = {
+      mapID: '',
+      cameramapx: '',
+      cameramapy: ''
+    };
+    return _this3;
   }
 
   _createClass(PlayMode, [{
     key: 'enter',
     value: function enter() {
-      if (!this.map) {
-        this.map = (0, _map.MapMaker)(80, 40);
-        this.map.build();
+      if (!this.state.map) {
+        var m = (0, _map.MapMaker)(80, 40);
+        this.mapID = m.getID();
+        m.build();
       }
-      this.camerax = 5;
-      this.cameray = 8;
+      this.state.camerax = 5;
+      this.state.cameray = 8;
       this.cameraSymbol = new _display_symbol.DisplaySymbol('@', '#eb4');
+    }
+  }, {
+    key: 'toJSON',
+    value: function toJSON() {
+      return JSON.stringify(this.state);
+    }
+  }, {
+    key: 'restoreFromState',
+    value: function restoreFromState(stateData) {
+      console.log('restoring play state from');
+      console.dir(stateData);
+      this.state = stateData;
     }
   }, {
     key: 'render',
@@ -15448,7 +15473,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
       display.clear();
       display.drawText(33, 4, "GAME IN PROGRESS");
       display.drawText(33, 5, "PRESS W TO WIN, L TO LOSE");
-      this.map.render(display, this.camerax, this.cameray);
+      _datastore.DATASTORE.MAPS[this.state.mapID].render(display, this.state.cameraxmapx, this.state.cameramapy);
       this.cameraSymbol.render(display, display.getOptions().width / 2, display.getOptions().height / 2);
     }
   }, {
@@ -15673,13 +15698,13 @@ var Map = function () {
     this.state.ydim = ydim || 1;
     this.state.mapType = 'basic caves';
     this.state.setupRngState = _rotJs2.default.RNG.getState();
-    this.state.id = (0, _util.uniqueID)('map-' + this.state.mapType);
+    this.state.id = (0, _util.uniqueID)();
   }
 
   _createClass(Map, [{
     key: 'build',
     value: function build() {
-      this.tileGrid = TILE_GRID_GENERATOR[this.state.mapType](xdim, ydim, this.state.setupRngState);
+      this.tileGrid = TILE_GRID_GENERATOR[this.state.mapType](this.state.xdim, this.state.ydim, this.state.setupRngState);
     }
   }, {
     key: 'getID',
@@ -15729,7 +15754,7 @@ var Map = function () {
   }, {
     key: 'setRngState',
     value: function setRngState(newID) {
-      this.state.id = newID;
+      this.state.RngState = newID;
     }
   }, {
     key: 'render',
@@ -15749,6 +15774,11 @@ var Map = function () {
         cx++;
         cy = 0;
       }
+    }
+  }, {
+    key: 'toJSON',
+    value: function toJSON() {
+      return JSON.stringify(this.state);
     }
   }, {
     key: 'getTile',
@@ -15784,7 +15814,7 @@ var TILE_GRID_GENERATOR = {
 
 function MapMaker(mapWidth, mapHeight) {
   var m = new Map(mapWidth, mapHeight);
-  _datastore.DATASTORE.MAPS[m.getId()] = m;
+  _datastore.DATASTORE.MAPS[m.getID()] = m;
   return m;
 }
 

@@ -139,8 +139,9 @@ export let Game = {
 
   toJSON: function() {
     let json = '';
-    console.log("the random seed is " + this._randomSeed);
-    json = JSON.stringify({rseed: this._randomSeed});
+    json = JSON.stringify({
+      rseed: this._randomSeed,
+      playModestate: this.modes.play});
     return json;
   },
 
@@ -148,19 +149,7 @@ export let Game = {
     let state = JSON.parse(json);
     this._randomSeed = state.rseed;
     console.log("the random seed is " + this._randomSeed);
+    ROT.RNG.setSeed(this._randomSeed);
+    this.modes.play.restoreFromState(state.playModeState);
   }
-
 };
-
-
-
-
-
-
-
-//console.dir(ROT);
-
-//document.write("ROT support status: "+ROT.isSupported()+"<br/>");
-
-//let name = "Bob", time = "today";
-//console.log(`Hello ${name}, how are you ${time}?`);

@@ -5,7 +5,7 @@ import {Game} from './game.js';
 import {MapMaker} from './map.js';
 import {Message} from './message.js';
 import {DisplaySymbol} from './display_symbol';
-import {DATASTORE} from './datastore.js';
+import {DATASTORE, clearDatastore} from './datastore.js';
 
 class UIMode {
   constructor(thegame) {
@@ -101,7 +101,7 @@ export class PersistenceMode extends UIMode {
     console.log('save game');
     if (!this.localStorageAvailable()) {return false;}
 
-    window.localStorage.setItem('roguetwogame',this.game.toJSON());
+    window.localStorage.setItem('roguetwogame',JSON.stringify(DATASTORE));
   }
 
   handleRestore(){
@@ -109,7 +109,17 @@ export class PersistenceMode extends UIMode {
     if (!this.localStorageAvailable()) {return false;}
 
     let restorationString = window.localStorage.getItem('roguetwogame');
-    this.game.fromJSON(restorationString);
+    //this.game.fromJSON(restorationString);
+
+    let state = JSON.parse(restorationString);
+    clearDatastore();
+    DATASTORE.ID_SEQ = state.ID_SEQ;
+    this.game.fromJson(state.GAME);
+
+    DATASTORE.MAPS = state.MAPS;
+
+    console.log('post-save datastore:');
+    console.dir(DATASTORE);
   }
 
   localStorageAvailable() {
@@ -132,22 +142,41 @@ export class PersistenceMode extends UIMode {
 //-----------------------------------------------------
 
 export class PlayMode extends UIMode {
+  constructor(thegame) {
+    super(thegame);
+    this.state = {
+      mapID: '',
+      cameramapx: '',
+      cameramapy: ''
+    };
+  }
 
   enter() {
-    if(! this.map) {
-      this.map = MapMaker(80,40);
-      this.map.build();
+    if(! this.state.map) {
+      let m = MapMaker(80,40);
+      this.mapID = m.getID();
+      m.build();
     }
-    this.camerax = 5;
-    this.cameray = 8;
+    this.state.camerax = 5;
+    this.state.cameray = 8;
     this.cameraSymbol = new DisplaySymbol('@', '#eb4');
+  }
+
+  toJSON() {
+    return JSON.stringify(this.state);
+  }
+
+  restoreFromState(stateData) {
+    console.log('restoring play state from');
+    console.dir(stateData);
+    this.state = stateData;
   }
 
   render(display){
     display.clear();
     display.drawText(33,4,"GAME IN PROGRESS");
     display.drawText(33,5,"PRESS W TO WIN, L TO LOSE");
-    this.map.render(display, this.camerax, this.cameray);
+    DATASTORE.MAPS[this.state.mapID].render(display, this.state.cameraxmapx, this.state.cameramapy);
     this.cameraSymbol.render(display, display.getOptions().width / 2, display.getOptions().height / 2);
   }
 
