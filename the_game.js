@@ -7479,7 +7479,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.clearDatastore = clearDatastore;
 // a generally accessible datastore object
 // NOTE: this holds the objects the game uses, keyed by object ID (and subgroupd - e.g. all maps are in a MAPS sub-namespace). Relationships between game objects (e.g. UI mode play's current map) are tracked via id rather than fully embedding related objects, which greatly eases persistence headaches (among other things).
-var DATASTORE = exports.DATASTORE = void 0;
+var DATASTORE = exports.DATASTORE = {};
 clearDatastore();
 
 function clearDatastore() {
@@ -15403,10 +15403,11 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
       _datastore.DATASTORE.ID_SEQ = state.ID_SEQ;
       this.game.fromJSON(state.GAME);
 
+      var mapData = void 0;
       for (var mapid in state.MAPS) {
-        var mapData = JSON.parse(state.MAPS[mapid]);
+        mapData = JSON.parse(state.MAPS[mapid]);
 
-        _datastore.DATASTORE.MAPS[mapid] = (0, _map.MapMaker)(mapData.xdim, mapData.ydim);
+        _datastore.DATASTORE.MAPS[mapid] = (0, _map.MapMaker)(mapData);
         _datastore.DATASTORE.MAPS[mapid].build();
       }
 
@@ -15445,8 +15446,9 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
 
     _this3.state = {
       mapID: '',
-      cameramapx: '',
-      cameramapy: ''
+      camerax: '',
+      cameray: '',
+      map: ''
     };
     return _this3;
   }
@@ -15455,7 +15457,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
     key: 'enter',
     value: function enter() {
       if (!this.state.map) {
-        var m = (0, _map.MapMaker)(80, 40);
+        var m = (0, _map.MapMaker)(this.state.map);
         this.state.mapID = m.getID();
         m.build();
       }
@@ -15820,9 +15822,18 @@ var TILE_GRID_GENERATOR = {
   }
 };
 
-function MapMaker(mapWidth, mapHeight) {
-  var m = new Map(mapWidth, mapHeight);
+function MapMaker(mapData) {
+  var m = new Map(80, 24);
+  if (mapData) {
+    m = new Map(mapData.xdim, mapData.ydim);
+  }
+
+  if (mapData.id) {
+    m.setID(mapData.id);
+  }
+
   _datastore.DATASTORE.MAPS[m.getID()] = m;
+
   return m;
 }
 

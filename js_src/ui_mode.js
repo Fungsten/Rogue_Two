@@ -119,10 +119,11 @@ export class PersistenceMode extends UIMode {
     DATASTORE.ID_SEQ = state.ID_SEQ;
     this.game.fromJSON(state.GAME);
 
+    let mapData;
     for (let mapid in state.MAPS) {
-      let mapData = JSON.parse(state.MAPS[mapid]);
+      mapData = JSON.parse(state.MAPS[mapid]);
 
-      DATASTORE.MAPS[mapid] = MapMaker(mapData.xdim, mapData.ydim);
+      DATASTORE.MAPS[mapid] = MapMaker(mapData);
       DATASTORE.MAPS[mapid].build();
     }
 
@@ -154,14 +155,15 @@ export class PlayMode extends UIMode {
     super(thegame);
     this.state = {
       mapID: '',
-      cameramapx: '',
-      cameramapy: ''
+      camerax: '',
+      cameray: '',
+      map: ''
     };
   }
 
   enter() {
     if(! this.state.map) {
-      let m = MapMaker(80,40);
+      let m = MapMaker(this.state.map);
       this.state.mapID = m.getID();
       m.build();
     }

@@ -83,8 +83,22 @@ let TILE_GRID_GENERATOR = {
   }
 }
 
-export function MapMaker(mapWidth, mapHeight) {
-  let m = new Map(mapWidth, mapHeight);
+export function MapMaker(mapData) {
+  let m = new Map(80,24);
+  if (mapData){
+    m = new Map(mapData.xdim, mapData.ydim);
+  }
+
+
+  if (mapData.id) {
+    m.setID(mapData.id);
+  }
+
+
+
   DATASTORE.MAPS[m.getID()] = m;
+
+
+
   return m;
 }
