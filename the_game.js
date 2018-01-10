@@ -15436,11 +15436,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
     value: function enter() {
       if (!this.map) {
         this.map = (0, _map.MapMaker)(80, 40);
-        this.map = (0, _map.MapMaker)(80, 40);
-        this.map = (0, _map.MapMaker)(80, 40);
-        this.map = (0, _map.MapMaker)(80, 40);
-        this.map = (0, _map.MapMaker)(80, 40);
-        this.map = (0, _map.MapMaker)(80, 40);
+        this.map.build();
       }
       this.camerax = 5;
       this.cameray = 8;
@@ -15652,7 +15648,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // This is the map class for maps
 
-exports.mapMaker = mapMaker;
+exports.MapMaker = MapMaker;
 
 var _tile = __webpack_require__(337);
 
@@ -15672,21 +15668,68 @@ var Map = function () {
   function Map(xdim, ydim) {
     _classCallCheck(this, Map);
 
-    this.xdim = xdim || 1;
-    this.ydim = ydim || 1;
-    this.tileGrid = TILE_GRID_GENERATOR['basic caves'](xdim, ydim);
-    this.id = uniqueID('map');
+    this.state = {};
+    this.state.xdim = xdim || 1;
+    this.state.ydim = ydim || 1;
+    this.state.mapType = 'basic caves';
+    this.state.setupRngState = _rotJs2.default.RNG.getState();
+    this.state.id = (0, _util.uniqueID)('map-' + this.state.mapType);
   }
 
   _createClass(Map, [{
+    key: 'build',
+    value: function build() {
+      this.tileGrid = TILE_GRID_GENERATOR[this.state.mapType](xdim, ydim, this.state.setupRngState);
+    }
+  }, {
     key: 'getID',
     value: function getID() {
-      return this.id;
+      return this.state.id;
     }
   }, {
     key: 'setID',
     value: function setID(newID) {
-      this.id = newID;
+      this.state.id = newID;
+    }
+  }, {
+    key: 'getXDim',
+    value: function getXDim() {
+      return this.state.xdim;
+    }
+  }, {
+    key: 'setXDim',
+    value: function setXDim(newID) {
+      this.state.xdim = newID;
+    }
+  }, {
+    key: 'getYDim',
+    value: function getYDim() {
+      return this.state.ydim;
+    }
+  }, {
+    key: 'setYDim',
+    value: function setYDim(newID) {
+      this.state.ydim = newID;
+    }
+  }, {
+    key: 'getMapType',
+    value: function getMapType() {
+      return this.state.mapType;
+    }
+  }, {
+    key: 'setMapType',
+    value: function setMapType(newID) {
+      this.state.mapType = newID;
+    }
+  }, {
+    key: 'getRngState',
+    value: function getRngState() {
+      return this.state.RngState;
+    }
+  }, {
+    key: 'setRngState',
+    value: function setRngState(newID) {
+      this.state.id = newID;
     }
   }, {
     key: 'render',
@@ -15710,7 +15753,7 @@ var Map = function () {
   }, {
     key: 'getTile',
     value: function getTile(mapx, mapy) {
-      if (mapx < 0 || mapx > this.xdim - 1 || mapy < 0 || mapy > this.ydim - 1) {
+      if (mapx < 0 || mapx > this.state.xdim - 1 || mapy < 0 || mapy > this.state.ydim - 1) {
         return _tile.TILES.NULLTILE;
       }
       return this.tileGrid[mapx][mapy];
@@ -15721,9 +15764,12 @@ var Map = function () {
 }();
 
 var TILE_GRID_GENERATOR = {
-  'basic caves': function basicCaves(xd, yd) {
+  'basic caves': function basicCaves(xd, yd, rngState) {
     var tg = (0, _util.init2DArray)(xd, yd, _tile.TILES.NULLTILE);
     var gen = new _rotJs2.default.Map.Cellular(xd, yd, { connected: true });
+    var origRngState = _rotJs2.default.RNG.getState();
+    _rotJs2.default.RNG.setState(rngState);
+
     gen.randomize(.5);
     gen.create();
     gen.create();
@@ -15736,7 +15782,7 @@ var TILE_GRID_GENERATOR = {
   }
 };
 
-function mapMaker(mapWidth, mapHeight) {
+function MapMaker(mapWidth, mapHeight) {
   var m = new Map(mapWidth, mapHeight);
   _datastore.DATASTORE.MAPS[m.getId()] = m;
   return m;

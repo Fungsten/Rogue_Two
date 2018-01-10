@@ -136,11 +136,7 @@ export class PlayMode extends UIMode {
   enter() {
     if(! this.map) {
       this.map = MapMaker(80,40);
-      this.map = MapMaker(80,40);
-      this.map = MapMaker(80,40);
-      this.map = MapMaker(80,40);
-      this.map = MapMaker(80,40);
-      this.map = MapMaker(80,40);
+      this.map.build();
     }
     this.camerax = 5;
     this.cameray = 8;

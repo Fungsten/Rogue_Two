@@ -1,23 +1,38 @@
 // This is the map class for maps
 
 import {TILES} from './tile.js';
-import {init2DArray} from './util.js';
+import {init2DArray, uniqueID} from './util.js';
 import ROT from 'rot-js';
 import {DATASTORE} from './datastore.js'
 
 class Map {
   constructor(xdim, ydim) {
-    this.attr = {};
-    this.xdim = xdim || 1;
-    this.ydim = ydim || 1;
-    let mapType = 'basic caves';
-    this.setupRngState = ROT.RNG.getState();
-    this.tileGrid = TILE_GRID_GENERATOR[mapType](xdim, ydim, this.setupRngState);
-    this.id = uniqueID('map-' + mapType);
+    this.state = {};
+    this.state.xdim = xdim || 1;
+    this.state.ydim = ydim || 1;
+    this.state.mapType = 'basic caves';
+    this.state.setupRngState = ROT.RNG.getState();
+    this.state.id = uniqueID('map-' + this.state.mapType);
   }
 
-  getID() {return this.id;}
-  setID(newID) {this.id = newID;}
+  build() {
+    this.tileGrid = TILE_GRID_GENERATOR[this.state.mapType](xdim, ydim, this.state.setupRngState);
+  }
+
+  getID() {return this.state.id;}
+  setID(newID) {this.state.id = newID;}
+
+  getXDim() {return this.state.xdim;}
+  setXDim(newID) {this.state.xdim = newID;}
+
+  getYDim() {return this.state.ydim;}
+  setYDim(newID) {this.state.ydim = newID;}
+
+  getMapType() {return this.state.mapType;}
+  setMapType(newID) {this.state.mapType = newID;}
+
+  getRngState() {return this.state.RngState}
+  setRngState(newID) {this.state.id = newID;}
 
   render(display, camera_map_x, camera_map_y) {
     let cx = 0;
@@ -38,7 +53,7 @@ class Map {
   }
 
   getTile(mapx, mapy) {
-    if (mapx < 0 || mapx > this.xdim - 1 || mapy < 0 || mapy > this.ydim - 1) {
+    if (mapx < 0 || mapx > this.state.xdim - 1 || mapy < 0 || mapy > this.state.ydim - 1) {
       return TILES.NULLTILE;
     }
     return this.tileGrid[mapx][mapy];
@@ -46,7 +61,7 @@ class Map {
 }
 
 let TILE_GRID_GENERATOR = {
-  'basic caves': function(xd, yd, rngState {
+  'basic caves': function(xd, yd, rngState) {
     let tg = init2DArray(xd, yd, TILES.NULLTILE);
     let gen = new ROT.Map.Cellular(xd, yd, { connected: true });
     let origRngState = ROT.RNG.getState();
@@ -64,7 +79,7 @@ let TILE_GRID_GENERATOR = {
   }
 }
 
-export function mapMaker(mapWidth, mapHeight) {
+export function MapMaker(mapWidth, mapHeight) {
   let m = new Map(mapWidth, mapHeight);
   DATASTORE.MAPS[m.getId()] = m;
   return m;
