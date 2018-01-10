@@ -18,3 +18,12 @@ export function init2DArray(xdim, ydim, initVal) {
   }
   return a;
 }
+
+let randCharSource = '0123456789qwertyuiopasdfghjklzxcvbnm;'.split('');
+export function uniqueID() {
+  let id = '';
+  for (let i = 0; i < 8; i++) {
+    id += randCharSource.random();
+  }
+  return id;
+}

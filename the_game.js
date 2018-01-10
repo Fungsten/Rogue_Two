@@ -9530,6 +9530,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.utilAlert = utilAlert;
 exports.existentialCrisis = existentialCrisis;
 exports.init2DArray = init2DArray;
+exports.uniqueID = uniqueID;
 function utilAlert() {
   document.write("this is a util function<br/>");
 }
@@ -9549,6 +9550,15 @@ function init2DArray(xdim, ydim, initVal) {
     }
   }
   return a;
+}
+
+var randCharSource = '0123456789qwertyuiopasdfghjklzxcvbnm;'.split('');
+function uniqueID() {
+  var id = '';
+  for (var i = 0; i < 8; i++) {
+    id += randCharSource.random();
+  }
+  return id;
 }
 
 /***/ }),
@@ -15633,6 +15643,9 @@ var Map = function () {
     this.ydim = ydim || 1;
     //this.tileGrid = init2DArray(this.xdim, this.ydim, TILES.NULLTILE);
     this.tileGrid = TILE_GRID_GENERATOR['basic caves'](xdim, ydim);
+    this.mapID = (0, _util.uniqueID)();
+
+    console.dir(this);
   }
 
   _createClass(Map, [{
@@ -15645,13 +15658,9 @@ var Map = function () {
       var ystart = camera_map_y - Math.trunc(display.getOptions().height / 2);;
       var yend = ystart + display.getOptions().height; //{{display height}};
 
-      //console.log("ystart: " + ystart);
-      //console.log("yend: " + yend);
 
       for (var xi = xstart; xi < xend; xi++) {
-        //console.log("xi: " + xi);
         for (var yi = ystart; yi < yend; yi++) {
-          //console.log("yi: " + yi);
           this.getTile(xi, yi).render(display, cx, cy);
           cy++;
         }
