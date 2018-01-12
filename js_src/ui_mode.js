@@ -221,8 +221,8 @@ export class PlayMode extends UIMode {
     this.curry = {};
     this.curry.curMapID = m.getID();
     this.curry.view = {};
-    this.curry.camerax = 5;
-    this.curry.cameray = 8;
+    this.curry.camerax = 40;
+    this.curry.cameray = 12;
     // this.curry.avatarID = {}
     // this.curry.viewDisplayLoc = {
     //   x: Math.round(display.getOptions().width/2),
@@ -232,11 +232,12 @@ export class PlayMode extends UIMode {
     //m.build();
     // this.state.camerax = 5;
     // this.state.cameray = 8;
-    this.cameraSymbol = new DisplaySymbol(EntityFactory.create("avatar"));
+    // this.cameraSymbol = new DisplaySymbol(EntityFactory.create("avatar"));
     let a = EntityFactory.create("avatar");
     this.curry.avatarID = a.getID();
     // m.addEntityAt(a,?,?);
     m.addEntityAtRandPos(a);
+    this.updateCameraToAvatar();
     console.log("play mode - new game started");
 }
 
@@ -245,7 +246,7 @@ export class PlayMode extends UIMode {
     //display.drawText(33,4,"GAME IN PROGRESS");
     //display.drawText(33,5,"PRESS W TO WIN, L TO LOSE");
     DATASTORE.MAPS[this.curry.curMapID].render(display, this.curry.camerax, this.curry.cameray);
-    this.cameraSymbol.render(display, display.getOptions().width / 2, display.getOptions().height / 2);
+    // this.cameraSymbol.render(display, display.getOptions().width / 2, display.getOptions().height / 2);
   }
 
   handleInput(eventType, evt) {
@@ -269,52 +270,63 @@ export class PlayMode extends UIMode {
 
     //upper left
     if (evt.key == '7' && eventType == 'keydown') {
-      this.moveCamera(-1, -1);
+      this.moveAvatar(-1, -1);
       return true;
     }
     //up
     if (evt.key == '8' && eventType == 'keydown') {
-      this.moveCamera(0, -1);
+      this.moveAvatar(0, -1);
       return true;
     }
     //upper right
     if (evt.key == '9' && eventType == 'keydown') {
-      this.moveCamera(1, -1);
+      this.moveAvatar(1, -1);
       return true;
     }
     //left
     if (evt.key == '4' && eventType == 'keydown') {
-      this.moveCamera(-1, 0);
+      this.moveAvatar(-1, 0);
       return true;
     }
     //right
     if (evt.key == '6' && eventType == 'keydown') {
-      this.moveCamera(1, 0);
+      this.moveAvatar(1, 0);
       return true;
     }
     //lower left
     if (evt.key == '1' && eventType == 'keydown') {
-      this.moveCamera(-1, 1);
+      this.moveAvatar(-1, 1);
       return true;
     }
     //down
     if (evt.key == '2' && eventType == 'keydown') {
-      this.moveCamera(0, 1);
+      this.moveAvatar(0, 1);
       return true;
     }
     //lower right
     if (evt.key == '3' && eventType == 'keydown') {
-      this.moveCamera(1, 1);
+      this.moveAvatar(1, 1);
       return true;
     }
 
     //-----------------------------------------------------
     //-----------------------------------------------------
   }
-  moveCamera(x,y) {
+  moveAvatar(dx,dy) {
       //console.log(x + y);
-      this.curry.camerax += x;
-      this.curry.cameray += y;
+      // this.curry.camerax += dx;
+      // this.curry.cameray += dy;
+      this.getAvatar().moveBy(dx,dy);
+      updateCameraToAvatar();
+  }
+
+  updateCameraToAvatar() {
+    this.curry.camerax = this.getAvatar().getX();
+    this.curry.cameray = this.getAvatar().getY();
+  }
+
+  getAvatar() {
+    return DATASTORE.ENTITIES[this.curry.avatarID];
   }
 }
 //-----------------------------------------------------

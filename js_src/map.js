@@ -39,11 +39,21 @@ class Map {
   getRngBaseState() {return this.mapState.rngBaseState}
   setRngBaseState(newID) {this.mapState.rngBaseState = newID;}
 
+  updateEntityPos(ent, newX, newY) {
+    let oldPos = this.mapState.entityIDtoMapPos[ent.getID()];
+    delete this.mapState.mapPostoEntityID[oldPos];
+
+    this.mapState.mapPostoEntityID[`${newX},${newY}`] = ent.getID();
+    this.mapState.entityIDtoMapPos[ent.getID()] = `${newX},${newY}`;
+  }
+
   addEntityAt(ent, mapx, mapy) {
     let pos = `${mapx},${mapy}`;
     this.mapState.entityIDtoMapPos[ent.getID()] = pos;
     this.mapState.mapPostoEntityID[pos] = ent.getID();
     ent.setmapID(this.getID);
+    ent.setX(mapx);
+    ent.setY(mapy);
   }
 
   addEntityAtRandPos(ent) {
@@ -55,10 +65,17 @@ class Map {
   getRandomOpenPosition() {
     let x = Math.trunc(ROT.RNG.getUniform()*this.mapState.xdim);
     let y = Math.trunc(ROT.RNG.getUniform()*this.mapState.ydim);
-    if (this.tileGrid[x][y].isA('floor')) {
+    if (this.isPositionOpen(x, y)) {
           return `${x},${y}`;
     }
     return this.getRandomOpenPosition();
+  }
+
+  isPositionOpen(mapx, mapy) {
+    if (this.tileGrid[x][y].isA('floor')) {
+          return true;
+    }
+    return false;
   }
 
   render(display, camera_map_x, camera_map_y) {
@@ -107,7 +124,7 @@ let TILE_GRID_GENERATOR = {
     let tg = init2DArray(xd, yd, TILES.NULLTILE);
     let gen = new ROT.Map.Cellular(xd, yd, { connected: true });
 
-    gen.randomize(.5);
+    gen.randomize(.3);
     gen.create();
 
     gen.connect(function(x,y,isWall) {
