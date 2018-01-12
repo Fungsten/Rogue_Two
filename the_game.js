@@ -9412,18 +9412,25 @@ var Game = exports.Game = {
     }
 
   },
+  curMode: '',
   modes: {
     startup: '',
-    curMode: '',
-    persistence: ''
+    persistence: '',
+    play: '',
+    win: '',
+    lose: ''
   },
+
+  isPlaying: false,
+  hasSaved: false,
 
   init: function init() {
     // this._randomSeed = 5 + Math.floor(Math.random()*100000);
     // //this._randomSeed = 76250;
     // console.log("using random seed "+this._randomSeed);
     // ROT.RNG.setSeed(this._randomSeed);
-    console.dir(this);
+    console.log("Game object:");
+    console.dir(Game);
 
     this.display.main.o = new _rotJs2.default.Display({
       width: this.display.main.w,
@@ -9472,11 +9479,17 @@ var Game = exports.Game = {
     }
   },
 
-  setupNewGame: function setupNewGame() {
-    this._randomSeed = 5 + Math.floor(Math.random() * 100000);
+  startNewGame: function startNewGame() {
+    //this._randomSeed = 5 + Math.floor(Math.random()*100000);
     //this._randomSeed = 76250;
-    console.log("using random seed " + this._randomSeed);
-    _rotJs2.default.RNG.setSeed(this._randomSeed);
+    console.log("new game");
+    (0, _datastore.clearDatastore)();
+    console.log('datastore');
+    console.dir(_datastore.DATASTORE);
+    _datastore.DATASTORE.GAME = this;
+    //console.log("using random seed "+this._randomSeed);
+    //ROT.RNG.setSeed(this._randomSeed);
+    this.modes.play.setupNewGame();
   },
 
   getDisplay: function getDisplay(displayId) {
@@ -9526,21 +9539,15 @@ var Game = exports.Game = {
   },
 
   toJSON: function toJSON() {
-    var json = '';
-    console.log(this._randomSeed);
-    json = JSON.stringify({
-      rseed: this._randomSeed,
-      playModeState: this.modes.play });
-    console.log(json);
-    return json;
+    return this.modes.play.toJSON();
   },
 
   fromJSON: function fromJSON(json) {
-    var state = JSON.parse(json);
-    this._randomSeed = this.rseed;
-    console.log("the random seed is " + this._randomSeed);
-    _rotJs2.default.RNG.setSeed(this._randomSeed);
-    this.modes.play.restoreFromState(state.playModeState);
+    this.modes.play.fromJSON(json);
+  },
+
+  restoreFromState: function restoreFromState(stateData) {
+    this.state = stateData;
   }
 };
 
@@ -15221,6 +15228,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.WinMode = exports.LoseMode = exports.UIModeMessages = exports.PlayMode = exports.PersistenceMode = exports.StartupMode = undefined;
 
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // Game Modes
 
 var _rotJs = __webpack_require__(63);
@@ -15319,7 +15328,8 @@ var StartupMode = exports.StartupMode = function (_UIMode) {
     key: 'handleInput',
     value: function handleInput(eventType, evt) {
       if (eventType == "keyup") {
-        console.dir(this);
+        // console.log("what is this");
+        // console.dir(this);
         this.game.switchMode('persistence');
         return true;
       }
@@ -15342,6 +15352,14 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
   }
 
   _createClass(PersistenceMode, [{
+    key: 'enter',
+    value: function enter() {
+      _get(PersistenceMode.prototype.__proto__ || Object.getPrototypeOf(PersistenceMode.prototype), 'enter', this).call(this);
+      if (window.localStorage.getItem("roguetwogame")) {
+        this.game.hasSaved = true;
+      }
+    }
+  }, {
     key: 'render',
     value: function render(display) {
       display.clear();
@@ -15356,7 +15374,7 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
       if (inputType == 'keyup') {
         if (inputData.key == 'n' || inputData.key == 'N') {
           console.log('new game');
-          this.game.setupNewGame();
+          this.game.startNewGame();
           this.game.switchMode('play');
           return true;
         }
@@ -15366,7 +15384,6 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
         }
         if (inputData.key == 'l' || inputData.key == 'L') {
           this.handleRestore();
-          this.game.switchMode('play');
           return true;
         }
         if (inputData.key == 'Escape') {
@@ -15381,11 +15398,15 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
     value: function handleSave() {
       console.log('save game');
       if (!this.localStorageAvailable()) {
-        return false;
+        return;
       }
-
-      window.localStorage.setItem('roguetwogame', JSON.stringify(_datastore.DATASTORE));
+      // console.dir(DATASTORE);
+      // console.log(JSON.stringify(DATASTORE));
       console.dir(_datastore.DATASTORE);
+      window.localStorage.setItem('roguetwogame', JSON.stringify(_datastore.DATASTORE));
+      this.game.hasSaved = true;
+      // console.log(window.localStorage.getItem('roguetwogame'));
+      // console.dir(DATASTORE);
       console.log("done saving");
       this.game.switchMode('play');
     }
@@ -15394,30 +15415,39 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
     value: function handleRestore() {
       console.log('load game');
       if (!this.localStorageAvailable()) {
-        return false;
+        return;
       }
 
       var restorationString = window.localStorage.getItem('roguetwogame');
-      //this.game.fromJSON(restorationString);
-
       var state = JSON.parse(restorationString);
-      //clearDatastore();
-
+      (0, _datastore.clearDatastore)();
+      // console.dir(DATASTORE);
+      // console.log('1');
+      // console.dir(state);
+      // console.log('2');
       _datastore.DATASTORE.GAME = this.game;
-
       _datastore.DATASTORE.ID_SEQ = state.ID_SEQ;
-      //this.game.fromJSON(state.GAME);
+      //DATASTORE.MAPS = state.MAP;
+      console.dir(state);
 
-      var mapData = void 0;
+      console.log("state.maps looks like");
+      console.dir(state.MAPS);
+
       for (var mapid in state.MAPS) {
-        mapData = JSON.parse(state.MAPS[mapid]);
-
-        _datastore.DATASTORE.MAPS[mapid] = (0, _map.MapMaker)(mapData);
-        _datastore.DATASTORE.MAPS[mapid].build();
+        (0, _map.MapMaker)(JSON.parse(state.MAPS[mapid]));
+        // let mapData = JSON.parse(state.MAPS[mapid]);
+        // // MapMaker(JSON.parse(state.MAPS[mapid]));
+        // DATASTORE.MAPS[mapid] = MapMaker(mapData);
+        // DATASTORE.MAPS[mapid].build();
+        // console.log("uno");
+        // MapMaker(mapData).build();
       }
+
+      this.game.fromJSON(state.GAME);
 
       console.log('post-save datastore:');
       console.dir(_datastore.DATASTORE);
+      this.game.switchMode('play');
     }
   }, {
     key: 'localStorageAvailable',
@@ -15444,45 +15474,75 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
 var PlayMode = exports.PlayMode = function (_UIMode3) {
   _inherits(PlayMode, _UIMode3);
 
-  function PlayMode(thegame) {
+  function PlayMode() {
     _classCallCheck(this, PlayMode);
 
-    var _this3 = _possibleConstructorReturn(this, (PlayMode.__proto__ || Object.getPrototypeOf(PlayMode)).call(this, thegame));
-
-    _this3.state = {
-      mapID: '',
-      camerax: '',
-      cameray: ''
-    };
-    return _this3;
+    return _possibleConstructorReturn(this, (PlayMode.__proto__ || Object.getPrototypeOf(PlayMode)).apply(this, arguments));
   }
 
   _createClass(PlayMode, [{
     key: 'enter',
+
+    // constructor(thegame) {
+    //   super(thegame);
+    //   this.state = {
+    //     mapID: '',
+    //     camerax: '',
+    //     cameray: '',
+    //   };
+    // }
+
     value: function enter() {
-      console.log("entering play mode");
-      console.dir(this.state);
-      if (!this.state.mapID) {
-        var m = (0, _map.MapMaker)({ xdim: 80, ydim: 24 });
-        this.state.mapID = m.getID();
-        m.build();
-      }
-      this.state.camerax = 5;
-      this.state.cameray = 8;
-      this.cameraSymbol = new _display_symbol.DisplaySymbol('@', '#eb4');
+      // console.log("entering play mode");
+      // // console.log(window.localStorage.getItem('roguetwogame'));
+      // console.dir(this.state.mapID);
+      // if(! this.state.mapID) {
+      //   let m = MapMaker({xdim: 80, ydim: 24});
+      //   this.state.mapID = m.getID();
+      //   m.build();
+      // }
+      // this.state.camerax = 5;
+      // this.state.cameray = 8;
+      // this.cameraSymbol = new DisplaySymbol('@', '#eb4');
+      _get(PlayMode.prototype.__proto__ || Object.getPrototypeOf(PlayMode.prototype), 'enter', this).call(this);
+      this.game.isPlaying = true;
     }
   }, {
     key: 'toJSON',
     value: function toJSON() {
-      return JSON.stringify(this.state);
+      return JSON.stringify(this.curry);
+    }
+  }, {
+    key: 'fromJSON',
+    value: function fromJSON(json) {
+      this.curry = JSON.parse(json);
     }
   }, {
     key: 'restoreFromState',
     value: function restoreFromState(stateData) {
-      //should put in a game object
       console.log('restoring play state from');
       console.dir(stateData);
       this.state = stateData;
+    }
+  }, {
+    key: 'setupNewGame',
+    value: function setupNewGame() {
+      var m = (0, _map.MapMaker)({ xdim: 80, ydim: 24 });
+
+      this.curry = {};
+      this.curry.curMapID = m.getID();
+      this.curry.view = {};
+      this.curry.camerax = 5;
+      this.curry.cameray = 8;
+      // this.curry.viewDisplayLoc = {
+      //   x: Math.round(display.getOptions().width/2),
+      //   y: Math.round(display.getOptions().height/2)
+      // };
+      //DATASTORE.GAME = this;
+      //m.build();
+      // this.state.camerax = 5;
+      // this.state.cameray = 8;
+      this.cameraSymbol = new _display_symbol.DisplaySymbol('@', '#eb4');
     }
   }, {
     key: 'render',
@@ -15490,7 +15550,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
       display.clear();
       //display.drawText(33,4,"GAME IN PROGRESS");
       //display.drawText(33,5,"PRESS W TO WIN, L TO LOSE");
-      _datastore.DATASTORE.MAPS[this.state.mapID].render(display, this.state.camerax, this.state.cameray);
+      _datastore.DATASTORE.MAPS[this.curry.curMapID].render(display, this.curry.camerax, this.curry.cameray);
       this.cameraSymbol.render(display, display.getOptions().width / 2, display.getOptions().height / 2);
     }
   }, {
@@ -15561,15 +15621,14 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
   }, {
     key: 'moveCamera',
     value: function moveCamera(x, y) {
-      console.log(x + y);
-      this.state.camerax += x;
-      this.state.cameray += y;
+      //console.log(x + y);
+      this.curry.camerax += x;
+      this.curry.cameray += y;
     }
   }]);
 
   return PlayMode;
 }(UIMode);
-
 //-----------------------------------------------------
 //-----------------------------------------------------
 
@@ -15636,9 +15695,9 @@ var LoseMode = exports.LoseMode = function (_UIMode5) {
 
   return LoseMode;
 }(UIMode);
+//-----------------------------------------------------
+//-----------------------------------------------------
 
-//-----------------------------------------------------
-//-----------------------------------------------------
 
 var WinMode = exports.WinMode = function (_UIMode6) {
   _inherits(WinMode, _UIMode6);
@@ -15702,68 +15761,71 @@ var Map = function () {
   function Map(xdim, ydim) {
     _classCallCheck(this, Map);
 
-    this.state = {};
-    this.state.xdim = xdim || 1;
-    this.state.ydim = ydim || 1;
-    this.state.mapType = 'basic caves';
-    this.state.setupRngState = _rotJs2.default.RNG.getState();
-    this.state.id = (0, _util.uniqueID)();
+    this.mapState = {};
+    this.mapState.id = (0, _util.uniqueID)();
+    this.mapState.xdim = xdim || 1;
+    this.mapState.ydim = ydim || 1;
+    this.mapState.mapType = 'basic caves';
+    //this.rng = ROT.RNG.clone();
+    //this.mapState.rngBaseState = this.rng.getState();
+    this.mapState.setupRngState = _rotJs2.default.RNG.getState();
   }
 
   _createClass(Map, [{
     key: 'build',
     value: function build() {
-      this.tileGrid = TILE_GRID_GENERATOR[this.state.mapType](this.state.xdim, this.state.ydim, this.state.setupRngState);
+      //ROT.RNG.setState(this.mapState.rngBaseState);
+      this.tileGrid = TILE_GRID_GENERATOR[this.mapState.mapType](this.mapState.xdim, this.mapState.ydim, this.mapState.setupRngState);
     }
   }, {
     key: 'getID',
     value: function getID() {
-      return this.state.id;
+      return this.mapState.id;
     }
   }, {
     key: 'setID',
     value: function setID(newID) {
-      this.state.id = newID;
+      this.mapState.id = newID;
     }
   }, {
     key: 'getXDim',
     value: function getXDim() {
-      return this.state.xdim;
+      return this.mapState.xdim;
     }
   }, {
     key: 'setXDim',
     value: function setXDim(newID) {
-      this.state.xdim = newID;
+      this.mapState.xdim = newID;
     }
   }, {
     key: 'getYDim',
     value: function getYDim() {
-      return this.state.ydim;
+      return this.mapState.ydim;
     }
   }, {
     key: 'setYDim',
     value: function setYDim(newID) {
-      this.state.ydim = newID;
+      this.mapState.ydim = newID;
     }
   }, {
     key: 'getMapType',
     value: function getMapType() {
-      return this.state.mapType;
+      return this.mapState.mapType;
     }
   }, {
     key: 'setMapType',
     value: function setMapType(newID) {
-      this.state.mapType = newID;
+      this.mapState.mapType = newID;
     }
   }, {
-    key: 'getRngState',
-    value: function getRngState() {
-      return this.state.RngState;
+    key: 'getRngBaseState',
+    value: function getRngBaseState() {
+      return this.mapState.rngBaseState;
     }
   }, {
-    key: 'setRngState',
-    value: function setRngState(newID) {
-      this.state.RngState = newID;
+    key: 'setRngBaseState',
+    value: function setRngBaseState(newID) {
+      this.mapState.rngBaseState = newID;
     }
   }, {
     key: 'render',
@@ -15787,15 +15849,20 @@ var Map = function () {
   }, {
     key: 'toJSON',
     value: function toJSON() {
-      return JSON.stringify(this.state);
+      return JSON.stringify(this.mapState);
+    }
+  }, {
+    key: 'fromState',
+    value: function fromState(state) {
+      this.mapState = state;
     }
   }, {
     key: 'getTile',
     value: function getTile(mapx, mapy) {
-      if (mapx < 0 || mapx > this.state.xdim - 1 || mapy < 0 || mapy > this.state.ydim - 1) {
+      if (mapx < 0 || mapx > this.mapState.xdim - 1 || mapy < 0 || mapy > this.mapState.ydim - 1) {
         return _tile.TILES.NULLTILE;
       }
-      return this.tileGrid[mapx][mapy];
+      return this.tileGrid[mapx][mapy] || _tile.TILES.NULLTILE;
     }
   }]);
 
@@ -15804,15 +15871,14 @@ var Map = function () {
 
 var TILE_GRID_GENERATOR = {
   'basic caves': function basicCaves(xd, yd, rngState) {
-    var tg = (0, _util.init2DArray)(xd, yd, _tile.TILES.NULLTILE);
-    var gen = new _rotJs2.default.Map.Cellular(xd, yd, { connected: true });
     var origRngState = _rotJs2.default.RNG.getState();
     _rotJs2.default.RNG.setState(rngState);
+    var tg = (0, _util.init2DArray)(xd, yd, _tile.TILES.NULLTILE);
+    var gen = new _rotJs2.default.Map.Cellular(xd, yd, { connected: true });
 
     gen.randomize(.5);
     gen.create();
-    gen.create();
-    gen.create();
+
     gen.connect(function (x, y, isWall) {
       tg[x][y] = isWall || x == 0 || y == 0 || x == xd - 1 || y == yd - 1 ? _tile.TILES.WALL : _tile.TILES.FLOOR;
     });
@@ -15826,12 +15892,13 @@ function MapMaker(mapData) {
   // if (mapData){
   //   m = new Map(mapData.xdim, mapData.ydim);
   // }
-  if (mapData.id) {
-    m.setID(mapData.id);
+  if (mapData.id !== undefined) {
+    m.fromState(mapData);
   }
-  if (mapData.setupRngState) {
-    m.setID(mapData.setupRngState);
-  }
+  m.build();
+  // if (mapData.setupRngState) {
+  //   m.setID(mapData.setupRngState);
+  // }
   _datastore.DATASTORE.MAPS[m.getID()] = m;
   return m;
 }
