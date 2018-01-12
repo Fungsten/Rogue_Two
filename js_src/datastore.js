@@ -8,5 +8,6 @@ export function clearDatastore() {
     ID_SEQ: 1,
     GAME: {},
     MAPS: {},
+    ENTITIES: {},
   }
 }
