@@ -72,7 +72,7 @@ class Map {
   }
 
   isPositionOpen(mapx, mapy) {
-    if (this.tileGrid[x][y].isA('floor')) {
+    if (this.tileGrid[mapx][mapy].isA('floor')) {
           return true;
     }
     return false;

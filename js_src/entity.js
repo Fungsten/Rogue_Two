@@ -22,6 +22,7 @@ export class Entity extends DisplaySymbol {
   setX(newInfo) { this.entState.x = newInfo; }
   getY() { return this.entState.y; }
   setY(newInfo) { this.entState.y = newInfo; }
+
   getPos() {
     return `${this.entState.x}${this.entState.y}`;
   }
@@ -51,7 +52,9 @@ export class Entity extends DisplaySymbol {
       console.log(this.getMap());
 
       this.getMap().updateEntityPos(this, this.entState.x, this.entState.y);
+      return true;
     }
+    return false;
 
 
   }
