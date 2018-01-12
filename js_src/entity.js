@@ -27,8 +27,8 @@ export class Entity extends DisplaySymbol {
     return `${this.entState.x}${this.entState.y}`;
   }
 
-  getmapID() { return this.entState.name; }
-  setmapID(newInfo) { this.entState.name = newInfo; }
+  getmapID() { return this.entState.mapID; }
+  setmapID(newInfo) { this.entState.mapID = newInfo; }
 
   getMap() { return DATASTORE.MAPS[this.entState.mapID]; }
   getID() { return this.entState.id; }
@@ -37,9 +37,12 @@ export class Entity extends DisplaySymbol {
 
   moveBy(dx, dy) {
     console.log(this.entState.mapID);
+    console.log("datastore.maps");
     console.log(DATASTORE.MAPS);
+    console.log("datasore.maps[this.entstate.mapid]");
     console.log(DATASTORE.MAPS[this.entState.mapID]);
     console.log(this.getPos());
+    console.log(this.getMap());
 
     let newX = this.entState.x*1 + dx*1;
     let newY = this.entState.y*1 + dy*1;
@@ -47,9 +50,6 @@ export class Entity extends DisplaySymbol {
     if (this.getMap().isPositionOpen(newX, newY)){
       this.entState.x = newX;
       this.entState.y = newY;
-
-      console.log(this.getPos());
-      console.log(this.getMap());
 
       this.getMap().updateEntityPos(this, this.entState.x, this.entState.y);
       return true;

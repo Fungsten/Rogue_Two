@@ -237,6 +237,7 @@ export class PlayMode extends UIMode {
     this.curry.avatarID = a.getID();
     // m.addEntityAt(a,?,?);
     m.addEntityAtRandPos(a);
+    a.setmapID(this.curry.curMapID);
     this.updateCameraToAvatar();
     console.log("play mode - new game started");
 }
@@ -317,7 +318,7 @@ export class PlayMode extends UIMode {
       // this.curry.camerax += dx;
       // this.curry.cameray += dy;
       this.getAvatar().moveBy(dx,dy);
-      updateCameraToAvatar();
+      this.updateCameraToAvatar();
   }
 
   updateCameraToAvatar() {
