@@ -10,6 +10,7 @@ export class Entity extends DisplaySymbol {
 
     this.entState = {};
     this.entState.name = template.name;
+    //this.entState.chr = template.chr;
     this.entState.x = 0;
     this.entState.y = 0;
     this.entState.mapID = 0;
@@ -23,9 +24,7 @@ export class Entity extends DisplaySymbol {
   getY() { return this.entState.y; }
   setY(newInfo) { this.entState.y = newInfo; }
 
-  getPos() {
-    return `${this.entState.x}${this.entState.y}`;
-  }
+  getPos() { return `${this.entState.x}${this.entState.y}`; }
 
   getmapID() { return this.entState.mapID; }
   setmapID(newInfo) { this.entState.mapID = newInfo; }
@@ -36,14 +35,6 @@ export class Entity extends DisplaySymbol {
 
 
   moveBy(dx, dy) {
-    console.log(this.entState.mapID);
-    console.log("datastore.maps");
-    console.log(DATASTORE.MAPS);
-    console.log("datasore.maps[this.entstate.mapid]");
-    console.log(DATASTORE.MAPS[this.entState.mapID]);
-    console.log(this.getPos());
-    console.log(this.getMap());
-
     let newX = this.entState.x*1 + dx*1;
     let newY = this.entState.y*1 + dy*1;
 
@@ -55,11 +46,17 @@ export class Entity extends DisplaySymbol {
       return true;
     }
     return false;
-
-
   }
 
   toJSON() {
     return JSON.stringify(this.entState);
+  }
+
+  fromJSON(json) {
+    this.entState = JSON.parse(json);
+  }
+
+  fromState(state) {
+    this.entState = state;
   }
 }

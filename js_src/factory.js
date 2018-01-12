@@ -1,5 +1,6 @@
 // a colonel factory system = objects that create other objects
 import {DATASTORE} from './datastore.js';
+import {DisplaySymbol} from './display_symbol.js';
 
 export class Factory {
   constructor(productClass, datastoreKey) {
@@ -14,8 +15,11 @@ export class Factory {
     this.knownTemplates[template.templateName ? template.templateName : template.name] = template;
   }
 
-  create(templateName) {
+  create(templateName, restorationState) {
     let product = new this.productClass(this.knownTemplates[templateName]);
+    if (restorationState) {
+      product.fromState(restorationState);
+    }
 
     DATASTORE[this.datastoreKey][product.getID()] = product;
 

@@ -109,13 +109,9 @@ export class PersistenceMode extends UIMode {
   handleSave(){
     console.log('save game');
     if (!this.localStorageAvailable()) {return;}
-    // console.dir(DATASTORE);
-    // console.log(JSON.stringify(DATASTORE));
     console.dir(DATASTORE);
     window.localStorage.setItem('roguetwogame', JSON.stringify(DATASTORE));
     this.game.hasSaved = true;
-    // console.log(window.localStorage.getItem('roguetwogame'));
-    // console.dir(DATASTORE);
     console.log("done saving");
     this.game.switchMode('play');
   }
@@ -127,13 +123,8 @@ export class PersistenceMode extends UIMode {
     let restorationString = window.localStorage.getItem('roguetwogame');
     let state = JSON.parse(restorationString);
     clearDatastore();
-    // console.dir(DATASTORE);
-    // console.log('1');
-    // console.dir(state);
-    // console.log('2');
     DATASTORE.GAME = this.game;
     DATASTORE.ID_SEQ = state.ID_SEQ;
-    //DATASTORE.MAPS = state.MAP;
     console.dir(state);
 
     console.log("state.maps looks like");
@@ -141,12 +132,15 @@ export class PersistenceMode extends UIMode {
 
     for (let mapid in state.MAPS) {
       MapMaker(JSON.parse(state.MAPS[mapid]));
-      // let mapData = JSON.parse(state.MAPS[mapid]);
-      // // MapMaker(JSON.parse(state.MAPS[mapid]));
-      // DATASTORE.MAPS[mapid] = MapMaker(mapData);
-      // DATASTORE.MAPS[mapid].build();
-      // console.log("uno");
-      // MapMaker(mapData).build();
+    }
+
+    for (let entityID in state.ENTITIES) {
+      let entState = JSON.parse(state.ENTITIES[entityID]);
+      console.log("state.ENTITIES: ");
+      console.log(state.ENTITIES);
+      console.log("The entState is: ");
+      console.log(entState);
+      EntityFactory.create(entState.name, entState);
     }
 
     this.game.fromJSON(state.GAME);
@@ -169,34 +163,14 @@ export class PersistenceMode extends UIMode {
       return false;
     }
   }
-
 }
 
 //-----------------------------------------------------
 //-----------------------------------------------------
 
 export class PlayMode extends UIMode {
-  // constructor(thegame) {
-  //   super(thegame);
-  //   this.state = {
-  //     mapID: '',
-  //     camerax: '',
-  //     cameray: '',
-  //   };
-  // }
 
   enter() {
-    // console.log("entering play mode");
-    // // console.log(window.localStorage.getItem('roguetwogame'));
-    // console.dir(this.state.mapID);
-    // if(! this.state.mapID) {
-    //   let m = MapMaker({xdim: 80, ydim: 24});
-    //   this.state.mapID = m.getID();
-    //   m.build();
-    // }
-    // this.state.camerax = 5;
-    // this.state.cameray = 8;
-    // this.cameraSymbol = new DisplaySymbol('@', '#eb4');
     super.enter();
     this.game.isPlaying = true;
   }
@@ -228,14 +202,9 @@ export class PlayMode extends UIMode {
     //   x: Math.round(display.getOptions().width/2),
     //   y: Math.round(display.getOptions().height/2)
     // };
-    //DATASTORE.GAME = this;
-    //m.build();
-    // this.state.camerax = 5;
-    // this.state.cameray = 8;
-    // this.cameraSymbol = new DisplaySymbol(EntityFactory.create("avatar"));
+
     let a = EntityFactory.create("avatar");
     this.curry.avatarID = a.getID();
-    // m.addEntityAt(a,?,?);
     m.addEntityAtRandPos(a);
     a.setmapID(this.curry.curMapID);
     this.updateCameraToAvatar();
