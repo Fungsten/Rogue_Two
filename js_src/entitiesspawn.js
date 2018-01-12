@@ -7,5 +7,10 @@ EntityFactory.learn({
   'name': 'avatar',
   'chr': '@',
   'fg': '#eb4',
+});
 
+EntityFactory.learn({
+  'name': 'Brady',
+  'chr': 'B',
+  'fg': '#eb4',
 });

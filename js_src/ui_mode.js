@@ -204,8 +204,13 @@ export class PlayMode extends UIMode {
     // };
 
     let a = EntityFactory.create("avatar");
+    let b = EntityFactory.create("Brady");
+
     this.curry.avatarID = a.getID();
+
     m.addEntityAtRandPos(a);
+    m.addEntityAtRandPos(b);
+
     a.setmapID(this.curry.curMapID);
     this.updateCameraToAvatar();
     console.log("play mode - new game started");
