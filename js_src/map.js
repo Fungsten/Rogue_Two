@@ -39,9 +39,27 @@ class Map {
   getRngBaseState() {return this.mapState.rngBaseState}
   setRngBaseState(newID) {this.mapState.rngBaseState = newID;}
 
-  // addEntityAt(ent, mapx, mapy) {
-  //   this.mapState.entityIDtoMapPos[ent.getID()] = ;
-  // }
+  addEntityAt(ent, mapx, mapy) {
+    let pos = `${mapx},${mapy}`;
+    this.mapState.entityIDtoMapPos[ent.getID()] = pos;
+    this.mapState.mapPostoEntityID[pos] = ent.getID();
+    ent.setmapID(this.getID);
+  }
+
+  addEntityAtRandPos(ent) {
+    let openPos = this.getRandomOpenPosition();
+    let p = openPos.split(',');
+    this.addEntityAt(ent, p[0], p[1]);
+  }
+
+  getRandomOpenPosition() {
+    let x = Math.trunc(ROT.RNG.getUniform()*this.mapState.xdim);
+    let y = Math.trunc(ROT.RNG.getUniform()*this.mapState.ydim);
+    if (this.tileGrid[x][y].isA('floor')) {
+          return `${x},${y}`;
+    }
+    return this.getRandomOpenPosition();
+  }
 
   render(display, camera_map_x, camera_map_y) {
     let cx = 0;
@@ -53,7 +71,12 @@ class Map {
 
     for(let xi = xstart; xi < xend; xi++){
       for(let yi = ystart; yi < yend; yi++){
-        this.getTile(xi, yi).render(display, cx, cy);
+        let pos = `${xi},${yi}`;
+        if (this.mapState.mapPostoEntityID[pos]){
+          DATASTORE.ENTITIES[this.mapState.mapPostoEntityID[pos]].render(display, cx, cy);
+        } else {
+          this.getTile(xi, yi).render(display, cx, cy);
+        }
         cy++;
       }
       cx++;

@@ -7,6 +7,10 @@ export class Tile extends DisplaySymbol {
     super(template);
     this.name = template.name;
   }
+
+  isA(name) {
+    return this.name == name;
+  }
 }
 
 export let TILES = {

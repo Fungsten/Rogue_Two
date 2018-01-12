@@ -223,6 +223,7 @@ export class PlayMode extends UIMode {
     this.curry.view = {};
     this.curry.camerax = 5;
     this.curry.cameray = 8;
+    // this.curry.avatarID = {}
     // this.curry.viewDisplayLoc = {
     //   x: Math.round(display.getOptions().width/2),
     //   y: Math.round(display.getOptions().height/2)
@@ -233,6 +234,9 @@ export class PlayMode extends UIMode {
     // this.state.cameray = 8;
     this.cameraSymbol = new DisplaySymbol(EntityFactory.create("avatar"));
     let a = EntityFactory.create("avatar");
+    this.curry.avatarID = a.getID();
+    // m.addEntityAt(a,?,?);
+    m.addEntityAtRandPos(a);
     console.log("play mode - new game started");
 }
 
