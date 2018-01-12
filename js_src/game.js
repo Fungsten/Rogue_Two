@@ -25,18 +25,25 @@ export let Game = {
     }
 
   },
+  curMode: '',
   modes: {
     startup: '',
-    curMode: '',
-    persistence: ''
+    persistence: '',
+    play: '',
+    win: '',
+    lose: ''
   },
+
+  isPlaying: false,
+  hasSaved: false,
 
   init: function() {
     // this._randomSeed = 5 + Math.floor(Math.random()*100000);
     // //this._randomSeed = 76250;
     // console.log("using random seed "+this._randomSeed);
     // ROT.RNG.setSeed(this._randomSeed);
-    console.dir(this);
+    console.log("Game object:");
+    console.dir(Game);
 
     this.display.main.o = new ROT.Display({
       width: this.display.main.w,
@@ -87,14 +94,15 @@ export let Game = {
   },
 
   startNewGame: function() {
-    this._randomSeed = 5 + Math.floor(Math.random()*100000);
+    //this._randomSeed = 5 + Math.floor(Math.random()*100000);
     //this._randomSeed = 76250;
+    console.log("new game");
     clearDatastore();
-    console.log("the datastore");
+    console.log('datastore');
     console.dir(DATASTORE);
     DATASTORE.GAME = this;
-    console.log("using random seed "+this._randomSeed);
-    ROT.RNG.setSeed(this._randomSeed);
+    //console.log("using random seed "+this._randomSeed);
+    //ROT.RNG.setSeed(this._randomSeed);
     this.modes.play.setupNewGame();
   },
 

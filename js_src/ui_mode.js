@@ -52,8 +52,8 @@ export class StartupMode extends UIMode { //defines how an object exists
 
   handleInput(eventType, evt) {
     if (eventType == "keyup") {
-      console.log("what is this");
-      console.dir(this);
+      // console.log("what is this");
+      // console.dir(this);
       this.game.switchMode('persistence');
       return true;
     }
@@ -64,6 +64,13 @@ export class StartupMode extends UIMode { //defines how an object exists
 //-----------------------------------------------------
 
 export class PersistenceMode extends UIMode {
+  enter() {
+    super.enter();
+    if (window.localStorage.getItem("roguetwogame")){
+      this.game.hasSaved = true;
+    }
+  }
+
   render(display) {
     display.clear();
     display.drawText(33,2,"N for new game");
@@ -86,8 +93,6 @@ export class PersistenceMode extends UIMode {
       }
       if (inputData.key == 'l' || inputData.key == 'L') {
         this.handleRestore();
-        //this.game.restoreFromState(restore);
-        this.game.switchMode('play');
         return true;
       }
       if (inputData.key == 'Escape'){
@@ -101,38 +106,52 @@ export class PersistenceMode extends UIMode {
 
   handleSave(){
     console.log('save game');
-    if (!this.localStorageAvailable()) {return false;}
+    if (!this.localStorageAvailable()) {return;}
+    // console.dir(DATASTORE);
+    // console.log(JSON.stringify(DATASTORE));
     console.dir(DATASTORE);
-
     window.localStorage.setItem('roguetwogame', JSON.stringify(DATASTORE));
-    console.dir(DATASTORE);
+    this.game.hasSaved = true;
+    // console.log(window.localStorage.getItem('roguetwogame'));
+    // console.dir(DATASTORE);
     console.log("done saving");
     this.game.switchMode('play');
   }
 
   handleRestore(){
     console.log('load game');
-    if (!this.localStorageAvailable()) {return false;}
+    if (!this.localStorageAvailable()) {return;}
 
     let restorationString = window.localStorage.getItem('roguetwogame');
     let state = JSON.parse(restorationString);
     clearDatastore();
-
-    DATASTORE.GAME = this.GAME;
+    // console.dir(DATASTORE);
+    // console.log('1');
+    // console.dir(state);
+    // console.log('2');
+    DATASTORE.GAME = this.game;
     DATASTORE.ID_SEQ = state.ID_SEQ;
     //DATASTORE.MAPS = state.MAP;
     console.dir(state);
-    this.game.fromJSON(state.GAME);
+
+    console.log("state.maps looks like");
+    console.dir(state.MAPS);
 
     for (let mapid in state.MAPS) {
-      let mapData = JSON.parse(state.MAPS[mapid]);
-
-      DATASTORE.MAPS[mapid] = MapMaker(mapData);
-      DATASTORE.MAPS[mapid].build();
+      MapMaker(JSON.parse(state.MAPS[mapid]));
+      // let mapData = JSON.parse(state.MAPS[mapid]);
+      // // MapMaker(JSON.parse(state.MAPS[mapid]));
+      // DATASTORE.MAPS[mapid] = MapMaker(mapData);
+      // DATASTORE.MAPS[mapid].build();
+      // console.log("uno");
+      // MapMaker(mapData).build();
     }
+
+    this.game.fromJSON(state.GAME);
 
     console.log('post-save datastore:');
     console.dir(DATASTORE);
+    this.game.switchMode('play');
   }
 
   localStorageAvailable() {
@@ -155,37 +174,40 @@ export class PersistenceMode extends UIMode {
 //-----------------------------------------------------
 
 export class PlayMode extends UIMode {
-  constructor(thegame) {
-    super(thegame);
-    this.state = {
-      mapID: '',
-      camerax: '',
-      cameray: '',
-    };
-  }
+  // constructor(thegame) {
+  //   super(thegame);
+  //   this.state = {
+  //     mapID: '',
+  //     camerax: '',
+  //     cameray: '',
+  //   };
+  // }
 
   enter() {
-    console.log("entering play mode");
-    console.dir(this.state);
-    if(! this.state.mapID) {
-      let m = MapMaker({xdim: 80, ydim: 24});
-      this.state.mapID = m.getID();
-      m.build();
-    }
-    this.state.camerax = 5;
-    this.state.cameray = 8;
-    this.cameraSymbol = new DisplaySymbol('@', '#eb4');
+    // console.log("entering play mode");
+    // // console.log(window.localStorage.getItem('roguetwogame'));
+    // console.dir(this.state.mapID);
+    // if(! this.state.mapID) {
+    //   let m = MapMaker({xdim: 80, ydim: 24});
+    //   this.state.mapID = m.getID();
+    //   m.build();
+    // }
+    // this.state.camerax = 5;
+    // this.state.cameray = 8;
+    // this.cameraSymbol = new DisplaySymbol('@', '#eb4');
+    super.enter();
+    this.game.isPlaying = true;
   }
 
   toJSON() {
-    return JSON.stringify(this.state);
+    return JSON.stringify(this.curry);
   }
 
   fromJSON(json) {
-    this.state = JSON.parse(json);
+    this.curry = JSON.parse(json);
   }
 
-  restoreFromState(stateData) { //should put in a game object
+  restoreFromState(stateData) {
     console.log('restoring play state from');
     console.dir(stateData);
     this.state = stateData;
@@ -193,11 +215,20 @@ export class PlayMode extends UIMode {
 
   setupNewGame() {
     let m = MapMaker({xdim: 80, ydim: 24});
-    this.state.mapID = m.getID();
+
+    this.curry = {};
+    this.curry.curMapID = m.getID();
+    this.curry.view = {};
+    this.curry.camerax = 5;
+    this.curry.cameray = 8;
+    // this.curry.viewDisplayLoc = {
+    //   x: Math.round(display.getOptions().width/2),
+    //   y: Math.round(display.getOptions().height/2)
+    // };
     //DATASTORE.GAME = this;
-    m.build();
-    this.state.camerax = 5;
-    this.state.cameray = 8;
+    //m.build();
+    // this.state.camerax = 5;
+    // this.state.cameray = 8;
     this.cameraSymbol = new DisplaySymbol('@', '#eb4');
   }
 
@@ -205,7 +236,7 @@ export class PlayMode extends UIMode {
     display.clear();
     //display.drawText(33,4,"GAME IN PROGRESS");
     //display.drawText(33,5,"PRESS W TO WIN, L TO LOSE");
-    DATASTORE.MAPS[this.state.mapID].render(display, this.state.camerax, this.state.cameray);
+    DATASTORE.MAPS[this.curry.curMapID].render(display, this.curry.camerax, this.curry.cameray);
     this.cameraSymbol.render(display, display.getOptions().width / 2, display.getOptions().height / 2);
   }
 
@@ -272,17 +303,12 @@ export class PlayMode extends UIMode {
     //-----------------------------------------------------
     //-----------------------------------------------------
   }
-
   moveCamera(x,y) {
-      console.log(x + y);
-      this.state.camerax += x;
-      this.state.cameray += y;
+      //console.log(x + y);
+      this.curry.camerax += x;
+      this.curry.cameray += y;
   }
-
 }
-
-
-
 //-----------------------------------------------------
 //-----------------------------------------------------
 
@@ -301,9 +327,6 @@ export class UIModeMessages extends UIMode {
       return false;
     }
   }
-
-
-
 }
 //don't need to export parent classes to export subclasses
 
@@ -324,12 +347,9 @@ export class LoseMode extends UIMode {
     }
   }
 }
-
 //-----------------------------------------------------
 //-----------------------------------------------------
-
 export class WinMode extends UIMode {
-
   render(display){
     display.clear();
     display.drawText(33,4,"A WINNER IS YOU");

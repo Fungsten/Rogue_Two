@@ -7,32 +7,35 @@ import {DATASTORE} from './datastore.js'
 
 class Map {
   constructor(xdim, ydim) {
-    this.state = {};
-    this.state.xdim = xdim || 1;
-    this.state.ydim = ydim || 1;
-    this.state.mapType = 'basic caves';
-    this.state.setupRngState = ROT.RNG.getState();
-    this.state.id = uniqueID();
+    this.mapState = {};
+    this.mapState.id = uniqueID();
+    this.mapState.xdim = xdim || 1;
+    this.mapState.ydim = ydim || 1;
+    this.mapState.mapType = 'basic caves';
+    //this.rng = ROT.RNG.clone();
+    //this.mapState.rngBaseState = this.rng.getState();
+    this.mapState.setupRngState = ROT.RNG.getState();
   }
 
   build() {
-    this.tileGrid = TILE_GRID_GENERATOR[this.state.mapType](this.state.xdim, this.state.ydim, this.state.setupRngState);
+    //ROT.RNG.setState(this.mapState.rngBaseState);
+    this.tileGrid = TILE_GRID_GENERATOR[this.mapState.mapType](this.mapState.xdim, this.mapState.ydim, this.mapState.setupRngState);
   }
 
-  getID() {return this.state.id;}
-  setID(newID) {this.state.id = newID;}
+  getID() {return this.mapState.id;}
+  setID(newID) {this.mapState.id = newID;}
 
-  getXDim() {return this.state.xdim;}
-  setXDim(newID) {this.state.xdim = newID;}
+  getXDim() {return this.mapState.xdim;}
+  setXDim(newID) {this.mapState.xdim = newID;}
 
-  getYDim() {return this.state.ydim;}
-  setYDim(newID) {this.state.ydim = newID;}
+  getYDim() {return this.mapState.ydim;}
+  setYDim(newID) {this.mapState.ydim = newID;}
 
-  getMapType() {return this.state.mapType;}
-  setMapType(newID) {this.state.mapType = newID;}
+  getMapType() {return this.mapState.mapType;}
+  setMapType(newID) {this.mapState.mapType = newID;}
 
-  getRngState() {return this.state.RngState}
-  setRngState(newID) {this.state.RngState = newID;}
+  getRngBaseState() {return this.mapState.rngBaseState}
+  setRngBaseState(newID) {this.mapState.rngBaseState = newID;}
 
   render(display, camera_map_x, camera_map_y) {
     let cx = 0;
@@ -53,28 +56,31 @@ class Map {
   }
 
   toJSON() {
-    return JSON.stringify(this.state);
+    return JSON.stringify(this.mapState);
+  }
+
+  fromState(state) {
+    this.mapState = state;
   }
 
   getTile(mapx, mapy) {
-    if (mapx < 0 || mapx > this.state.xdim - 1 || mapy < 0 || mapy > this.state.ydim - 1) {
+    if (mapx < 0 || mapx > this.mapState.xdim - 1 || mapy < 0 || mapy > this.mapState.ydim - 1) {
       return TILES.NULLTILE;
     }
-    return this.tileGrid[mapx][mapy];
+    return this.tileGrid[mapx][mapy] || TILES.NULLTILE;
   }
 }
 
 let TILE_GRID_GENERATOR = {
   'basic caves': function(xd, yd, rngState) {
-    let tg = init2DArray(xd, yd, TILES.NULLTILE);
-    let gen = new ROT.Map.Cellular(xd, yd, { connected: true });
     let origRngState = ROT.RNG.getState();
     ROT.RNG.setState(rngState);
+    let tg = init2DArray(xd, yd, TILES.NULLTILE);
+    let gen = new ROT.Map.Cellular(xd, yd, { connected: true });
 
     gen.randomize(.5);
     gen.create();
-    gen.create();
-    gen.create();
+
     gen.connect(function(x,y,isWall) {
       tg[x][y] = (isWall || x==0 || y==0 || x==xd-1 || y==yd-1) ? TILES.WALL : TILES.FLOOR;
     });
@@ -88,12 +94,13 @@ export function MapMaker(mapData) {
   // if (mapData){
   //   m = new Map(mapData.xdim, mapData.ydim);
   // }
-  if (mapData.id) {
-    m.setID(mapData.id);
+  if (mapData.id !== undefined) {
+    m.fromState(mapData);
   }
-  if (mapData.setupRngState) {
-    m.setID(mapData.setupRngState);
-  }
+  m.build();
+  // if (mapData.setupRngState) {
+  //   m.setID(mapData.setupRngState);
+  // }
   DATASTORE.MAPS[m.getID()] = m;
   return m;
 }
