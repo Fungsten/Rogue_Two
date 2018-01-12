@@ -78,27 +78,22 @@ let TILE_GRID_GENERATOR = {
     gen.connect(function(x,y,isWall) {
       tg[x][y] = (isWall || x==0 || y==0 || x==xd-1 || y==yd-1) ? TILES.WALL : TILES.FLOOR;
     });
-    //ROT.RNG.setState(origRngState);
+    ROT.RNG.setState(origRngState);
     return tg;
   }
 }
 
 export function MapMaker(mapData) {
-  let m = new Map(80,24);
-  if (mapData){
-    m = new Map(mapData.xdim, mapData.ydim);
-  }
-
-
+  let m = new Map(mapData.xdim, mapData.ydim, mapData.mapType);
+  // if (mapData){
+  //   m = new Map(mapData.xdim, mapData.ydim);
+  // }
   if (mapData.id) {
     m.setID(mapData.id);
   }
-
-
-
+  if (mapData.setupRngState) {
+    m.setID(mapData.setupRngState);
+  }
   DATASTORE.MAPS[m.getID()] = m;
-
-
-
   return m;
 }

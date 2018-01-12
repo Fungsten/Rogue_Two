@@ -102,6 +102,9 @@ export class PersistenceMode extends UIMode {
     if (!this.localStorageAvailable()) {return false;}
 
     window.localStorage.setItem('roguetwogame', JSON.stringify(DATASTORE));
+    console.dir(DATASTORE);
+    console.log("done saving");
+    this.game.switchMode('play');
   }
 
   handleRestore(){
@@ -157,13 +160,14 @@ export class PlayMode extends UIMode {
       mapID: '',
       camerax: '',
       cameray: '',
-      map: ''
     };
   }
 
   enter() {
-    if(! this.state.map) {
-      let m = MapMaker(this.state.map);
+    console.log("entering play mode");
+    console.dir(this.state);
+    if(! this.state.mapID) {
+      let m = MapMaker({xdim: 80, ydim: 24});
       this.state.mapID = m.getID();
       m.build();
     }
@@ -176,7 +180,7 @@ export class PlayMode extends UIMode {
     return JSON.stringify(this.state);
   }
 
-  restoreFromState(stateData) {
+  restoreFromState(stateData) { //should put in a game object
     console.log('restoring play state from');
     console.dir(stateData);
     this.state = stateData;
@@ -184,8 +188,8 @@ export class PlayMode extends UIMode {
 
   render(display){
     display.clear();
-    display.drawText(33,4,"GAME IN PROGRESS");
-    display.drawText(33,5,"PRESS W TO WIN, L TO LOSE");
+    //display.drawText(33,4,"GAME IN PROGRESS");
+    //display.drawText(33,5,"PRESS W TO WIN, L TO LOSE");
     DATASTORE.MAPS[this.state.mapID].render(display, this.state.camerax, this.state.cameray);
     this.cameraSymbol.render(display, display.getOptions().width / 2, display.getOptions().height / 2);
   }

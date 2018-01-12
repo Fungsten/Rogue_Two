@@ -15385,6 +15385,9 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
       }
 
       window.localStorage.setItem('roguetwogame', JSON.stringify(_datastore.DATASTORE));
+      console.dir(_datastore.DATASTORE);
+      console.log("done saving");
+      this.game.switchMode('play');
     }
   }, {
     key: 'handleRestore',
@@ -15449,8 +15452,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
     _this3.state = {
       mapID: '',
       camerax: '',
-      cameray: '',
-      map: ''
+      cameray: ''
     };
     return _this3;
   }
@@ -15458,8 +15460,10 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
   _createClass(PlayMode, [{
     key: 'enter',
     value: function enter() {
-      if (!this.state.map) {
-        var m = (0, _map.MapMaker)(this.state.map);
+      console.log("entering play mode");
+      console.dir(this.state);
+      if (!this.state.mapID) {
+        var m = (0, _map.MapMaker)({ xdim: 80, ydim: 24 });
         this.state.mapID = m.getID();
         m.build();
       }
@@ -15475,6 +15479,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
   }, {
     key: 'restoreFromState',
     value: function restoreFromState(stateData) {
+      //should put in a game object
       console.log('restoring play state from');
       console.dir(stateData);
       this.state = stateData;
@@ -15483,8 +15488,8 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
     key: 'render',
     value: function render(display) {
       display.clear();
-      display.drawText(33, 4, "GAME IN PROGRESS");
-      display.drawText(33, 5, "PRESS W TO WIN, L TO LOSE");
+      //display.drawText(33,4,"GAME IN PROGRESS");
+      //display.drawText(33,5,"PRESS W TO WIN, L TO LOSE");
       _datastore.DATASTORE.MAPS[this.state.mapID].render(display, this.state.camerax, this.state.cameray);
       this.cameraSymbol.render(display, display.getOptions().width / 2, display.getOptions().height / 2);
     }
@@ -15811,23 +15816,23 @@ var TILE_GRID_GENERATOR = {
     gen.connect(function (x, y, isWall) {
       tg[x][y] = isWall || x == 0 || y == 0 || x == xd - 1 || y == yd - 1 ? _tile.TILES.WALL : _tile.TILES.FLOOR;
     });
-    //ROT.RNG.setState(origRngState);
+    _rotJs2.default.RNG.setState(origRngState);
     return tg;
   }
 };
 
 function MapMaker(mapData) {
-  var m = new Map(80, 24);
-  if (mapData) {
-    m = new Map(mapData.xdim, mapData.ydim);
-  }
-
+  var m = new Map(mapData.xdim, mapData.ydim, mapData.mapType);
+  // if (mapData){
+  //   m = new Map(mapData.xdim, mapData.ydim);
+  // }
   if (mapData.id) {
     m.setID(mapData.id);
   }
-
+  if (mapData.setupRngState) {
+    m.setID(mapData.setupRngState);
+  }
   _datastore.DATASTORE.MAPS[m.getID()] = m;
-
   return m;
 }
 
