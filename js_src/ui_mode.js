@@ -84,7 +84,8 @@ export class PersistenceMode extends UIMode {
         return true;
       }
       if (inputData.key == 'l' || inputData.key == 'L') {
-        this.handleRestore();
+        //let restore = this.handleRestore();
+        //this.game.restoreFromState(restore);
         this.game.switchMode('play');
         return true;
       }
@@ -132,6 +133,7 @@ export class PersistenceMode extends UIMode {
 
     console.log('post-save datastore:');
     console.dir(DATASTORE);
+    return state;
   }
 
   localStorageAvailable() {
@@ -184,6 +186,15 @@ export class PlayMode extends UIMode {
     console.log('restoring play state from');
     console.dir(stateData);
     this.state = stateData;
+  }
+
+  setupNewGame() {
+    let m = MapMaker({xdim: 80, ydim: 24});
+    this.state.mapID = m.getID();
+    m.build();
+    this.state.cameraMapX = 5;
+    this.state.cameraMapY = 8;
+    this.cameraSymbol = new DisplaySymbol('@', '#eb4');
   }
 
   render(display){
