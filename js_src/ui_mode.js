@@ -7,6 +7,7 @@ import {Message} from './message.js';
 import {DisplaySymbol} from './display_symbol';
 import {DATASTORE, clearDatastore} from './datastore.js';
 import {Entity} from './entity.js';
+import {EntityFactory} from './entitiesspawn.js';
 
 class UIMode {
   constructor(thegame) {
@@ -230,8 +231,8 @@ export class PlayMode extends UIMode {
     //m.build();
     // this.state.camerax = 5;
     // this.state.cameray = 8;
-    this.cameraSymbol = new DisplaySymbol({'name':'avatar','chr':'@','fg':'#eb4'}); //we can ignore this for now until replaced by avatars the last airbenders
-    let a = new Entity({'name':'avatar','chr':'@','fg':'#eb4'});
+    this.cameraSymbol = new DisplaySymbol(EntityFactory.create("avatar"));
+    let a = EntityFactory.create("avatar");
     console.log("play mode - new game started");
 }
 

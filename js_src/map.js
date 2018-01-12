@@ -15,6 +15,8 @@ class Map {
     //this.rng = ROT.RNG.clone();
     //this.mapState.rngBaseState = this.rng.getState();
     this.mapState.setupRngState = ROT.RNG.getState();
+    this.mapState.entityIDtoMapPos = {};
+    this.mapState.mapPostoEntityID = {};
   }
 
   build() {
@@ -36,6 +38,10 @@ class Map {
 
   getRngBaseState() {return this.mapState.rngBaseState}
   setRngBaseState(newID) {this.mapState.rngBaseState = newID;}
+
+  // addEntityAt(ent, mapx, mapy) {
+  //   this.mapState.entityIDtoMapPos[ent.getID()] = ;
+  // }
 
   render(display, camera_map_x, camera_map_y) {
     let cx = 0;
