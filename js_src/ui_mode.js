@@ -52,6 +52,7 @@ export class StartupMode extends UIMode { //defines how an object exists
 
   handleInput(eventType, evt) {
     if (eventType == "keyup") {
+      console.log("what is this");
       console.dir(this);
       this.game.switchMode('persistence');
       return true;
@@ -75,7 +76,7 @@ export class PersistenceMode extends UIMode {
     if (inputType == 'keyup') {
       if (inputData.key == 'n' || inputData.key == 'N') {
         console.log('new game');
-        this.game.setupNewGame();
+        this.game.startNewGame();
         this.game.switchMode('play');
         return true;
       }
@@ -84,7 +85,7 @@ export class PersistenceMode extends UIMode {
         return true;
       }
       if (inputData.key == 'l' || inputData.key == 'L') {
-        //let restore = this.handleRestore();
+        this.handleRestore();
         //this.game.restoreFromState(restore);
         this.game.switchMode('play');
         return true;
@@ -101,6 +102,7 @@ export class PersistenceMode extends UIMode {
   handleSave(){
     console.log('save game');
     if (!this.localStorageAvailable()) {return false;}
+    console.dir(DATASTORE);
 
     window.localStorage.setItem('roguetwogame', JSON.stringify(DATASTORE));
     console.dir(DATASTORE);
@@ -113,19 +115,17 @@ export class PersistenceMode extends UIMode {
     if (!this.localStorageAvailable()) {return false;}
 
     let restorationString = window.localStorage.getItem('roguetwogame');
-    //this.game.fromJSON(restorationString);
-
     let state = JSON.parse(restorationString);
-    //clearDatastore();
+    clearDatastore();
 
-    DATASTORE.GAME = this.game;
-
+    DATASTORE.GAME = this.GAME;
     DATASTORE.ID_SEQ = state.ID_SEQ;
-    //this.game.fromJSON(state.GAME);
+    //DATASTORE.MAPS = state.MAP;
+    console.dir(state);
+    this.game.fromJSON(state.GAME);
 
-    let mapData;
     for (let mapid in state.MAPS) {
-      mapData = JSON.parse(state.MAPS[mapid]);
+      let mapData = JSON.parse(state.MAPS[mapid]);
 
       DATASTORE.MAPS[mapid] = MapMaker(mapData);
       DATASTORE.MAPS[mapid].build();
@@ -133,7 +133,6 @@ export class PersistenceMode extends UIMode {
 
     console.log('post-save datastore:');
     console.dir(DATASTORE);
-    return state;
   }
 
   localStorageAvailable() {
@@ -182,6 +181,10 @@ export class PlayMode extends UIMode {
     return JSON.stringify(this.state);
   }
 
+  fromJSON(json) {
+    this.state = JSON.parse(json);
+  }
+
   restoreFromState(stateData) { //should put in a game object
     console.log('restoring play state from');
     console.dir(stateData);
@@ -191,9 +194,10 @@ export class PlayMode extends UIMode {
   setupNewGame() {
     let m = MapMaker({xdim: 80, ydim: 24});
     this.state.mapID = m.getID();
+    //DATASTORE.GAME = this;
     m.build();
-    this.state.cameraMapX = 5;
-    this.state.cameraMapY = 8;
+    this.state.camerax = 5;
+    this.state.cameray = 8;
     this.cameraSymbol = new DisplaySymbol('@', '#eb4');
   }
 
@@ -274,6 +278,7 @@ export class PlayMode extends UIMode {
       this.state.camerax += x;
       this.state.cameray += y;
   }
+
 }
 
 

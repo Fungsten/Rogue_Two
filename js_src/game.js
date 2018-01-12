@@ -2,7 +2,7 @@ import * as U from './util.js';
 import ROT from 'rot-js';
 import {StartupMode, PlayMode, LoseMode, WinMode, PersistenceMode} from './ui_mode.js';
 import {Message} from './message.js';
-import {DATASTORE} from './datastore.js';
+import {DATASTORE, clearDatastore} from './datastore.js';
 
 export let Game = {
 
@@ -86,9 +86,13 @@ export let Game = {
     }
   },
 
-  setupNewGame: function() {
+  startNewGame: function() {
     this._randomSeed = 5 + Math.floor(Math.random()*100000);
     //this._randomSeed = 76250;
+    clearDatastore();
+    console.log("the datastore");
+    console.dir(DATASTORE);
+    DATASTORE.GAME = this;
     console.log("using random seed "+this._randomSeed);
     ROT.RNG.setSeed(this._randomSeed);
     this.modes.play.setupNewGame();
@@ -139,20 +143,22 @@ export let Game = {
   },
 
   toJSON: function() {
-    let json = '';
-    console.log(this._randomSeed);
-    json = JSON.stringify({
-      rseed: this._randomSeed,
-      playModeState: this.modes.play});
-    console.log(json);
-    return json;
+    return this.modes.play.toJSON();
   },
 
   fromJSON: function(json) {
-    let state = JSON.parse(json);
-    this._randomSeed = this.rseed;
-    console.log("the random seed is " + this._randomSeed);
-    ROT.RNG.setSeed(this._randomSeed);
-    this.modes.play.restoreFromState(state.playModeState);
-  }
+    this.modes.play.fromJSON(json);
+  },
+
+  restoreFromState(stateData){
+    this.state = stateData;
+  },
+
+  // fromJSON: function(json) {
+  //   let state = JSON.parse(json);
+  //   this._randomSeed = this.rseed;
+  //   console.log("the random seed is " + this._randomSeed);
+  //   ROT.RNG.setSeed(this._randomSeed);
+  //   this.modes.play.restoreFromState(state.playModeState);
+  // }
 };
