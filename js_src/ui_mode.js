@@ -4,7 +4,7 @@ import ROT from 'rot-js';
 import {Game} from './game.js';
 import {MapMaker} from './map.js';
 import {Message} from './message.js';
-import {DisplaySymbol} from './display_symbol';
+import {MixableSymbol} from './mixable_symbol.js';
 import {DATASTORE, clearDatastore} from './datastore.js';
 import {Entity} from './entity.js';
 import {EntityFactory} from './entitiesspawn.js';
