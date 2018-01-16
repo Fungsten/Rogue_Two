@@ -213,10 +213,8 @@ export class PlayMode extends UIMode {
     this.curry.avatarID = a.getID();
 
     m.addEntityAtRandPos(a);
-    m.addEntityAtRandPos(b);
-    // m.addEntityAtRandPos(b);
-    // m.addEntityAtRandPos(b);
-    // m.addEntityAtRandPos(b);
+    let bradyNumber = 10;
+    for (let i = 0; i < bradyNumber; i++) {m.addEntityAtRandPos(b);}
 
     a.setmapID(this.curry.curMapID);
     this.updateCameraToAvatar();
@@ -235,8 +233,10 @@ export class PlayMode extends UIMode {
 
   renderAvatar(display) {
     display.clear();
-    display.drawText(0,0,"Avatar");
-    display.drawText(0,2,"time: " + this.getAvatar().getTime());
+    display.drawText(0,2,"Avatar");
+    display.drawText(0,0,"time: " + this.getAvatar().getTime());
+    display.drawText(0,3,"HP: " + this.getAvatar().getCurHP() + " / " + this.getAvatar().getMaxHP());
+    display.drawText(0,4,"AE: " + this.getAvatar().getCurAE() + " / " + this.getAvatar().getMaxAE());
   }
 
   handleInput(eventType, evt) {
