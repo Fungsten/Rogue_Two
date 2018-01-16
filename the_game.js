@@ -9578,6 +9578,7 @@ var Game = exports.Game = {
   },
 
   render: function render() {
+    this.renderAvatar();
     this.renderMain();
     this.renderMessage();
   },
@@ -9588,10 +9589,7 @@ var Game = exports.Game = {
 
   renderAvatar: function renderAvatar() {
     var d = this.display.avatar.o;
-    d.clear();
-    for (var i = 0; i < 10; i++) {
-      d.drawText(5, i + 5, "avatar");
-    }
+    // this.renderAvatar(d);
   },
 
   renderMessage: function renderMessage() {
@@ -9688,6 +9686,12 @@ exports.MixableSymbol = undefined;
 
 var _display_symbol = __webpack_require__(94);
 
+var _entity_mixins = __webpack_require__(341);
+
+var E = _interopRequireWildcard(_entity_mixins);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -9702,10 +9706,40 @@ var MixableSymbol = exports.MixableSymbol = function (_DisplaySymbol) {
 
     var _this = _possibleConstructorReturn(this, (MixableSymbol.__proto__ || Object.getPrototypeOf(MixableSymbol)).call(this, template));
 
-    if (!_this.entState) {
-      _this.entState = {};
+    if (!_this.state) {
+      _this.state = {};
+    } //potentially must change to entState
+
+    _this.mixins = [];
+    _this.mixinTracker = {};
+
+    if (template.mixinNames) {
+      for (var mi = 0; mi < template.mixinNames.length; mi++) {
+        _this.mixins.push(E[template.mixinNames[mi]]);
+        _this.mixinTracker[template.mixinNames[mi]] = true;
+      }
     }
 
+    for (var _mi = 0; _mi < _this.mixins.length; _mi++) {
+      //this is where the fun begins
+      var m = _this.mixins[_mi];
+      if (m.META.stateNameSpace) {
+        _this.state[m.META.stateNameSpace] = {};
+
+        if (m.META.stateModel) {
+          for (sbase in m.META.stateModel) {
+            _this.state[m.META.stateNameSpace][sbase] = m.META.stateModel[sbase];
+            // what about the deep copy command on the base?
+          }
+        }
+      }
+
+      if (m.METHODS) {
+        for (var method in m.METHODS) {
+          _this[method] = m.METHODS[method];
+        }
+      }
+    }
     return _this;
   }
 
@@ -9746,107 +9780,107 @@ var Entity = exports.Entity = function (_MixableSymbol) {
 
     var _this = _possibleConstructorReturn(this, (Entity.__proto__ || Object.getPrototypeOf(Entity)).call(this, template));
 
-    _this.entState = {};
-    if (!_this.entState) {
-      _this.entState = {};
+    _this.state = {};
+    if (!_this.state) {
+      _this.state = {};
     }
-    //this.entState.chr = template.chr;
-    _this.entState.x = 0;
-    _this.entState.y = 0;
-    _this.entState.mapID = 0;
-    _this.entState.id = (0, _util.uniqueID)();
+    //this.state.chr = template.chr;
+    _this.state.x = 0;
+    _this.state.y = 0;
+    _this.state.mapID = 0;
+    _this.state.id = (0, _util.uniqueID)();
     return _this;
   }
 
   _createClass(Entity, [{
     key: 'getName',
     value: function getName() {
-      return this.entState.name;
+      return this.state.name;
     }
   }, {
     key: 'setName',
     value: function setName(newInfo) {
-      this.entState.name = newInfo;
+      this.state.name = newInfo;
     }
   }, {
     key: 'getX',
     value: function getX() {
-      return this.entState.x;
+      return this.state.x;
     }
   }, {
     key: 'setX',
     value: function setX(newInfo) {
-      this.entState.x = newInfo;
+      this.state.x = newInfo;
     }
   }, {
     key: 'getY',
     value: function getY() {
-      return this.entState.y;
+      return this.state.y;
     }
   }, {
     key: 'setY',
     value: function setY(newInfo) {
-      this.entState.y = newInfo;
+      this.state.y = newInfo;
     }
   }, {
     key: 'getPos',
     value: function getPos() {
-      return '' + this.entState.x + this.entState.y;
+      return '' + this.state.x + this.state.y;
     }
   }, {
     key: 'getmapID',
     value: function getmapID() {
-      return this.entState.mapID;
+      return this.state.mapID;
     }
   }, {
     key: 'setmapID',
     value: function setmapID(newInfo) {
-      this.entState.mapID = newInfo;
+      this.state.mapID = newInfo;
     }
   }, {
     key: 'getMap',
     value: function getMap() {
-      return _datastore.DATASTORE.MAPS[this.entState.mapID];
+      return _datastore.DATASTORE.MAPS[this.state.mapID];
     }
   }, {
     key: 'getID',
     value: function getID() {
-      return this.entState.id;
+      return this.state.id;
     }
   }, {
     key: 'setID',
     value: function setID(newInfo) {
-      this.entState.id = newInfo;
+      this.state.id = newInfo;
     }
-  }, {
-    key: 'moveBy',
-    value: function moveBy(dx, dy) {
-      var newX = this.entState.x * 1 + dx * 1;
-      var newY = this.entState.y * 1 + dy * 1;
 
-      if (this.getMap().isPositionOpen(newX, newY)) {
-        this.entState.x = newX;
-        this.entState.y = newY;
+    // moveBy(dx, dy) {
+    //   let newX = this.state.x*1 + dx*1;
+    //   let newY = this.state.y*1 + dy*1;
+    //
+    //   if (this.getMap().isPositionOpen(newX, newY)){
+    //     this.state.x = newX;
+    //     this.state.y = newY;
+    //
+    //     this.getMap().updateEntityPos(this, this.state.x, this.state.y);
+    //     return true;
+    //   }
+    //   return false;
+    // }
 
-        this.getMap().updateEntityPos(this, this.entState.x, this.entState.y);
-        return true;
-      }
-      return false;
-    }
   }, {
     key: 'toJSON',
     value: function toJSON() {
-      return JSON.stringify(this.entState);
+      return JSON.stringify(this.state);
     }
   }, {
     key: 'fromJSON',
     value: function fromJSON(json) {
-      this.entState = JSON.parse(json);
+      this.state = JSON.parse(json);
     }
   }, {
     key: 'fromState',
     value: function fromState(state) {
-      this.entState = state;
+      this.state = state;
     }
   }]);
 
@@ -15420,7 +15454,7 @@ var _datastore = __webpack_require__(46);
 
 var _entity = __webpack_require__(132);
 
-var _entitiesspawn = __webpack_require__(341);
+var _entitiesspawn = __webpack_require__(342);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15466,6 +15500,11 @@ var UIMode = function () {
       display.drawText(2, 2, "rendering " + this.constructor.name);
     } //render
 
+  }, {
+    key: 'renderAvatar',
+    value: function renderAvatar(display) {
+      display.clear();
+    }
   }]);
 
   return UIMode;
@@ -15605,12 +15644,12 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
       }
 
       for (var entityID in state.ENTITIES) {
-        var entState = JSON.parse(state.ENTITIES[entityID]);
+        var _state = JSON.parse(_state.ENTITIES[entityID]);
         console.log("state.ENTITIES: ");
-        console.log(state.ENTITIES);
-        console.log("The entState is: ");
-        console.log(entState);
-        _entitiesspawn.EntityFactory.create(entState.name, entState);
+        console.log(_state.ENTITIES);
+        console.log("The state is: ");
+        console.log(_state);
+        _entitiesspawn.EntityFactory.create(_state.name, _state);
       }
 
       this.game.fromJSON(state.GAME);
@@ -15711,6 +15750,13 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
       // this.cameraSymbol.render(display, display.getOptions().width / 2, display.getOptions().height / 2);
     }
   }, {
+    key: 'renderAvatar',
+    value: function renderAvatar(display) {
+      display.clear();
+      display.drawText(0, 0, "Avatar");
+      display.drawText(0, 2, "time: " + this.getAvatar().getTime());
+    }
+  }, {
     key: 'handleInput',
     value: function handleInput(eventType, evt) {
       if (evt.key == 'l') {
@@ -15781,8 +15827,12 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
       //console.log(x + y);
       // this.curry.camerax += dx;
       // this.curry.cameray += dy;
-      this.getAvatar().moveBy(dx, dy);
-      this.updateCameraToAvatar();
+      if (this.getAvatar().tryWalk(dx, dy)) {
+        this.getAvatar().moveBy(dx, dy);
+        this.updateCameraToAvatar();
+        return true;
+      }
+      return false;
     }
   }, {
     key: 'updateCameraToAvatar',
@@ -16202,18 +16252,105 @@ Color.BG = '#000';
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+//defines the various mixins that can be added to an Entity
+
+var _exampleMixin = {
+  META: {
+    mixinName: 'ExampleMixin',
+    mixinGroupName: 'ExampleMixinGroup',
+    stateNameSpace: '_ExampleMixin',
+    stateModel: {
+      foo: 10
+    },
+    initialize: function initialize() {
+      // do any initialization
+    }
+  },
+  METHODS: {
+    method1: function method1(p) {
+      // do stuff
+      // can access / manipulate this.state._ExampleMixin
+    }
+  }
+};
+
+// *************************************************************
+
+var TimeTracker = exports.TimeTracker = {
+  META: {
+    mixinName: 'TimeTracker',
+    mixinGroupName: 'Tracker',
+    stateNameSpace: '_TimeTracker',
+    stateModel: {
+      timeTaken: 0
+    }
+  },
+  METHODS: {
+    getTime: function getTime() {
+      // do stuff
+      // can access / manipulate this.state._ExampleMixin
+      return this.state._TimeTracker.timeTaken;
+    },
+    setTime: function setTime(t) {
+      // do stuff
+      // can access / manipulate this.state._ExampleMixin
+      this.state._TimeTracker.timeTaken = t;
+    },
+    addTime: function addTime(t) {
+      // do stuff
+      // can access / manipulate this.state._ExampleMixin
+      this.state._TimeTracker.timeTaken += t;
+    }
+  }
+};
+
+var WalkerCorporeal = exports.WalkerCorporeal = {
+  META: {
+    mixinName: 'WalkerCorporeal',
+    mixinGroupName: 'Walker'
+  },
+  METHODS: {
+    tryWalk: function tryWalk(dx, dy) {
+      // do stuff
+      // can access / manipulate this.state._ExampleMixin
+      var newX = this.state.x * 1 + dx * 1;
+      var newY = this.state.y * 1 + dy * 1;
+
+      if (this.getMap().isPositionOpen(newX, newY)) {
+        this.state.x = newX;
+        this.state.y = newY;
+
+        this.getMap().updateEntityPos(this, this.state.x, this.state.y);
+        return true;
+      }
+      return false;
+    }
+  }
+};
+
+/***/ }),
+/* 342 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.EntityFactory = undefined;
 
 var _entity = __webpack_require__(132);
 
-var _factory = __webpack_require__(342);
+var _factory = __webpack_require__(343);
 
 var EntityFactory = exports.EntityFactory = new _factory.Factory(_entity.Entity, 'ENTITIES');
 // export let ENTITIES = {};
 EntityFactory.learn({
   'name': 'avatar',
   'chr': '@',
-  'fg': '#eb4'
+  'fg': '#eb4',
+  'mixinName': ['TimeTracker', 'WalkerCorporeal']
 });
 
 EntityFactory.learn({
@@ -16223,7 +16360,7 @@ EntityFactory.learn({
 });
 
 /***/ }),
-/* 342 */
+/* 343 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

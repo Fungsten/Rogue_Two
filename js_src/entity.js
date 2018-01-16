@@ -8,55 +8,55 @@ export class Entity extends MixableSymbol {
   constructor(template) {
     super(template);
 
-    this.entState = {};
-    if (! this.entState) { this.entState = {}; }
-    //this.entState.chr = template.chr;
-    this.entState.x = 0;
-    this.entState.y = 0;
-    this.entState.mapID = 0;
-    this.entState.id = uniqueID();
+    this.state = {};
+    if (! this.state) { this.state = {}; }
+    //this.state.chr = template.chr;
+    this.state.x = 0;
+    this.state.y = 0;
+    this.state.mapID = 0;
+    this.state.id = uniqueID();
   }
 
-  getName() { return this.entState.name; }
-  setName(newInfo) { this.entState.name = newInfo; }
-  getX() { return this.entState.x; }
-  setX(newInfo) { this.entState.x = newInfo; }
-  getY() { return this.entState.y; }
-  setY(newInfo) { this.entState.y = newInfo; }
+  getName() { return this.state.name; }
+  setName(newInfo) { this.state.name = newInfo; }
+  getX() { return this.state.x; }
+  setX(newInfo) { this.state.x = newInfo; }
+  getY() { return this.state.y; }
+  setY(newInfo) { this.state.y = newInfo; }
 
-  getPos() { return `${this.entState.x}${this.entState.y}`; }
+  getPos() { return `${this.state.x}${this.state.y}`; }
 
-  getmapID() { return this.entState.mapID; }
-  setmapID(newInfo) { this.entState.mapID = newInfo; }
+  getmapID() { return this.state.mapID; }
+  setmapID(newInfo) { this.state.mapID = newInfo; }
 
-  getMap() { return DATASTORE.MAPS[this.entState.mapID]; }
-  getID() { return this.entState.id; }
-  setID(newInfo) { this.entState.id = newInfo; }
+  getMap() { return DATASTORE.MAPS[this.state.mapID]; }
+  getID() { return this.state.id; }
+  setID(newInfo) { this.state.id = newInfo; }
 
 
-  moveBy(dx, dy) {
-    let newX = this.entState.x*1 + dx*1;
-    let newY = this.entState.y*1 + dy*1;
-
-    if (this.getMap().isPositionOpen(newX, newY)){
-      this.entState.x = newX;
-      this.entState.y = newY;
-
-      this.getMap().updateEntityPos(this, this.entState.x, this.entState.y);
-      return true;
-    }
-    return false;
-  }
+  // moveBy(dx, dy) {
+  //   let newX = this.state.x*1 + dx*1;
+  //   let newY = this.state.y*1 + dy*1;
+  //
+  //   if (this.getMap().isPositionOpen(newX, newY)){
+  //     this.state.x = newX;
+  //     this.state.y = newY;
+  //
+  //     this.getMap().updateEntityPos(this, this.state.x, this.state.y);
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   toJSON() {
-    return JSON.stringify(this.entState);
+    return JSON.stringify(this.state);
   }
 
   fromJSON(json) {
-    this.entState = JSON.parse(json);
+    this.state = JSON.parse(json);
   }
 
   fromState(state) {
-    this.entState = state;
+    this.state = state;
   }
 }

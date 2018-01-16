@@ -114,6 +114,7 @@ export let Game = {
   },
 
   render: function() {
+    this.renderAvatar();
     this.renderMain();
     this.renderMessage();
   },
@@ -124,10 +125,7 @@ export let Game = {
 
   renderAvatar: function() {
     let d = this.display.avatar.o;
-    d.clear();
-    for (let i = 0; i < 10; i++) {
-      d.drawText(5,i+5,"avatar");
-    }
+    // this.renderAvatar(d);
   },
 
   renderMessage: function() {

@@ -31,6 +31,9 @@ class UIMode {
     console.log("rendering "+this.constructor.name);
     display.drawText(2,2,"rendering "+this.constructor.name);
   } //render
+  renderAvatar(display) {
+    display.clear();
+  }
 }
 
 //-----------------------------------------------------
@@ -135,12 +138,12 @@ export class PersistenceMode extends UIMode {
     }
 
     for (let entityID in state.ENTITIES) {
-      let entState = JSON.parse(state.ENTITIES[entityID]);
+      let state = JSON.parse(state.ENTITIES[entityID]);
       console.log("state.ENTITIES: ");
       console.log(state.ENTITIES);
-      console.log("The entState is: ");
-      console.log(entState);
-      EntityFactory.create(entState.name, entState);
+      console.log("The state is: ");
+      console.log(state);
+      EntityFactory.create(state.name, state);
     }
 
     this.game.fromJSON(state.GAME);
@@ -224,6 +227,12 @@ export class PlayMode extends UIMode {
     // this.cameraSymbol.render(display, display.getOptions().width / 2, display.getOptions().height / 2);
   }
 
+  renderAvatar(display) {
+    display.clear();
+    display.drawText(0,0,"Avatar");
+    display.drawText(0,2,"time: " + this.getAvatar().getTime());
+  }
+
   handleInput(eventType, evt) {
     if (evt.key == 'l') {
       //console.dir(this);
@@ -291,8 +300,12 @@ export class PlayMode extends UIMode {
       //console.log(x + y);
       // this.curry.camerax += dx;
       // this.curry.cameray += dy;
-      this.getAvatar().moveBy(dx,dy);
-      this.updateCameraToAvatar();
+      if (this.getAvatar().tryWalk(dx, dy)) {
+        this.getAvatar().moveBy(dx,dy);
+        this.updateCameraToAvatar();
+        return true;
+      }
+      return false;
   }
 
   updateCameraToAvatar() {
