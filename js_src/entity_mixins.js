@@ -45,12 +45,16 @@ export let TimeTracker = {
     addTime: function(t) {
       // do stuff
       // can access / manipulate this.state._ExampleMixin
+      // console.log("trying to add time");
+      // console.dir(this);
+      // //console.dir(this.state);
+      // console.dir(this.mixins[0].META.stateModel.timeTaken);
       this.state._TimeTracker.timeTaken += t;
     }
   },
   LISTENERS: {
     'turnTaken': function(evtData) {
-      this.addTme(evtData.timeUsed);
+      this.addTime(evtData.timeUsed);
     }
   }
 };
@@ -73,7 +77,7 @@ export let WalkerCorporeal = {
         this.state.y = newY;
         this.getMap().updateEntityPos(this, this.state.x, this.state.y);
 
-        this.raiseMixinEvent('turnTaken', {timeUsed: 1});
+        this.raiseMixinEvent('turnTaken', {'timeUsed': 1});
 
         return true;
       }

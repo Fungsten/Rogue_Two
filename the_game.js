@@ -9715,10 +9715,10 @@ var MixableSymbol = exports.MixableSymbol = function (_DisplaySymbol) {
     _this.mixins = [];
     _this.mixinTracker = {};
 
-    if (template.mixinNames) {
-      for (var mi = 0; mi < template.mixinNames.length; mi++) {
-        _this.mixins.push(E[template.mixinNames[mi]]);
-        _this.mixinTracker[template.mixinNames[mi]] = true;
+    if (template.mixinName) {
+      for (var mi = 0; mi < template.mixinName.length; mi++) {
+        _this.mixins.push(E[template.mixinName[mi]]);
+        _this.mixinTracker[template.mixinName[mi]] = true;
       }
     }
 
@@ -9726,10 +9726,11 @@ var MixableSymbol = exports.MixableSymbol = function (_DisplaySymbol) {
       //this is where the fun begins
       var m = _this.mixins[_mi];
       if (m.META.stateNameSpace) {
+        // console.log('setting up mixin state of '+m.META.stateNameSpace);
         _this.state[m.META.stateNameSpace] = {};
 
         if (m.META.stateModel) {
-          for (sbase in m.META.stateModel) {
+          for (var sbase in m.META.stateModel) {
             _this.state[m.META.stateNameSpace][sbase] = m.META.stateModel[sbase];
             // what about the deep copy command on the base?
           }
@@ -9740,6 +9741,13 @@ var MixableSymbol = exports.MixableSymbol = function (_DisplaySymbol) {
         for (var method in m.METHODS) {
           _this[method] = m.METHODS[method];
         }
+      }
+    }
+
+    for (var _mi2 = 0; _mi2 < _this.mixins.length; _mi2++) {
+      var _m = _this.mixins[_mi2];
+      if (_m.META.initialize) {
+        _m.META.initialize.call(_this, template);
       }
     }
     return _this;
@@ -9792,9 +9800,9 @@ var Entity = exports.Entity = function (_MixableSymbol) {
   function Entity(template) {
     _classCallCheck(this, Entity);
 
+    // this.state = {};
     var _this = _possibleConstructorReturn(this, (Entity.__proto__ || Object.getPrototypeOf(Entity)).call(this, template));
 
-    _this.state = {};
     if (!_this.state) {
       _this.state = {};
     }
@@ -15841,12 +15849,8 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
       //console.log(x + y);
       // this.curry.camerax += dx;
       // this.curry.cameray += dy;
-      if (this.getAvatar().tryWalk(dx, dy)) {
-        this.getAvatar().moveBy(dx, dy);
-        this.updateCameraToAvatar();
-        return true;
-      }
-      return false;
+      this.getAvatar().tryWalk(dx, dy);
+      this.updateCameraToAvatar();
     }
   }, {
     key: 'updateCameraToAvatar',
@@ -16313,12 +16317,16 @@ var TimeTracker = exports.TimeTracker = {
     addTime: function addTime(t) {
       // do stuff
       // can access / manipulate this.state._ExampleMixin
+      // console.log("trying to add time");
+      // console.dir(this);
+      // //console.dir(this.state);
+      // console.dir(this.mixins[0].META.stateModel.timeTaken);
       this.state._TimeTracker.timeTaken += t;
     }
   },
   LISTENERS: {
     'turnTaken': function turnTaken(evtData) {
-      this.addTme(evtData.timeUsed);
+      this.addTime(evtData.timeUsed);
     }
   }
 };
@@ -16340,7 +16348,7 @@ var WalkerCorporeal = exports.WalkerCorporeal = {
         this.state.y = newY;
         this.getMap().updateEntityPos(this, this.state.x, this.state.y);
 
-        this.raiseMixinEvent('turnTaken', { timeUsed: 1 });
+        this.raiseMixinEvent('turnTaken', { 'timeUsed': 1 });
 
         return true;
       }

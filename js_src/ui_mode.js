@@ -300,12 +300,8 @@ export class PlayMode extends UIMode {
       //console.log(x + y);
       // this.curry.camerax += dx;
       // this.curry.cameray += dy;
-      if (this.getAvatar().tryWalk(dx, dy)) {
-        this.getAvatar().moveBy(dx,dy);
-        this.updateCameraToAvatar();
-        return true;
-      }
-      return false;
+      this.getAvatar().tryWalk(dx,dy);
+      this.updateCameraToAvatar();
   }
 
   updateCameraToAvatar() {
