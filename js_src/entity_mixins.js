@@ -47,6 +47,11 @@ export let TimeTracker = {
       // can access / manipulate this.state._ExampleMixin
       this.state._TimeTracker.timeTaken += t;
     }
+  },
+  LISTENERS: {
+    'turnTaken': function(evtData) {
+      this.addTme(evtData.timeUsed);
+    }
   }
 };
 
@@ -66,10 +71,9 @@ export let WalkerCorporeal = {
       if (this.getMap().isPositionOpen(newX, newY)){
         this.state.x = newX;
         this.state.y = newY;
-
         this.getMap().updateEntityPos(this, this.state.x, this.state.y);
 
-        this.raiseMixinEvent('turnTaken');
+        this.raiseMixinEvent('turnTaken', {timeUsed: 1});
 
         return true;
       }

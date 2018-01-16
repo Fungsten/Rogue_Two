@@ -9684,6 +9684,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.MixableSymbol = undefined;
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _display_symbol = __webpack_require__(94);
 
 var _entity_mixins = __webpack_require__(341);
@@ -9742,6 +9744,18 @@ var MixableSymbol = exports.MixableSymbol = function (_DisplaySymbol) {
     }
     return _this;
   }
+
+  _createClass(MixableSymbol, [{
+    key: 'raiseMixinEvent',
+    value: function raiseMixinEvent(evtLabel, evtData) {
+      for (var mi = 0; mi < this.mixins.length; mi++) {
+        var m = this.mixins[mi];
+        if (m.LISTENERS && m.LISTENERS[evtLabel]) {
+          m.LISTENERS[evtLabel].call(this, evtData);
+        }
+      }
+    }
+  }]);
 
   return MixableSymbol;
 }(_display_symbol.DisplaySymbol);
@@ -16301,6 +16315,11 @@ var TimeTracker = exports.TimeTracker = {
       // can access / manipulate this.state._ExampleMixin
       this.state._TimeTracker.timeTaken += t;
     }
+  },
+  LISTENERS: {
+    'turnTaken': function turnTaken(evtData) {
+      this.addTme(evtData.timeUsed);
+    }
   }
 };
 
@@ -16319,8 +16338,10 @@ var WalkerCorporeal = exports.WalkerCorporeal = {
       if (this.getMap().isPositionOpen(newX, newY)) {
         this.state.x = newX;
         this.state.y = newY;
-
         this.getMap().updateEntityPos(this, this.state.x, this.state.y);
+
+        this.raiseMixinEvent('turnTaken', { timeUsed: 1 });
+
         return true;
       }
       return false;
