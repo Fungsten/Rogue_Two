@@ -1,5 +1,6 @@
 // a colonel factory system = objects that create other objects
 import {DATASTORE} from './datastore.js';
+import {MixableSymbol} from './mixable_symbol.js';
 import {DisplaySymbol} from './display_symbol.js';
 
 export class Factory {

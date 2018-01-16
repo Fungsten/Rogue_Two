@@ -6,7 +6,12 @@ import * as E from './entity_mixins.js';
 export class MixableSymbol extends DisplaySymbol {
   constructor(template) {
     super(template);
-    if (! this.state) { this.state = {}; } //potentially must change to entState
+    if (! this.state) { this.state = {}; }
+
+    this.state.name = template.name;
+    this.state.templateName = template.templateName || template.name;
+    //this.state.id = uniqueID();
+    this.state.chr = template.chr;
 
     this.mixins = [];
     this.mixinTracker = {};

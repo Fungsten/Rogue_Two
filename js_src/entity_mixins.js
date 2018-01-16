@@ -20,8 +20,6 @@ let _exampleMixin = {
   }
 };
 
-// *************************************************************
-
 export let TimeTracker = {
   META: {
     mixinName: 'TimeTracker',
@@ -59,7 +57,6 @@ export let TimeTracker = {
   }
 };
 
-
 export let WalkerCorporeal = {
   META: {
     mixinName: 'WalkerCorporeal',
@@ -85,3 +82,105 @@ export let WalkerCorporeal = {
     }
   }
 };
+
+export let HitPoints = {
+  META: {
+    mixinName: 'HitPoints',
+    mixinGroupName: 'HP',
+    stateNameSpace: '_HP',
+    stateModel: {
+      curHP: 0,
+      maxHP: 0
+    },
+    initialize: function(template) {
+      // do any initialization
+      this.state._HP.maxHP = template.maxHP || 1;
+      this.state._HP.curHP = template.curHP || this.state._HP.maxHP;
+    }
+  },
+  METHODS: {
+    setHP: function(newHP) {
+      this.state._HP.curHP = newHP;
+    },
+
+    changeHP: function(delta) {
+      if (this.state._HP.curHP) {return;}
+      this.state._HP.curHP += delta;
+    },
+
+    setMaxHP: function(newMax) {
+      this.state._HP.maxHP = newMax;
+    },
+
+    getCurHP: function(curr) {
+      return this.state._HP.curHP;
+    },
+
+    getMaxHP: function(max) {
+      return this.state._HP.maxHP;
+    }
+  }
+  // LISTENERS: {
+  //   'damagedBy': function(evtData)
+  // }
+
+};
+
+export let Aether = {
+  META: {
+    mixinName: 'Aether',
+    mixinGroupName: 'AE',
+    stateNameSpace: '_AE',
+    stateModel: {
+      curAE: 0,
+      maxAE: 0
+    },
+    initialize: function(template) {
+      // do any initialization
+      this.state._AE.maxAE = template.maxAE || 1;
+      this.state._AE.curAE = template.curAE || this.state._AE.maxAE;
+    }
+  },
+  METHODS: {
+    setAE: function(newAE) {
+      this.state._AE.curAE = newAE;
+    },
+
+    changeAE: function(delta) {
+      if (this.state._AE.curAE) {return;}
+      this.state._AE.curAE += delta;
+    },
+
+    setMaxAE: function(newMax) {
+      this.state._AE.maxAE = newMax;
+    },
+
+    getCurAE: function(curr) {
+      return this.state._AE.curAE;
+    },
+
+    getMaxAE: function(max) {
+      return this.state._AE.maxAE;
+    }
+  }
+};
+
+// export let _exampleMixin = {
+//   META: {
+//     mixinName: 'ExampleMixin',
+//     mixinGroupName: 'ExampleMixinGroup',
+//     stateNameSpace: '_ExampleMixin',
+//     stateModel: {
+//       foo: 10
+//     },
+//     initialize: function() {
+//       // do any initialization
+//     }
+//   },
+//   METHODS: {
+//     method1: function(p) {
+//       // do stuff
+//       // can access / manipulate this.state._ExampleMixin
+//     }
+//   }
+// };

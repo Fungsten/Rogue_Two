@@ -10,7 +10,7 @@ export class Entity extends MixableSymbol {
 
     // this.state = {};
     if (! this.state) { this.state = {}; }
-    //this.state.chr = template.chr;
+    // this.state.chr = template.chr;
     this.state.x = 0;
     this.state.y = 0;
     this.state.mapID = 0;

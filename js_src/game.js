@@ -62,7 +62,7 @@ export let Game = {
 
     this.setupModes();
 
-    Message.send("What about the droid attack on the Wookies?");
+    Message.send("A game made by Will & Grace");
 
     this.switchMode("startup");
     console.dir(this);
@@ -125,7 +125,7 @@ export let Game = {
 
   renderAvatar: function() {
     let d = this.display.avatar.o;
-    // this.renderAvatar(d);
+    this.curMode.renderAvatar(d);
   },
 
   renderMessage: function() {

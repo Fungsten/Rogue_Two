@@ -130,7 +130,7 @@ export class PersistenceMode extends UIMode {
     DATASTORE.ID_SEQ = state.ID_SEQ;
     console.dir(state);
 
-    console.log("state.maps looks like");
+    console.log("saveState.maps looks like");
     console.dir(state.MAPS);
 
     for (let mapid in state.MAPS) {
@@ -138,12 +138,13 @@ export class PersistenceMode extends UIMode {
     }
 
     for (let entityID in state.ENTITIES) {
-      let state = JSON.parse(state.ENTITIES[entityID]);
+      let entState = JSON.parse(state.ENTITIES[entityID]);
       console.log("state.ENTITIES: ");
       console.log(state.ENTITIES);
-      console.log("The state is: ");
-      console.log(state);
-      EntityFactory.create(state.name, state);
+      console.log("The entState is: ");
+      console.log(entState.name);
+      // DATASTORE.ENTITIES
+      EntityFactory.create(entState.name, entState);
     }
 
     this.game.fromJSON(state.GAME);
@@ -213,10 +214,15 @@ export class PlayMode extends UIMode {
 
     m.addEntityAtRandPos(a);
     m.addEntityAtRandPos(b);
+    // m.addEntityAtRandPos(b);
+    // m.addEntityAtRandPos(b);
+    // m.addEntityAtRandPos(b);
 
     a.setmapID(this.curry.curMapID);
     this.updateCameraToAvatar();
     console.log("play mode - new game started");
+    Message.clear();
+    Message.send("You have just been arrested. But you seem to be on top of things.");
 }
 
   render(display){
