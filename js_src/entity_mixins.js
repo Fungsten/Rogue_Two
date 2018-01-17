@@ -226,8 +226,9 @@ export let MeleeAttacker = {
     'bumpEntity': function(evtData) {
       // this
       // evtData.target
-      evtData.target.raiseMixinEvent('damaged', {src: this, damageAmount: this.getMeleeDamage()});
+
       this.raiseMixinEvent('attacks', {actor: this, target: evtData.target});
+      evtData.target.raiseMixinEvent('damaged', {src: this, damageAmount: this.getMeleeDamage()});
       console.log("ATTACK");
     }
   }
