@@ -69,7 +69,26 @@ export let WalkerCorporeal = {
       let newX = this.state.x*1 + dx*1;
       let newY = this.state.y*1 + dy*1;
 
-      if (this.getMap().isPositionOpen(newX, newY)){
+      // if (this.getMap().isPositionOpen(newX, newY)){
+      //   this.state.x = newX;
+      //   this.state.y = newY;
+      //   this.getMap().updateEntityPos(this, this.state.x, this.state.y);
+      //
+      //   this.raiseMixinEvent('turnTaken', {'timeUsed': 1});
+      //
+      //   return true;
+      // }
+
+      // {{get target movement location}}
+      // {{get info for target location: tile, entity}}
+      let targetPositionInfo = this.getMap().getTargetPositionInfo(newX, newY);
+      // {{if entity, bump it}}
+      if (targetPositionInfo.entity) {
+        targetPositionInfo.entity.raiseMixinEvent('bumpEntity', {actor: this, target: targetPositionInfo.entity});
+      } else if (targetPositionInfo.tile.isImpassable()) {
+
+        return false;
+      } else {
         this.state.x = newX;
         this.state.y = newY;
         this.getMap().updateEntityPos(this, this.state.x, this.state.y);
@@ -78,6 +97,7 @@ export let WalkerCorporeal = {
 
         return true;
       }
+
       return false;
     }
   }
@@ -105,7 +125,7 @@ export let HitPoints = {
 
     changeHP: function(delta) {
       if (this.state._HP.curHP) {return;}
-      this.state._HP.curHP += delta;
+      this.state._HP.curHP -= delta;
     },
 
     setMaxHP: function(newMax) {
@@ -120,9 +140,12 @@ export let HitPoints = {
       return this.state._HP.maxHP;
     }
   }
-  // LISTENERS: {
-  //   'damagedBy': function(evtData)
-  // }
+  LISTENERS: {
+    'damaged': function(evtData) {
+      // evtData.src
+      this.changeHP(evtData.damageAmount);
+    }
+  }
 
 };
 
@@ -165,22 +188,32 @@ export let Aether = {
   }
 };
 
-// export let _exampleMixin = {
-//   META: {
-//     mixinName: 'ExampleMixin',
-//     mixinGroupName: 'ExampleMixinGroup',
-//     stateNameSpace: '_ExampleMixin',
-//     stateModel: {
-//       foo: 10
-//     },
-//     initialize: function() {
-//       // do any initialization
-//     }
-//   },
-//   METHODS: {
-//     method1: function(p) {
-//       // do stuff
-//       // can access / manipulate this.state._ExampleMixin
-//     }
-//   }
-// };
+export let MeleeAttacker = {
+  META: {
+    mixinName: 'MeleeAttacker',
+    mixinGroupName: 'MeleeAttacker',
+    stateNameSpace: '_MeleeAttacker',
+    stateModel: {
+      foo: 10
+    },
+    initialize: function() {
+      // do any initialization
+      this.state._MeleeAttacker.meleeDamage = template.meleeDamage || 1,
+    }
+  },
+  METHODS: {
+    getMeleeDamage: function() {
+      return this.state._MeleeAttacker.meleeDamage;
+    },
+    setMeleeDamage: function(n) {
+
+    }
+  },
+  LISTENERS: {
+    'bumpEntity': function(evtData) {
+      // this
+      // evtData.target
+      evtData.target.raiseMixinEvent('damaged', {src: this, damageAmount: this.getMeleeDamage()});
+    }
+  }
+};

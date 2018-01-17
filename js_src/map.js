@@ -78,6 +78,18 @@ class Map {
     return false;
   }
 
+  getTargetPositionInfo(x, y) {
+    let info = {
+      entity: '',
+      tile: getTile(x, y);
+    }
+    let entID = this.mapState.mapPostoEntityID[`${x},${y}`]
+    if (entID) {
+      info.entity = DATASTORE.ENTITIES[entID];
+    }
+    return info;
+  }
+
   render(display, camera_map_x, camera_map_y) {
     let cx = 0;
     let cy = 0;
