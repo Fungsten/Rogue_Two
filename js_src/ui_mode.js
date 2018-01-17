@@ -8,6 +8,7 @@ import {DisplaySymbol} from './display_symbol';
 import {DATASTORE, clearDatastore} from './datastore.js';
 import {Entity} from './entity.js';
 import {EntityFactory} from './entitiesspawn.js';
+import {keybindings} from './keybinds.js';
 
 class UIMode {
   constructor(thegame) {
@@ -52,13 +53,14 @@ export class StartupMode extends UIMode { //defines how an object exists
     display.drawText(6,20,"Press any key to continue");
   }
 
+
+
   handleInput(eventType, evt) {
-    if (eventType == "keyup") {
-      // console.log("what is this");
-      // console.dir(this);
-      this.game.switchMode('persistence');
-      return true;
-    }
+    // if (eventType == "keyup") {
+    //   this.game.switchMode('persistence');
+    //   return true;
+    // }
+    keybindings(eventType, evt)
   }
 }
 
@@ -79,6 +81,8 @@ export class PersistenceMode extends UIMode {
     display.drawText(33,3,"S to save game");
     display.drawText(33,4,"L to load previously saved game");
   }
+
+  // keybindings(inputType, inputData) {}
 
   handleInput(inputType,inputData) {
     // super.handleInput(inputType,inputData);
@@ -104,6 +108,7 @@ export class PersistenceMode extends UIMode {
 
     }
     return false;
+    keybindings(inputType, inputData);
   }
 
   handleSave(){
@@ -230,7 +235,7 @@ export class PlayMode extends UIMode {
       this.game.switchMode('lose');
       return true;
     }
-    if (evt.key == 'w') {
+    if (evt.key == 'o') {
       //console.dir(this);
       this.game.switchMode('win');
       return true;
@@ -244,42 +249,42 @@ export class PlayMode extends UIMode {
     //-----------------------------------------------------
 
     //upper left
-    if (evt.key == '7' && eventType == 'keydown') {
+    if (evt.key == 'q' && eventType == 'keydown') {
       this.moveAvatar(-1, -1);
       return true;
     }
     //up
-    if (evt.key == '8' && eventType == 'keydown') {
+    if (evt.key == 'w' && eventType == 'keydown') {
       this.moveAvatar(0, -1);
       return true;
     }
     //upper right
-    if (evt.key == '9' && eventType == 'keydown') {
+    if (evt.key == 'e' && eventType == 'keydown') {
       this.moveAvatar(1, -1);
       return true;
     }
     //left
-    if (evt.key == '4' && eventType == 'keydown') {
+    if (evt.key == 'a' && eventType == 'keydown') {
       this.moveAvatar(-1, 0);
       return true;
     }
     //right
-    if (evt.key == '6' && eventType == 'keydown') {
+    if (evt.key == 'd' && eventType == 'keydown') {
       this.moveAvatar(1, 0);
       return true;
     }
     //lower left
-    if (evt.key == '1' && eventType == 'keydown') {
+    if (evt.key == 'c' && eventType == 'keydown') {
       this.moveAvatar(-1, 1);
       return true;
     }
     //down
-    if (evt.key == '2' && eventType == 'keydown') {
+    if (evt.key == 's' && eventType == 'keydown') {
       this.moveAvatar(0, 1);
       return true;
     }
     //lower right
-    if (evt.key == '3' && eventType == 'keydown') {
+    if (evt.key == 'z' && eventType == 'keydown') {
       this.moveAvatar(1, 1);
       return true;
     }

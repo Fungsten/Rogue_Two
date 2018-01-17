@@ -1,6 +1,7 @@
 import * as U from './util.js';
 import ROT from 'rot-js';
 import {StartupMode, PlayMode, LoseMode, WinMode, PersistenceMode} from './ui_mode.js';
+import {keybindings} from "./keybinds.js";
 import {Message} from './message.js';
 import {DATASTORE, clearDatastore} from './datastore.js';
 
