@@ -208,13 +208,16 @@ export class PlayMode extends UIMode {
     // };
 
     let a = EntityFactory.create("avatar");
-    let b = EntityFactory.create("Brady");
+    m.addEntityAtRandPos(a);
+    // let b = EntityFactory.create("Brady");
 
     this.curry.avatarID = a.getID();
 
-    m.addEntityAtRandPos(a);
-    let bradyNumber = 10;
-    for (let i = 0; i < bradyNumber; i++) {m.addEntityAtRandPos(b);}
+    let bradyNumber = 20;
+    for (let i = 0; i < bradyNumber; i++) {
+      let b = EntityFactory.create("Brady");
+      m.addEntityAtRandPos(b);
+    }
 
     a.setmapID(this.curry.curMapID);
     this.updateCameraToAvatar();

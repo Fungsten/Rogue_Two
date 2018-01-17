@@ -3,6 +3,7 @@
 import {MixableSymbol} from './mixable_symbol.js';
 import {uniqueID} from './util.js';
 import {DATASTORE} from './datastore.js';
+import {MapMaker} from './map.js';
 
 export class Entity extends MixableSymbol {
   constructor(template) {
@@ -32,6 +33,13 @@ export class Entity extends MixableSymbol {
   getMap() { return DATASTORE.MAPS[this.state.mapID]; }
   getID() { return this.state.id; }
   setID(newInfo) { this.state.id = newInfo; }
+
+  destroy() {
+    console.log("destroying entity");
+    this.getMap().extractEntity(this);
+    delete DATASTORE.ENTITIES[this.getID()];
+    console.dir(DATASTORE);
+  }
 
 
   // moveBy(dx, dy) {

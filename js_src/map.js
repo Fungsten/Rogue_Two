@@ -47,11 +47,20 @@ class Map {
     this.mapState.entityIDtoMapPos[ent.getID()] = `${newX},${newY}`;
   }
 
+  extractEntity(ent) {
+    // ent.setmapID('');
+    delete this.mapState.mapPostoEntityID[this.mapState.entityIDtoMapPos[ent.getID()]];
+    delete this.mapState.entityIDtoMapPos[ent.getID()];
+
+    delete DATASTORE.ENTITIES[ent.getID()];
+    return ent;
+  }
+
   addEntityAt(ent, mapx, mapy) {
     let pos = `${mapx},${mapy}`;
     this.mapState.entityIDtoMapPos[ent.getID()] = pos;
     this.mapState.mapPostoEntityID[pos] = ent.getID();
-    ent.setmapID(this.getID);
+    ent.setmapID(this.getID());
     ent.setX(mapx);
     ent.setY(mapy);
   }
@@ -81,7 +90,7 @@ class Map {
   getTargetPositionInfo(x, y) {
     let info = {
       entity: '',
-      tile: getTile(x, y);
+      tile: this.getTile(x, y)
     }
     let entID = this.mapState.mapPostoEntityID[`${x},${y}`]
     if (entID) {
@@ -102,6 +111,8 @@ class Map {
       for(let yi = ystart; yi < yend; yi++){
         let pos = `${xi},${yi}`;
         if (this.mapState.mapPostoEntityID[pos]){
+          console.log("trying to render entities");
+          console.dir(this.mapState.mapPostoEntityID[pos]);
           DATASTORE.ENTITIES[this.mapState.mapPostoEntityID[pos]].render(display, cx, cy);
         } else {
           this.getTile(xi, yi).render(display, cx, cy);

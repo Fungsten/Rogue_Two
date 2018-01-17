@@ -104,6 +104,8 @@ export let Game = {
     //console.log("using random seed "+this._randomSeed);
     //ROT.RNG.setSeed(this._randomSeed);
     this.modes.play.setupNewGame();
+
+    // initTiming();
   },
 
   getDisplay: function (displayId) {
