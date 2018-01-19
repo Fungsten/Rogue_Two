@@ -105,6 +105,11 @@ export let WalkerCorporeal = {
 
       return false;
     }
+  },
+  LISTENERS: {
+    'tryWalking': function(evtData) {
+      this.tryWalk(evtData.dx, evtData.dy);
+    }
   }
 };
 
@@ -272,7 +277,7 @@ export let PlayerActor = {
       currentActionDuration: 1000
     },
     init: function (template) {
-      timing.SCHEDULER.add(this,true,1);
+      SCHEDULER.add(this,true,1);
     }
   },
   METHODS: {
@@ -298,7 +303,7 @@ export let PlayerActor = {
       if (this.isActing()) {return;}
       this.isActing(true);
       Game.render();
-      timing.TIME_ENGINE.lock();
+      TIME_ENGINE.lock();
       this.isActing(false);
     }
   },
@@ -307,7 +312,7 @@ export let PlayerActor = {
         timing.setDuration(this.getCurActDur());
         this.setCurActDur(this.getBaseActDur());
         setTimeout(function() {
-          timing.TIME_ENGINE.unlock();
+          TIME_ENGINE.unlock();
         }, 1);
     },
     'killed': function(evtData) {
@@ -327,29 +332,29 @@ export let RandomWalker = {
       actingState: false,
       currentActionDuration: 1000
     },
-    initialize: function(){
+    init: function(template){
       SCHEDULER.add(this, true, 2);
     }
   },
   METHODS: {
     getBaseActionDuration: function(){
-      return this.attr._RandomWalker.baseActionDuration;
+      return this.state._RandomWalker.baseActionDuration;
     },
     setBaseActionDuration: function(n){
-      this.attr._RandomWalker.baseActionDuration = n;
+      this.state._RandomWalker.baseActionDuration = n;
     },
     getCurrentActionDuration: function(){
-      return this.attr._RandomWalker.currentActionDuration;
+      return this.state._RandomWalker.currentActionDuration;
     },
     setCurrentActionDuration: function(n){
-      this.attr._RandomWalker.currentActionDuration = n;
+      this.state._RandomWalker.currentActionDuration = n;
     },
 
     isActing: function(state){
       if(state){
-        this.attr._RandomWalker.actingState = state;
+        this.state._RandomWalker.actingState = state;
       }
-      return this.attr._RandomWalker.actingState;
+      return this.state._RandomWalker.actingState;
     },
     act: function(){
       if(this.isActing()){
@@ -362,7 +367,7 @@ export let RandomWalker = {
       console.log("walker has locked");
       let dx = Math.trunc(ROT.RNG.getUniform() * 3) - 1;
       let dy = Math.trunc(ROT.RNG.getUniform() * 3) - 1;
-      this.raiseMixinEvent('walkAttempt', {'dx': dx, 'dy': dy});
+      this.raiseMixinEvent('tryWalking', {'dx': dx, 'dy': dy});
       SCHEDULER.setDuration(this.getBaseActionDuration());
       this.setBaseActionDuration(this.getBaseActionDuration()); //get random int
       TIME_ENGINE.unlock();

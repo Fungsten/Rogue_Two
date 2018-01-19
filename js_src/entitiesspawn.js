@@ -19,5 +19,5 @@ EntityFactory.learn({
   'fg': '#eb4',
   'maxHP': 20,
   'maxAE': 100,
-  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker']
+  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker']
 });

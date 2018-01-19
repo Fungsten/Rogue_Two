@@ -9960,8 +9960,8 @@ var Map = function () {
         for (var yi = ystart; yi < yend; yi++) {
           var pos = xi + ',' + yi;
           if (this.mapState.mapPostoEntityID[pos]) {
-            console.log("trying to render entities");
-            console.dir(this.mapState.mapPostoEntityID[pos]);
+            // console.log("trying to render entities");
+            // console.dir(this.mapState.mapPostoEntityID[pos]);
             _datastore.DATASTORE.ENTITIES[this.mapState.mapPostoEntityID[pos]].render(display, cx, cy);
           } else {
             this.getTile(xi, yi).render(display, cx, cy);
@@ -16466,6 +16466,11 @@ var WalkerCorporeal = exports.WalkerCorporeal = {
 
       return false;
     }
+  },
+  LISTENERS: {
+    'tryWalking': function tryWalking(evtData) {
+      this.tryWalk(evtData.dx, evtData.dy);
+    }
   }
 };
 
@@ -16637,7 +16642,7 @@ var PlayerActor = exports.PlayerActor = {
       currentActionDuration: 1000
     },
     init: function init(template) {
-      timing.SCHEDULER.add(this, true, 1);
+      _timing.SCHEDULER.add(this, true, 1);
     }
   },
   METHODS: {
@@ -16665,7 +16670,7 @@ var PlayerActor = exports.PlayerActor = {
       }
       this.isActing(true);
       Game.render();
-      timing.TIME_ENGINE.lock();
+      _timing.TIME_ENGINE.lock();
       this.isActing(false);
     }
   },
@@ -16674,7 +16679,7 @@ var PlayerActor = exports.PlayerActor = {
       timing.setDuration(this.getCurActDur());
       this.setCurActDur(this.getBaseActDur());
       setTimeout(function () {
-        timing.TIME_ENGINE.unlock();
+        _timing.TIME_ENGINE.unlock();
       }, 1);
     },
     'killed': function killed(evtData) {
@@ -16694,29 +16699,29 @@ var RandomWalker = exports.RandomWalker = {
       actingState: false,
       currentActionDuration: 1000
     },
-    initialize: function initialize() {
+    init: function init(template) {
       _timing.SCHEDULER.add(this, true, 2);
     }
   },
   METHODS: {
     getBaseActionDuration: function getBaseActionDuration() {
-      return this.attr._RandomWalker.baseActionDuration;
+      return this.state._RandomWalker.baseActionDuration;
     },
     setBaseActionDuration: function setBaseActionDuration(n) {
-      this.attr._RandomWalker.baseActionDuration = n;
+      this.state._RandomWalker.baseActionDuration = n;
     },
     getCurrentActionDuration: function getCurrentActionDuration() {
-      return this.attr._RandomWalker.currentActionDuration;
+      return this.state._RandomWalker.currentActionDuration;
     },
     setCurrentActionDuration: function setCurrentActionDuration(n) {
-      this.attr._RandomWalker.currentActionDuration = n;
+      this.state._RandomWalker.currentActionDuration = n;
     },
 
     isActing: function isActing(state) {
       if (state) {
-        this.attr._RandomWalker.actingState = state;
+        this.state._RandomWalker.actingState = state;
       }
-      return this.attr._RandomWalker.actingState;
+      return this.state._RandomWalker.actingState;
     },
     act: function act() {
       if (this.isActing()) {
@@ -16729,7 +16734,7 @@ var RandomWalker = exports.RandomWalker = {
       console.log("walker has locked");
       var dx = Math.trunc(ROT.RNG.getUniform() * 3) - 1;
       var dy = Math.trunc(ROT.RNG.getUniform() * 3) - 1;
-      this.raiseMixinEvent('walkAttempt', { 'dx': dx, 'dy': dy });
+      this.raiseMixinEvent('tryWalking', { 'dx': dx, 'dy': dy });
       _timing.SCHEDULER.setDuration(this.getBaseActionDuration());
       this.setBaseActionDuration(this.getBaseActionDuration()); //get random int
       _timing.TIME_ENGINE.unlock();
@@ -16806,7 +16811,7 @@ EntityFactory.learn({
   'fg': '#eb4',
   'maxHP': 20,
   'maxAE': 100,
-  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker']
+  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker']
 });
 
 /***/ }),
