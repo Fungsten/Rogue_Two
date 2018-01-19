@@ -1,9 +1,9 @@
-Weed Strike is a game that illustrates some programming and development patterns that cover the basic functionality of roguelikes. Notably:
+Rogue Two is a game that illustrates some programming and development patterns that cover the basic functionality of roguelikes. Notably:
 * having an evolving design document for the game
   * goals/reasons
   * narrative elements
   * game play elements / mechanics
-    * fun factor
+  * fun factor
 * having an evolving project plan
 * choosing a deployment target (the web / a browser, in this case)
 * organizing the project file system
@@ -37,12 +37,12 @@ Weed Strike is a game that illustrates some programming and development patterns
     * npm package manager
     * git and github
       * branching and merging
-    * collaborating
+      * collaborating
       * pair-coding
-    * javascipt
-    * webpack dependency manager and packager/bundler
-    * babel transpiler
+  * javascript
+  * webpack dependency manager and packager/bundler
+  * babel transpiler
 * be a viable, playable game
   * fun
   * relatively intuitive
-  * offers some emergent behavior
+* offers some emergent behavior
