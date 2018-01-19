@@ -195,7 +195,7 @@ export class PlayMode extends UIMode {
   }
 
   setupNewGame() {
-    let m = MapMaker({xdim: 80, ydim: 24});
+    let m = MapMaker({xdim: 30, ydim: 20});
 
     this.curry = {};
     this.curry.curMapID = m.getID();
@@ -215,7 +215,7 @@ export class PlayMode extends UIMode {
 
     this.curry.avatarID = a.getID();
 
-    let bradyNumber = 1;
+    let bradyNumber = 5;
     for (let i = 0; i < bradyNumber; i++) {
       let b = EntityFactory.create("Brady");
       m.addEntityAtRandPos(b);

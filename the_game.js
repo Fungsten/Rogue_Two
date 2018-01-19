@@ -9892,8 +9892,12 @@ var Map = function () {
     key: 'extractEntity',
     value: function extractEntity(ent) {
       // ent.setmapID('');
+      console.log("deleting dead entity");
       delete this.mapState.mapPostoEntityID[this.mapState.entityIDtoMapPos[ent.getID()]];
       delete this.mapState.entityIDtoMapPos[ent.getID()];
+      if (this.mapState.mapPostoEntityID[this.mapState.entityIDtoMapPos[ent.getID()]]) {
+        delete this.mapState.mapPostoEntityID[this.mapState.entityIDtoMapPos[ent.getID()]];
+      }
 
       delete _datastore.DATASTORE.ENTITIES[ent.getID()];
       return ent;
@@ -16038,7 +16042,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
   }, {
     key: 'setupNewGame',
     value: function setupNewGame() {
-      var m = (0, _map.MapMaker)({ xdim: 80, ydim: 24 });
+      var m = (0, _map.MapMaker)({ xdim: 30, ydim: 20 });
 
       this.curry = {};
       this.curry.curMapID = m.getID();
@@ -16058,7 +16062,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
 
       this.curry.avatarID = a.getID();
 
-      var bradyNumber = 1;
+      var bradyNumber = 5;
       for (var i = 0; i < bradyNumber; i++) {
         var b = _entitiesspawn.EntityFactory.create("Brady");
         m.addEntityAtRandPos(b);
@@ -16483,6 +16487,10 @@ var WalkerCorporeal = exports.WalkerCorporeal = {
       if (targetPositionInfo.entity) {
         this.raiseMixinEvent('bumpEntity', { actor: this, target: targetPositionInfo.entity });
         console.dir(targetPositionInfo);
+        if (this.getName() == 'avatar') {
+          // console.log("the player has moved");
+          this.raiseMixinEvent('playerHasMoved');
+        }
       } else if (targetPositionInfo.tile.isImpassable()) {
         //console.log("the tile is isImpassable");
         this.raiseMixinEvent('walkblocked');
@@ -16495,7 +16503,7 @@ var WalkerCorporeal = exports.WalkerCorporeal = {
 
         this.raiseMixinEvent('turnTaken', { 'timeUsed': 1 });
         if (this.getName() == 'avatar') {
-          console.log("the player has moved");
+          // console.log("the player has moved");
           this.raiseMixinEvent('playerHasMoved');
         }
 
@@ -16507,7 +16515,7 @@ var WalkerCorporeal = exports.WalkerCorporeal = {
   },
   LISTENERS: {
     'tryWalking': function tryWalking(evtData) {
-      console.log("trying to walk");
+      // console.log("trying to walk");
       this.tryWalk(evtData.dx, evtData.dy);
     }
   }
@@ -16537,6 +16545,7 @@ var HitPoints = exports.HitPoints = {
       if (this.state._HP.curHP <= 0) {
         return;
       }
+      console.log(this.getName() + " has lost " + delta + " hp!");
       this.state._HP.curHP -= delta;
     },
 
@@ -16557,7 +16566,7 @@ var HitPoints = exports.HitPoints = {
       // evtData.src
       // evtData.damageAmount
       console.log("damaging");
-      console.dir(this);
+      // console.dir(this);
       this.changeHP(evtData.damageAmount);
       evtData.src.raiseMixinEvent('damages', { target: this, damageAmount: evtData.damageAmount });
       if (this.getCurHP() <= 0) {
@@ -16653,7 +16662,7 @@ var PlayerMessages = exports.PlayerMessages = {
   },
   LISTENERS: {
     'walkblocked': function walkblocked(evtData) {
-      console.log("help");
+      // console.log("help");
       _message.Message.send("The way is blocked.");
     },
     'attacks': function attacks(evtData) {
@@ -16663,6 +16672,8 @@ var PlayerMessages = exports.PlayerMessages = {
       _message.Message.send("" + this.getName() + " attacks " + evtData.target.getName() + " for " + evtData.damageAmount + " damage!");
     },
     'defeats': function defeats(evtData) {
+      console.log("what0");
+      console.log(this);
       _message.Message.send(this.getName() + " has defeated " + evtData.target.getName() + "!");
     },
     'defeatedBY': function defeatedBY(evtData) {
@@ -16688,7 +16699,7 @@ var PlayerActor = exports.PlayerActor = {
     act: function act() {
       this.actingState = false;
       console.log("it is now the enemy turn");
-      console.log(_timing.SCHEDULER.next());
+      // console.log(SCHEDULER.next());
       _timing.SCHEDULER.next().raiseMixinEvent('enemyTurn');
     }
   },
@@ -16720,16 +16731,16 @@ var RandomWalker = exports.RandomWalker = {
   },
   METHODS: {
     act: function act() {
-      console.log("enemy now moving");
+      //console.log("enemy now moving");
       if (this.actingState == false) {
         return;
       }
-      console.log("walker is acting");
+      //console.log("walker is acting");
       //Rand number from -1 to 1
       var dx = _rotJs2.default.RNG.getUniformInt(-1, 1);
-      console.log(dx);
+      //console.log(dx);
       var dy = _rotJs2.default.RNG.getUniformInt(-1, 1);
-      console.log(dy);
+      //console.log(dy);
       this.raiseMixinEvent('tryWalking', { 'dx': dx, 'dy': dy });
       this.actingState = false;
       this.raiseMixinEvent('playerTurn');
@@ -16737,12 +16748,13 @@ var RandomWalker = exports.RandomWalker = {
   },
   LISTENERS: {
     defeats: function defeats(evtData) {
-      _message.Message.send(this.getName() + " died");
+      // Message.send(this.getName() + " died");
       _timing.SCHEDULER.remove(this);
+      // this.destroy();
     },
     'enemyTurn': function enemyTurn() {
       this.actingState = true;
-      console.log(this.actingState);
+      //console.log(this.actingState);
       this.act();
     }
   }
@@ -16780,9 +16792,10 @@ EntityFactory.learn({
   'name': 'Brady',
   'chr': 'B',
   'fg': '#eb4',
-  'maxHP': 20,
+  'maxHP': 10,
   'maxAE': 100,
-  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker']
+  'meleeDamage': 20,
+  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker', 'PlayerMessages']
 });
 
 /***/ }),

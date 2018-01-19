@@ -17,7 +17,8 @@ EntityFactory.learn({
   'name': 'Brady',
   'chr': 'B',
   'fg': '#eb4',
-  'maxHP': 20,
+  'maxHP': 10,
   'maxAE': 100,
-  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker']
+  'meleeDamage' : 20,
+  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker', 'PlayerMessages']
 });

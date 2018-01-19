@@ -49,8 +49,13 @@ class Map {
 
   extractEntity(ent) {
     // ent.setmapID('');
+    console.log("deleting dead entity");
     delete this.mapState.mapPostoEntityID[this.mapState.entityIDtoMapPos[ent.getID()]];
     delete this.mapState.entityIDtoMapPos[ent.getID()];
+    if (this.mapState.mapPostoEntityID[this.mapState.entityIDtoMapPos[ent.getID()]]) {
+      delete this.mapState.mapPostoEntityID[this.mapState.entityIDtoMapPos[ent.getID()]];
+    }
+
 
     delete DATASTORE.ENTITIES[ent.getID()];
     return ent;

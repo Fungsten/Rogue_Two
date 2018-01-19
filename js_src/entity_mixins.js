@@ -89,6 +89,10 @@ export let WalkerCorporeal = {
       if (targetPositionInfo.entity) {
         this.raiseMixinEvent('bumpEntity', {actor: this, target: targetPositionInfo.entity});
         console.dir(targetPositionInfo);
+        if (this.getName() == 'avatar') {
+          // console.log("the player has moved");
+          this.raiseMixinEvent('playerHasMoved');
+        }
       } else if (targetPositionInfo.tile.isImpassable()) {
         //console.log("the tile is isImpassable");
         this.raiseMixinEvent('walkblocked');
@@ -101,7 +105,7 @@ export let WalkerCorporeal = {
 
         this.raiseMixinEvent('turnTaken', {'timeUsed': 1});
         if (this.getName() == 'avatar') {
-          console.log("the player has moved");
+          // console.log("the player has moved");
           this.raiseMixinEvent('playerHasMoved');
         }
 
@@ -113,7 +117,7 @@ export let WalkerCorporeal = {
   },
   LISTENERS: {
     'tryWalking': function(evtData) {
-      console.log("trying to walk");
+      // console.log("trying to walk");
       this.tryWalk(evtData.dx, evtData.dy);
     }
   }
@@ -141,6 +145,7 @@ export let HitPoints = {
 
     changeHP: function(delta) {
       if (this.state._HP.curHP <= 0) {return;}
+      console.log(this.getName() + " has lost " + delta + " hp!");
       this.state._HP.curHP -= delta;
     },
 
@@ -161,7 +166,7 @@ export let HitPoints = {
       // evtData.src
       // evtData.damageAmount
       console.log("damaging");
-      console.dir(this);
+      // console.dir(this);
       this.changeHP(evtData.damageAmount);
       evtData.src.raiseMixinEvent('damages', {target: this, damageAmount: evtData.damageAmount});
       if (this.getCurHP() <= 0) {
@@ -255,7 +260,7 @@ export let PlayerMessages = {
   },
   LISTENERS: {
     'walkblocked': function(evtData) {
-      console.log("help");
+      // console.log("help");
       Message.send("The way is blocked.");
     },
     'attacks': function(evtData) {
@@ -265,6 +270,8 @@ export let PlayerMessages = {
       Message.send("" + this.getName() + " attacks " + evtData.target.getName() + " for " + evtData.damageAmount + " damage!");
     },
     'defeats': function(evtData) {
+      console.log("what0");
+      console.log(this);
       Message.send(this.getName() + " has defeated " + evtData.target.getName() + "!");
     },
     'defeatedBY': function(evtData) {
@@ -290,7 +297,7 @@ export let PlayerActor = {
     act: function() {
       this.actingState = false;
       console.log("it is now the enemy turn");
-      console.log(SCHEDULER.next());
+      // console.log(SCHEDULER.next());
       SCHEDULER.next().raiseMixinEvent('enemyTurn');
     }
   },
@@ -322,16 +329,16 @@ export let RandomWalker = {
   },
   METHODS: {
     act: function(){
-      console.log("enemy now moving");
+      //console.log("enemy now moving");
       if(this.actingState == false){
         return;
       }
-      console.log("walker is acting");
+      //console.log("walker is acting");
       //Rand number from -1 to 1
       let dx = ROT.RNG.getUniformInt(-1, 1);
-      console.log(dx);
+      //console.log(dx);
       let dy = ROT.RNG.getUniformInt(-1, 1);
-      console.log(dy);
+      //console.log(dy);
       this.raiseMixinEvent('tryWalking', {'dx': dx, 'dy': dy});
       this.actingState = false;
       this.raiseMixinEvent('playerTurn');
@@ -339,12 +346,13 @@ export let RandomWalker = {
   },
   LISTENERS: {
     defeats: function(evtData){
-      Message.send(this.getName() + " died");
+      // Message.send(this.getName() + " died");
       SCHEDULER.remove(this);
+      // this.destroy();
     },
     'enemyTurn': function() {
       this.actingState = true;
-      console.log(this.actingState);
+      //console.log(this.actingState);
       this.act();
     }
   }
