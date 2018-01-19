@@ -270,8 +270,6 @@ export let PlayerMessages = {
       Message.send("" + this.getName() + " attacks " + evtData.target.getName() + " for " + evtData.damageAmount + " damage!");
     },
     'defeats': function(evtData) {
-      console.log("what0");
-      console.log(this);
       Message.send(this.getName() + " has defeated " + evtData.target.getName() + "!");
     },
     'defeatedBY': function(evtData) {
@@ -338,6 +336,9 @@ export let RandomWalker = {
       let dx = ROT.RNG.getUniformInt(-1, 1);
       //console.log(dx);
       let dy = ROT.RNG.getUniformInt(-1, 1);
+      if (dx == 0 && dy == 0) {
+        dy = 1;
+      }
       //console.log(dy);
       this.raiseMixinEvent('tryWalking', {'dx': dx, 'dy': dy});
       this.actingState = false;
