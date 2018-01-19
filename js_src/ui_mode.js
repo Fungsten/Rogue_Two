@@ -8,7 +8,7 @@ import {DisplaySymbol} from './display_symbol';
 import {DATASTORE, clearDatastore} from './datastore.js';
 import {Entity} from './entity.js';
 import {EntityFactory} from './entitiesspawn.js';
-import {keybindings} from './keybinds.js';
+import {startUpInput} from './keybinds.js';
 
 class UIMode {
   constructor(thegame) {
@@ -53,15 +53,14 @@ export class StartupMode extends UIMode { //defines how an object exists
     display.drawText(6,20,"Press any key to continue");
   }
 
-
-
   handleInput(eventType, evt) {
-    // if (eventType == "keyup") {
-    //   this.game.switchMode('persistence');
-    //   return true;
-    // }
-    keybindings(eventType, evt)
-  }
+    if (eventType == "keyup") {
+      this.game.switchMode('persistence');
+      return true;
+    }
+
+
+
 }
 
 //-----------------------------------------------------

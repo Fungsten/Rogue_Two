@@ -1,56 +1,79 @@
-// hopefully, we can store all the necessary keybindings here
+// keybindings
 
-import ROT from 'rot-js';
-import {Game} from './game.js';
-import {MapMaker} from './map.js';
-import {Message} from './message.js';
-import {DisplaySymbol} from './display_symbol';
-import {DATASTORE, clearDatastore} from './datastore.js';
-import {Entity} from './entity.js';
-import {EntityFactory} from './entitiesspawn.js';
-import {StartupMode, PlayMode, LoseMode, WinMode, PersistenceMode} from './ui_mode.js';
+// Some command constants that are populated by setKey
+export let COMMAND = { 'NULLCOMMAND': 1 };
 
+// Used by getInput, dynamically populated by setKey
+export let BINDING_TYPE = {};
 
-export function keybindings(inputType, inputData) {
+export function getIntput(eventTyp, evt){
+  if (evtType != 'keyup') { return COMMAND.NULLCOMMAND; }
 
-  //keybinds for startup mode
-  console.log("reading from keybinds");
-  // console.log(Game.curMode.constructor.name);
-  // console.log("please");
-  // console.log(Game.curMode.constructor.name == 'StartupMode');
-  if (Game.curMode.constructor.name == 'StartupMode') {
-    if (inputType == 'keyup') {
-      Game.curMode.game.switchMode('persistence');
-      return true;
-    }
+  let bindingSet = `key:${evt.key}`;
+
+  if (!BINDING_TYPE[bindingSet]) {return COMMAND.NULLCOMMAND; }
+  return BINDING_TYPE[bindingSet];
+}
+
+// takes a set name and preps the commands and binding lookups
+// later items override earlier ones, allowing a sort of hierarchical binding system
+export function setKey(list) {
+  // make sure named list exists
+  if (typeof list === 'string') {
+    list = [list];
   }
 
-  //keybinds for persistence mode
-  if (Game.curMode.constructor.name == 'PersistenceMode') {
-    if (inputType == 'keyup') {
-      if (inputData.key == 'n' || inputData.key == 'N') {
-        console.log('new game from keybinds');
-        Game.startNewGame();
-        Game.switchMode('play');
-        return true;
-      }
-      if (inputData.key == 's' || inputData.key == 'S') {
-        console.log('save game');
-        PersistenceMode.handleSave();
-        Game.switchMode('play');
-        return true;
-      }
-      if (inputData.key == 'l' || inputData.key == 'L') {
-        console.log('loading game');
-        PersistenceMode.handleRestore();
-        Game.switchMode('play');
-        return true;
-      }
-      if (inputData.key == 'Escape'){
-        Game.switchMode('play');
-        return true;
+  if (list[0] != 'universal') {
+    list.unshift('universal');
+  }
+
+  let commandNum = 1;
+  COOMMAND = {
+    NULLCOMMAND = commandNum
+  };
+
+  BINDING_TYPE = {};
+
+  for (let i = 0; i <list.length; i++){
+    let name = list[i];
+
+    if (!KEY_SETS.hasOwnProperty(name)) { return; }
+    for (let command in KEY_SETS[name]){
+      commandNum++;
+      COMMAND[command] = commandNum;
+      for (let j = 0; j < KEY_SETS[name][command].length; j++){
+        BINDING_TYPE[KEY_SETS[command][j]] = commandNum;
       }
     }
-    return false;
   }
 }
+
+let KEY_SETS = {
+  'universal': {
+    'HELP': ['key:h'],
+  },
+
+  'persistence': {
+    'NEW_GAME': ['key:n','key:N'],
+    'SAVE_GAME': ['key:s','key:S'],
+    'LOAD_GAME': ['key:l','key:L'],
+    'CANCEL': ['key:Escape'],
+  },
+
+  'play': {
+    'TO_PERSISTENCE': ['key:Escape'],
+    'MESSAGES': ['key:m','key:M'],
+  },
+
+  'movement': {
+    'U': ['key:w','key:W','key:8','key:ArrowUp'],
+    'L': ['key:a','key:A','key:4','key:ArrowLeft'],
+    'D': ['key:s','key:S','key:2','key:ArrowDown'],
+    'R': ['key:d','key:D','key:6','key:ArrowRight'],
+    'UL': ['key:q','key:Q','key:7'],
+    'UR': ['key:e','key:E','key:9'],
+    'DL': ['key:z','key:Z','key:1'],
+    'DR': ['key:c','key:C','key:3'],
+    'WAIT': ['key:Space','key:5'],
+  }
+};
