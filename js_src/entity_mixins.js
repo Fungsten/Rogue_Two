@@ -1,6 +1,7 @@
 //defines the various mixins that can be added to an Entity
-import {Message} from "./message.js";
+import {Message} from './message.js';
 import {TIME_ENGINE, SCHEDULER} from './timing.js';
+import ROT from 'rot-js';
 
 let _exampleMixin = {
   META: {
@@ -99,6 +100,10 @@ export let WalkerCorporeal = {
         this.getMap().updateEntityPos(this, this.state.x, this.state.y);
 
         this.raiseMixinEvent('turnTaken', {'timeUsed': 1});
+        if (this.getName() == 'avatar') {
+          console.log("the player has moved");
+          this.raiseMixinEvent('playerHasMoved');
+        }
 
         return true;
       }
@@ -108,6 +113,7 @@ export let WalkerCorporeal = {
   },
   LISTENERS: {
     'tryWalking': function(evtData) {
+      console.log("trying to walk");
       this.tryWalk(evtData.dx, evtData.dy);
     }
   }
@@ -273,53 +279,31 @@ export let PlayerActor = {
     mixinGroup: 'Actor',
     stateNameSpace: '_PlayerActor',
     stateModel: {
-      baseActionDuration: 1000,
-      actingState: false,
-      currentActionDuration: 1000
+      actingState: true,
     },
-    init: function (template) {
-      SCHEDULER.add(this,true,1);
+    initialize: function (template) {
+      console.log("PlayerActor initialized");
+      SCHEDULER.add(this, true);
     }
   },
   METHODS: {
-    getBaseActDur: function() {
-      return this.state._PlayerActor.baseActionDuration;
-    },
-    setBaseActDur: function(n) {
-      this.state._PlayerActor.baseActionDuration = n;
-    },
-    getCurActDur: function() {
-      return this.state._PlayerActor.currentActionDuration;
-    },
-    setCurActDur: function(n){
-      this.state._PlayerActor.currentActionDuration = n;
-    },
-    isActing: function(state) {
-      if (state !== undefined) {
-        this.state._PlayerActor.actingState = state;
-      }
-      return this.state._PlayerActor.actingState;
-    },
     act: function() {
-      if (this.isActing()) {return;}
-      this.isActing(true);
-      Game.render();
-      TIME_ENGINE.lock();
-      this.isActing(false);
+      this.actingState = false;
+      console.log("it is now the enemy turn");
+      console.log(SCHEDULER.next());
+      SCHEDULER.next().raiseMixinEvent('enemyTurn');
     }
   },
   LISTENERS: {
-    'actionDone': function(evtData) {
-        timing.setDuration(this.getCurActDur());
-        this.setCurActDur(this.getBaseActDur());
-        setTimeout(function() {
-          TIME_ENGINE.unlock();
-        }, 1);
-    },
     'killed': function(evtData) {
       Game.switchMode('lose');
+    },
+    'playerHasMoved': function() {
+      this.act();
+    },
+    'playerTurn': function() {
+       // this.raiseMixinEvent('tryWalk')
     }
-
   }
 };
 
@@ -329,57 +313,39 @@ export let RandomWalker = {
     mixinGroupName: 'Actor',
     stateNamespace: '_RandomWalker',
     stateModel: {
-      baseActionDuration: 1000,
       actingState: false,
-      currentActionDuration: 1000
     },
-    init: function(template){
-      SCHEDULER.add(this, true, 2);
+    initialize: function(template){
+      console.log("RandomWalker initialized");
+      SCHEDULER.add(this, true);
     }
   },
   METHODS: {
-    getBaseActionDuration: function(){
-      return this.state._RandomWalker.baseActionDuration;
-    },
-    setBaseActionDuration: function(n){
-      this.state._RandomWalker.baseActionDuration = n;
-    },
-    getCurrentActionDuration: function(){
-      return this.state._RandomWalker.currentActionDuration;
-    },
-    setCurrentActionDuration: function(n){
-      this.state._RandomWalker.currentActionDuration = n;
-    },
-
-    isActing: function(state){
-      if(state){
-        this.state._RandomWalker.actingState = state;
-      }
-      return this.state._RandomWalker.actingState;
-    },
     act: function(){
-      if(this.isActing()){
+      console.log("enemy now moving");
+      if(this.actingState == false){
         return;
       }
       console.log("walker is acting");
-      this.isActing(true);
-      TIME_ENGINE.lock();
       //Rand number from -1 to 1
-      console.log("walker has locked");
-      let dx = Math.trunc(ROT.RNG.getUniform() * 3) - 1;
-      let dy = Math.trunc(ROT.RNG.getUniform() * 3) - 1;
+      let dx = ROT.RNG.getUniformInt(-1, 1);
+      console.log(dx);
+      let dy = ROT.RNG.getUniformInt(-1, 1);
+      console.log(dy);
       this.raiseMixinEvent('tryWalking', {'dx': dx, 'dy': dy});
-      SCHEDULER.setDuration(this.getBaseActionDuration());
-      this.setBaseActionDuration(this.getBaseActionDuration()); //get random int
-      TIME_ENGINE.unlock();
-      this.isActing(false);
-      console.log("walker is done acting");
+      this.actingState = false;
+      this.raiseMixinEvent('playerTurn');
     }
   },
   LISTENERS: {
-    killed: function(evtData){
+    defeats: function(evtData){
       Message.send(this.getName() + " died");
       SCHEDULER.remove(this);
+    },
+    'enemyTurn': function() {
+      this.actingState = true;
+      console.log(this.actingState);
+      this.act();
     }
   }
 };

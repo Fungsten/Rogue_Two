@@ -8,6 +8,7 @@ import {MixableSymbol} from './mixable_symbol.js';
 import {DATASTORE, clearDatastore} from './datastore.js';
 import {Entity} from './entity.js';
 import {EntityFactory} from './entitiesspawn.js';
+import {SCHEDULER, TIME_ENGINE, initTiming} from './timing.js';
 
 class UIMode {
   constructor(thegame) {
@@ -206,6 +207,7 @@ export class PlayMode extends UIMode {
     //   x: Math.round(display.getOptions().width/2),
     //   y: Math.round(display.getOptions().height/2)
     // };
+    initTiming();
 
     let a = EntityFactory.create("avatar");
     m.addEntityAtRandPos(a);
@@ -213,7 +215,7 @@ export class PlayMode extends UIMode {
 
     this.curry.avatarID = a.getID();
 
-    let bradyNumber = 20;
+    let bradyNumber = 1;
     for (let i = 0; i < bradyNumber; i++) {
       let b = EntityFactory.create("Brady");
       m.addEntityAtRandPos(b);
