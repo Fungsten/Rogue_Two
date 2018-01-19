@@ -10,7 +10,7 @@ EntityFactory.learn({
   'maxHP': 100,
   'maxAE': 100,
   'meleeDamage': 10,
-  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'PlayerMessages']
+  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'PlayerMessages', 'PlayerActor']
 });
 
 EntityFactory.learn({
@@ -19,5 +19,5 @@ EntityFactory.learn({
   'fg': '#eb4',
   'maxHP': 20,
   'maxAE': 100,
-  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether']
+  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker']
 });

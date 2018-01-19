@@ -5,6 +5,7 @@ import * as E from './entity_mixins.js';
 
 export class MixableSymbol extends DisplaySymbol {
   constructor(template) {
+    // console.dir(template);
     super(template);
     if (! this.state) { this.state = {}; }
 

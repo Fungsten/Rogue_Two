@@ -17,6 +17,8 @@ export class Factory {
   }
 
   create(templateName, restorationState) {
+    // console.log("factorizing");
+    // console.dir(templateName);
     let product = new this.productClass(this.knownTemplates[templateName]);
     if (restorationState) {
       product.fromState(restorationState);

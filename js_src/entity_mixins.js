@@ -1,5 +1,6 @@
 //defines the various mixins that can be added to an Entity
 import {Message} from "./message.js";
+import {TIME_ENGINE, SCHEDULER} from './timing.js';
 
 let _exampleMixin = {
   META: {
@@ -256,6 +257,123 @@ export let PlayerMessages = {
     },
     'defeatedBY': function(evtData) {
       Message.send(this.getName() + " has been defeated by " + evtData.src.getName() + "!");
+    }
+  }
+};
+
+export let PlayerActor = {
+  META: {
+    mixinName: 'PlayerActor',
+    mixinGroup: 'Actor',
+    stateNameSpace: '_PlayerActor',
+    stateModel: {
+      baseActionDuration: 1000,
+      actingState: false,
+      currentActionDuration: 1000
+    },
+    init: function (template) {
+      timing.SCHEDULER.add(this,true,1);
+    }
+  },
+  METHODS: {
+    getBaseActDur: function() {
+      return this.state._PlayerActor.baseActionDuration;
+    },
+    setBaseActDur: function(n) {
+      this.state._PlayerActor.baseActionDuration = n;
+    },
+    getCurActDur: function() {
+      return this.state._PlayerActor.currentActionDuration;
+    },
+    setCurActDur: function(n){
+      this.state._PlayerActor.currentActionDuration = n;
+    },
+    isActing: function(state) {
+      if (state !== undefined) {
+        this.state._PlayerActor.actingState = state;
+      }
+      return this.state._PlayerActor.actingState;
+    },
+    act: function() {
+      if (this.isActing()) {return;}
+      this.isActing(true);
+      Game.render();
+      timing.TIME_ENGINE.lock();
+      this.isActing(false);
+    }
+  },
+  LISTENERS: {
+    'actionDone': function(evtData) {
+        timing.setDuration(this.getCurActDur());
+        this.setCurActDur(this.getBaseActDur());
+        setTimeout(function() {
+          timing.TIME_ENGINE.unlock();
+        }, 1);
+    },
+    'killed': function(evtData) {
+      Game.switchMode('lose');
+    }
+
+  }
+};
+
+export let RandomWalker = {
+  META: {
+    mixinName: 'RandomWalker',
+    mixinGroupName: 'Actor',
+    stateNamespace: '_RandomWalker',
+    stateModel: {
+      baseActionDuration: 1000,
+      actingState: false,
+      currentActionDuration: 1000
+    },
+    initialize: function(){
+      SCHEDULER.add(this, true, 2);
+    }
+  },
+  METHODS: {
+    getBaseActionDuration: function(){
+      return this.attr._RandomWalker.baseActionDuration;
+    },
+    setBaseActionDuration: function(n){
+      this.attr._RandomWalker.baseActionDuration = n;
+    },
+    getCurrentActionDuration: function(){
+      return this.attr._RandomWalker.currentActionDuration;
+    },
+    setCurrentActionDuration: function(n){
+      this.attr._RandomWalker.currentActionDuration = n;
+    },
+
+    isActing: function(state){
+      if(state){
+        this.attr._RandomWalker.actingState = state;
+      }
+      return this.attr._RandomWalker.actingState;
+    },
+    act: function(){
+      if(this.isActing()){
+        return;
+      }
+      console.log("walker is acting");
+      this.isActing(true);
+      TIME_ENGINE.lock();
+      //Rand number from -1 to 1
+      console.log("walker has locked");
+      let dx = Math.trunc(ROT.RNG.getUniform() * 3) - 1;
+      let dy = Math.trunc(ROT.RNG.getUniform() * 3) - 1;
+      this.raiseMixinEvent('walkAttempt', {'dx': dx, 'dy': dy});
+      SCHEDULER.setDuration(this.getBaseActionDuration());
+      this.setBaseActionDuration(this.getBaseActionDuration()); //get random int
+      TIME_ENGINE.unlock();
+      this.isActing(false);
+      console.log("walker is done acting");
+    }
+  },
+  LISTENERS: {
+    killed: function(evtData){
+      Message.send(this.getName() + " died");
+      SCHEDULER.remove(this);
     }
   }
 };
