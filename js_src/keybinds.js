@@ -3,17 +3,20 @@
 // Some command constants that are populated by setKey
 export let COMMAND = { 'NULLCOMMAND': 1 };
 
-// Used by getInput, dynamically populated by setKey
-export let BINDING_TYPE = {};
-
-export function getIntput(eventTyp, evt){
-  if (evtType != 'keyup') { return COMMAND.NULLCOMMAND; }
+export function getInput(eventType, evt){
+  if (eventType != 'keyup') { return COMMAND.NULLCOMMAND; }
 
   let bindingSet = `key:${evt.key}`;
 
-  if (!BINDING_TYPE[bindingSet]) {return COMMAND.NULLCOMMAND; }
+  console.log('binding type');
+  console.log(BINDING_TYPE);
+  if (!BINDING_TYPE[bindingSet]) {
+    return COMMAND.NULLCOMMAND; }
   return BINDING_TYPE[bindingSet];
 }
+
+// Used by getInput, dynamically populated by setKey
+let BINDING_TYPE = {};
 
 // takes a set name and preps the commands and binding lookups
 // later items override earlier ones, allowing a sort of hierarchical binding system
@@ -28,8 +31,8 @@ export function setKey(list) {
   }
 
   let commandNum = 1;
-  COOMMAND = {
-    NULLCOMMAND = commandNum
+  COMMAND = {
+    NULLCOMMAND: commandNum
   };
 
   BINDING_TYPE = {};
@@ -38,14 +41,21 @@ export function setKey(list) {
     let name = list[i];
 
     if (!KEY_SETS.hasOwnProperty(name)) { return; }
+
     for (let command in KEY_SETS[name]){
       commandNum++;
       COMMAND[command] = commandNum;
+
       for (let j = 0; j < KEY_SETS[name][command].length; j++){
-        BINDING_TYPE[KEY_SETS[command][j]] = commandNum;
+        console.log('in third for');
+        BINDING_TYPE[KEY_SETS[name][command][j]] = commandNum;
       }
     }
   }
+  console.log('COMMAND');
+  console.dir(COMMAND);
+  console.log('BINDING TYPE');
+  console.dir(BINDING_TYPE);
 }
 
 let KEY_SETS = {

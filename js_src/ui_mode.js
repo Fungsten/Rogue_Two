@@ -8,7 +8,7 @@ import {DisplaySymbol} from './display_symbol';
 import {DATASTORE, clearDatastore} from './datastore.js';
 import {Entity} from './entity.js';
 import {EntityFactory} from './entitiesspawn.js';
-import {startUpInput} from './keybinds.js';
+import {COMMAND, getInput, setKey} from './keybinds.js';
 
 class UIMode {
   constructor(thegame) {
@@ -59,7 +59,7 @@ export class StartupMode extends UIMode { //defines how an object exists
       return true;
     }
 
-
+  }
 
 }
 
@@ -72,6 +72,7 @@ export class PersistenceMode extends UIMode {
     if (window.localStorage.getItem("roguetwogame")){
       this.game.hasSaved = true;
     }
+    setKey('persistence');
   }
 
   render(display) {
@@ -79,35 +80,35 @@ export class PersistenceMode extends UIMode {
     display.drawText(33,2,"N for new game");
     display.drawText(33,3,"S to save game");
     display.drawText(33,4,"L to load previously saved game");
+    display.drawText(33,6,"Escape to cancel and return to game");
   }
 
-  // keybindings(inputType, inputData) {}
+  handleInput(eventType,evt) {
+    if (eventType == 'keyup') {
+      let input = getInput(eventType,evt);
+      if (input == COMMAND.NULLCOMMAND) { return false; }
 
-  handleInput(inputType,inputData) {
-    // super.handleInput(inputType,inputData);
-    if (inputType == 'keyup') {
-      if (inputData.key == 'n' || inputData.key == 'N') {
-        console.log('new game');
+      console.log('did not hit a null key');
+      if (input == COMMAND.NEW_GAME) {
         this.game.startNewGame();
+        Message.send("Started new game")
         this.game.switchMode('play');
         return true;
       }
-      if (inputData.key == 's' || inputData.key == 'S') {
+      if (input == COMMAND.SAVE_GAME) {
         this.handleSave();
+        Message.send("Saved current game")
         return true;
       }
-      if (inputData.key == 'l' || inputData.key == 'L') {
+      if (input == COMMAND.LOAD_GAME) {
         this.handleRestore();
+        Message.send("Loaded previously saved game")
         return true;
       }
-      if (inputData.key == 'Escape'){
+      if (input == COMMAND.CANCEL) {
         this.game.switchMode('play');
-        return true;
       }
-
     }
-    return false;
-    keybindings(inputType, inputData);
   }
 
   handleSave(){
