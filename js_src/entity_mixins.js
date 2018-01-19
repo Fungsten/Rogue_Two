@@ -234,6 +234,7 @@ export let MeleeAttacker = {
       // evtData.target
 
       this.raiseMixinEvent('attacks', {actor: this, target: evtData.target});
+      this.raiseMixinEvent('turnTaken', {'timeUsed': 1});
       evtData.target.raiseMixinEvent('damaged', {src: this, damageAmount: this.getMeleeDamage()});
       console.log("ATTACK");
     }
