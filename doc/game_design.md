@@ -59,3 +59,6 @@ NPC INTERACTION - for every NPC, be them enemy, neutral, or friendly, the player
 4. Thievery/conning - a player may not always be able to beat an NPC in a fight, but they might be able to steal from or con them. If a player encounters a daunting NPC and decides to con or steal, their rating is calculated as below. If the rating is above 0, the con or steal is a success. If the rating is less than or equal to 0, the target will attack if it's animosity level is high enough (so law enforcement or another criminal is likely to attack, but your average citizen or vender might just be upset and walk away).
    * Con rating = player(intelligence * charisma * 1(randomly-generated integer, if it is below the luck threshold)) -  target(intelligence * 1(randomly-generated integer, if it is below the luck threshold)
    * Steal rating = player(intelligence * stealth * 1(randomly-generated integer, if is below the luck threshold)) - target(intelligence * 1(randomly-generated integer, if it is below the luck threshold))
+   
+5. Factions - mostly so that law enforcement doesn't indiscriminately attack one another and the like
+      We'll have four factions: criminals, law enforcement, neutrals, and player
