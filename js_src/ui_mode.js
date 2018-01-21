@@ -88,7 +88,6 @@ export class PersistenceMode extends UIMode {
       let input = getInput(eventType,evt);
       if (input == COMMAND.NULLCOMMAND) { return false; }
 
-      console.log('did not hit a null key');
       if (input == COMMAND.NEW_GAME) {
         this.game.startNewGame();
         Message.send("Started new game")
@@ -178,6 +177,7 @@ export class PlayMode extends UIMode {
   enter() {
     super.enter();
     this.game.isPlaying = true;
+    setKey(['play','movement']);
   }
 
   toJSON() {
@@ -248,46 +248,27 @@ export class PlayMode extends UIMode {
     //-----------------------------------------------------
     //-----------------------------------------------------
 
-    //upper left
-    if (evt.key == 'q' && eventType == 'keydown') {
-      this.moveAvatar(-1, -1);
-      return true;
+    if (eventType == 'keyup') {
+      let input = getInput(eventType,evt);
+      if (input == COMMAND.NULLCOMMAND) { return false; }
+
+      if (input == COMMAND.TO_PERSISTENCE) {
+        this.game.switchMode('persistence');
+        return false;
+      }
+
+      // if (input == COMMAND.MESSAGES) {
+      //   this.game.switchMode('messages');
+      //   return false;
+      // }
+
+      let avatarMoved = false;
+
+      if (input == COMMAND.U) {
+        avatarMoved = DATASTORE.ENTITIES[this.curry.avatarID].tryWalk(-1,-1);
+      }
     }
-    //up
-    if (evt.key == 'w' && eventType == 'keydown') {
-      this.moveAvatar(0, -1);
-      return true;
-    }
-    //upper right
-    if (evt.key == 'e' && eventType == 'keydown') {
-      this.moveAvatar(1, -1);
-      return true;
-    }
-    //left
-    if (evt.key == 'a' && eventType == 'keydown') {
-      this.moveAvatar(-1, 0);
-      return true;
-    }
-    //right
-    if (evt.key == 'd' && eventType == 'keydown') {
-      this.moveAvatar(1, 0);
-      return true;
-    }
-    //lower left
-    if (evt.key == 'c' && eventType == 'keydown') {
-      this.moveAvatar(-1, 1);
-      return true;
-    }
-    //down
-    if (evt.key == 's' && eventType == 'keydown') {
-      this.moveAvatar(0, 1);
-      return true;
-    }
-    //lower right
-    if (evt.key == 'z' && eventType == 'keydown') {
-      this.moveAvatar(1, 1);
-      return true;
-    }
+  }
 
     //-----------------------------------------------------
     //-----------------------------------------------------
