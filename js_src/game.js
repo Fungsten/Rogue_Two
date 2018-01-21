@@ -39,10 +39,6 @@ export let Game = {
   hasSaved: false,
 
   init: function() {
-    // this._randomSeed = 5 + Math.floor(Math.random()*100000);
-    // //this._randomSeed = 76250;
-    // console.log("using random seed "+this._randomSeed);
-    // ROT.RNG.setSeed(this._randomSeed);
     console.log("Game object:");
     console.dir(Game);
 
@@ -66,10 +62,7 @@ export let Game = {
     Message.send("A game made by Will & Grace");
 
     this.switchMode("startup");
-    console.dir(this);
-    // this.switchMode("play");
-    // this.switchMode("lose");
-    // this.switchMode("win");
+    // console.dir(this);
 
     console.log('datastore');
     console.dir(DATASTORE);
@@ -81,7 +74,7 @@ export let Game = {
     this.modes.lose = new LoseMode(this);
     this.modes.win = new WinMode(this);
     this.modes.persistence = new PersistenceMode(this);
-    this.modes.messages = new MessageMode(this);
+    //this.modes.messages = new MessageMode(this);
   },
 
 
@@ -163,12 +156,4 @@ export let Game = {
   restoreFromState(stateData){
     this.state = stateData;
   },
-
-  // fromJSON: function(json) {
-  //   let state = JSON.parse(json);
-  //   this._randomSeed = this.rseed;
-  //   console.log("the random seed is " + this._randomSeed);
-  //   ROT.RNG.setSeed(this._randomSeed);
-  //   this.modes.play.restoreFromState(state.playModeState);
-  // }
 };

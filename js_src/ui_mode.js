@@ -86,8 +86,6 @@ export class PersistenceMode extends UIMode {
       display.drawText(33,3,"S to save game");
       display.drawText(33,6,"Escape to cancel and return to game");
     }
-    console.log('has saved?');
-    console.log(this.game.hasSaved);
     if (this.game.hasSaved){
       display.drawText(33,4,"L to load previously saved game");
     }
@@ -228,7 +226,7 @@ export class PlayMode extends UIMode {
 
     this.curry.avatarID = a.getID();
 
-    let bradyNumber = 25;
+    let bradyNumber = 5;
     for (let i = 0; i < bradyNumber; i++) {
       let b = EntityFactory.create("Brady");
       m.addEntityAtRandPos(b);
@@ -267,10 +265,10 @@ export class PlayMode extends UIMode {
         return true;
       }
 
-      if (input == COMMAND.MESSAGES) {
-        this.game.switchMode('messages');
-        return true;
-      }
+      // if (input == COMMAND.MESSAGES) {
+      //   this.game.switchMode('messages');
+      //   return true;
+      // }
 
       //upper left
       if (input == COMMAND.UL) {
@@ -340,7 +338,7 @@ export class PlayMode extends UIMode {
 
 export class MessageMode extends UIMode {
   render() {
-    Message.renderOn(this.display);
+    Message.render(this.display);
   }
 
   handleInput(inputType,inputData) {

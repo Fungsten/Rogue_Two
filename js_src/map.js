@@ -116,7 +116,7 @@ class Map {
       for(let yi = ystart; yi < yend; yi++){
         let pos = `${xi},${yi}`;
         if (this.mapState.mapPostoEntityID[pos]){
-          // console.log("trying to render entities");
+          console.log("trying to render entities");
           // console.dir(this.mapState.mapPostoEntityID[pos]);
           DATASTORE.ENTITIES[this.mapState.mapPostoEntityID[pos]].render(display, cx, cy);
         } else {
