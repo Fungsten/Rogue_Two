@@ -73,9 +73,9 @@ export class StartupMode extends UIMode { //defines how an object exists
 export class PersistenceMode extends UIMode {
   enter() {
     super.enter();
-    if (window.localStorage.getItem("roguetwogame")){
-      this.game.hasSaved = true;
-    }
+    // if (window.localStorage.getItem("roguetwogame")){
+    //   this.game.hasSaved = true;
+    // }
     setKey('persistence');
   }
 
@@ -86,6 +86,8 @@ export class PersistenceMode extends UIMode {
       display.drawText(33,3,"S to save game");
       display.drawText(33,6,"Escape to cancel and return to game");
     }
+    console.log('has saved?');
+    console.log(this.game.hasSaved);
     if (this.game.hasSaved){
       display.drawText(33,4,"L to load previously saved game");
     }
@@ -256,38 +258,19 @@ export class PlayMode extends UIMode {
   }
 
   handleInput(eventType, evt) {
-    // if (evt.key == 'l') {
-    //   //console.dir(this);
-    //   this.game.switchMode('lose');
-    //   return true;
-    // }
-    // if (evt.key == 'w') {
-    //   //console.dir(this);
-    //   this.game.switchMode('win');
-    //   return true;
-    // }
-    // if (evt.key == 'Escape' && eventType == 'keyup'){
-    //   this.game.switchMode('persistence');
-    //   return true;
-    // }
-
-    //-----------------------------------------------------
-    //-----------------------------------------------------
-
     if (eventType == 'keyup') {
       let input = getInput(eventType,evt);
       if (input == COMMAND.NULLCOMMAND) { return false; }
 
       if (input == COMMAND.TO_PERSISTENCE) {
         this.game.switchMode('persistence');
-        return false;
+        return true;
       }
 
-      // view more messages on main display
-      // if (input == COMMAND.MESSAGES) {
-      //   this.game.switchMode('messages');
-      //   return false;
-      // }
+      if (input == COMMAND.MESSAGES) {
+        this.game.switchMode('messages');
+        return true;
+      }
 
       //upper left
       if (input == COMMAND.UL) {
@@ -355,7 +338,7 @@ export class PlayMode extends UIMode {
 //-----------------------------------------------------
 //-----------------------------------------------------
 
-export class UIModeMessages extends UIMode {
+export class MessageMode extends UIMode {
   render() {
     Message.renderOn(this.display);
   }
