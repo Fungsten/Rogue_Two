@@ -52,10 +52,6 @@ export function setKey(list) {
       }
     }
   }
-  console.log('COMMAND');
-  console.dir(COMMAND);
-  console.log('BINDING TYPE');
-  console.dir(BINDING_TYPE);
 }
 
 let KEY_SETS = {

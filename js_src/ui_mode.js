@@ -82,8 +82,14 @@ export class PersistenceMode extends UIMode {
   render(display) {
     display.clear();
     display.drawText(33,2,"N for new game");
-    display.drawText(33,3,"S to save game");
-    display.drawText(33,4,"L to load previously saved game");
+    if (this.game.isPlaying) {
+      display.drawText(33,3,"S to save game");
+      display.drawText(33,6,"Escape to cancel and return to game");
+    }
+    if (this.game.hasSaved){
+      display.drawText(33,4,"L to load previously saved game");
+    }
+
   }
 
   handleInput(eventType,evt) {
@@ -109,6 +115,7 @@ export class PersistenceMode extends UIMode {
       }
       if (input == COMMAND.CANCEL) {
         this.game.switchMode('play');
+        return true;
       }
     }
   }
@@ -181,6 +188,7 @@ export class PlayMode extends UIMode {
   enter() {
     super.enter();
     this.game.isPlaying = true;
+    setKey(['play','movement']);
   }
 
   toJSON() {
@@ -248,67 +256,84 @@ export class PlayMode extends UIMode {
   }
 
   handleInput(eventType, evt) {
-    if (evt.key == 'l') {
-      //console.dir(this);
-      this.game.switchMode('lose');
-      return true;
-    }
-    if (evt.key == 'w') {
-      //console.dir(this);
-      this.game.switchMode('win');
-      return true;
-    }
-    if (evt.key == 'Escape' && eventType == 'keyup'){
-      this.game.switchMode('persistence');
-      return true;
-    }
+    // if (evt.key == 'l') {
+    //   //console.dir(this);
+    //   this.game.switchMode('lose');
+    //   return true;
+    // }
+    // if (evt.key == 'w') {
+    //   //console.dir(this);
+    //   this.game.switchMode('win');
+    //   return true;
+    // }
+    // if (evt.key == 'Escape' && eventType == 'keyup'){
+    //   this.game.switchMode('persistence');
+    //   return true;
+    // }
 
     //-----------------------------------------------------
     //-----------------------------------------------------
 
-    //upper left
-    if (evt.key == '7' && eventType == 'keydown') {
-      this.moveAvatar(-1, -1);
-      return true;
-    }
-    //up
-    if (evt.key == '8' && eventType == 'keydown') {
-      this.moveAvatar(0, -1);
-      return true;
-    }
-    //upper right
-    if (evt.key == '9' && eventType == 'keydown') {
-      this.moveAvatar(1, -1);
-      return true;
-    }
-    //left
-    if (evt.key == '4' && eventType == 'keydown') {
-      this.moveAvatar(-1, 0);
-      return true;
-    }
-    //right
-    if (evt.key == '6' && eventType == 'keydown') {
-      this.moveAvatar(1, 0);
-      return true;
-    }
-    //lower left
-    if (evt.key == '1' && eventType == 'keydown') {
-      this.moveAvatar(-1, 1);
-      return true;
-    }
-    //down
-    if (evt.key == '2' && eventType == 'keydown') {
-      this.moveAvatar(0, 1);
-      return true;
-    }
-    //lower right
-    if (evt.key == '3' && eventType == 'keydown') {
-      this.moveAvatar(1, 1);
-      return true;
-    }
+    if (eventType == 'keyup') {
+      let input = getInput(eventType,evt);
+      if (input == COMMAND.NULLCOMMAND) { return false; }
 
-    //-----------------------------------------------------
-    //-----------------------------------------------------
+      if (input == COMMAND.TO_PERSISTENCE) {
+        this.game.switchMode('persistence');
+        return false;
+      }
+
+      // view more messages on main display
+      // if (input == COMMAND.MESSAGES) {
+      //   this.game.switchMode('messages');
+      //   return false;
+      // }
+
+      //upper left
+      if (input == COMMAND.UL) {
+        this.moveAvatar(-1, -1);
+        return true;
+      }
+      //up
+      if (input == COMMAND.U) {
+        this.moveAvatar(0, -1);
+        return true;
+      }
+      //upper right
+      if (input == COMMAND.UR) {
+        this.moveAvatar(1, -1);
+        return true;
+      }
+      //left
+      if (input == COMMAND.L) {
+        this.moveAvatar(-1, 0);
+        return true;
+      }
+      //right
+      if (input == COMMAND.R) {
+        this.moveAvatar(1, 0);
+        return true;
+      }
+      //lower left
+      if (input == COMMAND.DL) {
+        this.moveAvatar(-1, 1);
+        return true;
+      }
+      //down
+      if (input == COMMAND.D) {
+        this.moveAvatar(0, 1);
+        return true;
+      }
+      //lower right
+      if (input == COMMAND.DR) {
+        this.moveAvatar(1, 1);
+        return true;
+      }
+      //wait, don't move
+      if (input == COMMAND.WAIT) {
+        return true;
+      }
+    }
   }
   moveAvatar(dx,dy) {
       //console.log(x + y);
