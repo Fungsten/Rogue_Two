@@ -279,6 +279,28 @@ export let PlayerMessages = {
   }
 };
 
+export let NPCMessages = {
+  META: {
+    mixinName: 'NPCMessages',
+    mixinGroupName: 'NPCMessages',
+    stateNameSpace: '_NPCMessages',
+  },
+  LISTENERS: {
+    'attacks': function(evtData) {
+      Message.send(this.getName() + " attacks " + evtData.target.getName() +"!");
+    },
+    'damages': function(evtData) {
+      Message.send("" + this.getName() + " attacks " + evtData.target.getName() + " for " + evtData.damageAmount + " damage!");
+    },
+    'defeats': function(evtData) {
+      Message.send(this.getName() + " has defeated " + evtData.target.getName() + "!");
+    },
+    'defeatedBY': function(evtData) {
+      Message.send(this.getName() + " has been defeated by " + evtData.src.getName() + "!");
+    }
+  }
+};
+
 export let PlayerActor = {
   META: {
     mixinName: 'PlayerActor',
@@ -362,3 +384,65 @@ export let RandomWalker = {
     }
   }
 };
+
+export let Special = {
+  META: {
+    mixinName: 'Special',
+    mixinGroupName: 'SP',
+    stateNameSpace: '_SP',
+    stateModel: {
+      str: 0,
+      per: 0,
+      end: 0,
+      crm: 0,
+      int: 0,
+      agi: 0,
+      luk: 0,
+    },
+    initialize: function(template) {
+      // do any initialization
+      this.state._SP.str = template.str || 1;
+      this.state._SP.per = template.per || 1;
+      this.state._SP.end = template.end || 1;
+      this.state._SP.crm = template.crm || 1;
+      this.state._SP.int = template.int || 1;
+      this.state._SP.agi = template.agi || 1;
+      this.state._SP.luk = template.luk || 1;
+    }
+  },
+  METHODS: {
+    setSTR: function(newSTR) {
+      this.state._SP.str = newSTR;
+    },
+
+    changeSTR: function(delta) {
+      if (this.state._SP.str - delta <= 0) {
+        this.state._SP.str = 0;
+      } else {
+        this.state._SP.str -= delta;
+      }
+    },
+
+    getSTR: function() {
+      return this.state._SP.str;
+    },
+    getPER: function() {
+      return this.state._SP.per;
+    },
+    getEND: function() {
+      return this.state._SP.end;
+    },
+    getCRM: function() {
+      return this.state._SP.crm;
+    },
+    getINT: function() {
+      return this.state._SP.int;
+    },
+    getAGI: function() {
+      return this.state._SP.agi;
+    },
+    getLUK: function() {
+      return this.state._SP.luk;
+    },
+  },
+}

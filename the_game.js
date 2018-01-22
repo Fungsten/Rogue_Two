@@ -584,7 +584,7 @@ if (__webpack_require__(6)) {
   var createArrayIncludes = __webpack_require__(52);
   var speciesConstructor = __webpack_require__(59);
   var ArrayIterators = __webpack_require__(87);
-  var Iterators = __webpack_require__(44);
+  var Iterators = __webpack_require__(45);
   var $iterDetect = __webpack_require__(56);
   var setSpecies = __webpack_require__(38);
   var arrayFill = __webpack_require__(86);
@@ -1357,6 +1357,31 @@ module.exports = function (target, src, safe) {
 /* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.clearDatastore = clearDatastore;
+// a generally accessible datastore object
+// NOTE: this holds the objects the game uses, keyed by object ID (and subgroupd - e.g. all maps are in a MAPS sub-namespace). Relationships between game objects (e.g. UI mode play's current map) are tracked via id rather than fully embedding related objects, which greatly eases persistence headaches (among other things).
+var DATASTORE = exports.DATASTORE = {};
+clearDatastore();
+
+function clearDatastore() {
+  exports.DATASTORE = DATASTORE = {
+    ID_SEQ: 1,
+    GAME: {},
+    MAPS: {},
+    ENTITIES: {}
+  };
+}
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var def = __webpack_require__(7).f;
 var has = __webpack_require__(11);
 var TAG = __webpack_require__(5)('toStringTag');
@@ -1367,7 +1392,7 @@ module.exports = function (it, tag, stat) {
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
@@ -1403,14 +1428,14 @@ module.exports = exporter;
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports) {
 
 module.exports = {};
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(4);
@@ -1421,7 +1446,7 @@ module.exports = function (it, TYPE) {
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -7052,31 +7077,6 @@ for (var p in ROT) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(65), __webpack_require__(338)))
 
 /***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.clearDatastore = clearDatastore;
-// a generally accessible datastore object
-// NOTE: this holds the objects the game uses, keyed by object ID (and subgroupd - e.g. all maps are in a MAPS sub-namespace). Relationships between game objects (e.g. UI mode play's current map) are tracked via id rather than fully embedding related objects, which greatly eases persistence headaches (among other things).
-var DATASTORE = exports.DATASTORE = {};
-clearDatastore();
-
-function clearDatastore() {
-  exports.DATASTORE = DATASTORE = {
-    ID_SEQ: 1,
-    GAME: {},
-    MAPS: {},
-    ENTITIES: {}
-  };
-}
-
-/***/ }),
 /* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7311,7 +7311,7 @@ var anInstance = __webpack_require__(39);
 var isObject = __webpack_require__(4);
 var fails = __webpack_require__(3);
 var $iterDetect = __webpack_require__(56);
-var setToStringTag = __webpack_require__(42);
+var setToStringTag = __webpack_require__(43);
 var inheritIfRequired = __webpack_require__(73);
 
 module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
@@ -7709,9 +7709,9 @@ var $export = __webpack_require__(0);
 var redefine = __webpack_require__(13);
 var hide = __webpack_require__(12);
 var has = __webpack_require__(11);
-var Iterators = __webpack_require__(44);
+var Iterators = __webpack_require__(45);
 var $iterCreate = __webpack_require__(79);
-var setToStringTag = __webpack_require__(42);
+var setToStringTag = __webpack_require__(43);
 var getPrototypeOf = __webpack_require__(17);
 var ITERATOR = __webpack_require__(5)('iterator');
 var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
@@ -7783,7 +7783,7 @@ module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE
 
 var create = __webpack_require__(36);
 var descriptor = __webpack_require__(31);
-var setToStringTag = __webpack_require__(42);
+var setToStringTag = __webpack_require__(43);
 var IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
@@ -7832,7 +7832,7 @@ module.exports = function (KEY) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // check on default Array iterator
-var Iterators = __webpack_require__(44);
+var Iterators = __webpack_require__(45);
 var ITERATOR = __webpack_require__(5)('iterator');
 var ArrayProto = Array.prototype;
 
@@ -7862,7 +7862,7 @@ module.exports = function (object, index, value) {
 
 var classof = __webpack_require__(50);
 var ITERATOR = __webpack_require__(5)('iterator');
-var Iterators = __webpack_require__(44);
+var Iterators = __webpack_require__(45);
 module.exports = __webpack_require__(21).getIteratorMethod = function (it) {
   if (it != undefined) return it[ITERATOR]
     || it['@@iterator']
@@ -7912,7 +7912,7 @@ module.exports = function fill(value /* , start = 0, end = @length */) {
 
 var addToUnscopables = __webpack_require__(30);
 var step = __webpack_require__(114);
-var Iterators = __webpack_require__(44);
+var Iterators = __webpack_require__(45);
 var toIObject = __webpack_require__(15);
 
 // 22.1.3.4 Array.prototype.entries()
@@ -8154,7 +8154,7 @@ var toIndex = __webpack_require__(123);
 var gOPN = __webpack_require__(37).f;
 var dP = __webpack_require__(7).f;
 var arrayFill = __webpack_require__(86);
-var setToStringTag = __webpack_require__(42);
+var setToStringTag = __webpack_require__(43);
 var ARRAY_BUFFER = 'ArrayBuffer';
 var DATA_VIEW = 'DataView';
 var PROTOTYPE = 'prototype';
@@ -8440,7 +8440,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.init2DArray = init2DArray;
 exports.uniqueID = uniqueID;
 
-var _datastore = __webpack_require__(47);
+var _datastore = __webpack_require__(42);
 
 function init2DArray(xdim, ydim, initVal) {
   var a = [];
@@ -8836,7 +8836,7 @@ module.exports = function (fn, args, that) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var $parseInt = __webpack_require__(2).parseInt;
-var $trim = __webpack_require__(43).trim;
+var $trim = __webpack_require__(44).trim;
 var ws = __webpack_require__(72);
 var hex = /^[-+]?0[xX]/;
 
@@ -8851,7 +8851,7 @@ module.exports = $parseInt(ws + '08') !== 8 || $parseInt(ws + '0x16') !== 22 ? f
 /***/ (function(module, exports, __webpack_require__) {
 
 var $parseFloat = __webpack_require__(2).parseFloat;
-var $trim = __webpack_require__(43).trim;
+var $trim = __webpack_require__(44).trim;
 
 module.exports = 1 / $parseFloat(__webpack_require__(72) + '-0') !== -Infinity ? function parseFloat(str) {
   var string = $trim(String(str), 3);
@@ -9065,7 +9065,7 @@ module.exports = function (C, x) {
 "use strict";
 
 var strong = __webpack_require__(119);
-var validate = __webpack_require__(45);
+var validate = __webpack_require__(46);
 var MAP = 'Map';
 
 // 23.1 Map Objects
@@ -9101,7 +9101,7 @@ var step = __webpack_require__(114);
 var setSpecies = __webpack_require__(38);
 var DESCRIPTORS = __webpack_require__(6);
 var fastKey = __webpack_require__(29).fastKey;
-var validate = __webpack_require__(45);
+var validate = __webpack_require__(46);
 var SIZE = DESCRIPTORS ? '_s' : 'size';
 
 var getEntry = function (that, key) {
@@ -9242,7 +9242,7 @@ module.exports = {
 "use strict";
 
 var strong = __webpack_require__(119);
-var validate = __webpack_require__(45);
+var validate = __webpack_require__(46);
 var SET = 'Set';
 
 // 23.2 Set Objects
@@ -9269,7 +9269,7 @@ var assign = __webpack_require__(102);
 var weak = __webpack_require__(122);
 var isObject = __webpack_require__(4);
 var fails = __webpack_require__(3);
-var validate = __webpack_require__(45);
+var validate = __webpack_require__(46);
 var WEAK_MAP = 'WeakMap';
 var getWeak = meta.getWeak;
 var isExtensible = Object.isExtensible;
@@ -9336,7 +9336,7 @@ var anInstance = __webpack_require__(39);
 var forOf = __webpack_require__(40);
 var createArrayMethod = __webpack_require__(26);
 var $has = __webpack_require__(11);
-var validate = __webpack_require__(45);
+var validate = __webpack_require__(46);
 var arrayFind = createArrayMethod(5);
 var arrayFindIndex = createArrayMethod(6);
 var id = 0;
@@ -9604,7 +9604,7 @@ var _util = __webpack_require__(93);
 
 var U = _interopRequireWildcard(_util);
 
-var _rotJs = __webpack_require__(46);
+var _rotJs = __webpack_require__(47);
 
 var _rotJs2 = _interopRequireDefault(_rotJs);
 
@@ -9612,7 +9612,7 @@ var _ui_mode = __webpack_require__(339);
 
 var _message = __webpack_require__(95);
 
-var _datastore = __webpack_require__(47);
+var _datastore = __webpack_require__(42);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9792,11 +9792,11 @@ var _tile = __webpack_require__(340);
 
 var _util = __webpack_require__(93);
 
-var _rotJs = __webpack_require__(46);
+var _rotJs = __webpack_require__(47);
 
 var _rotJs2 = _interopRequireDefault(_rotJs);
 
-var _datastore = __webpack_require__(47);
+var _datastore = __webpack_require__(42);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10039,7 +10039,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.TIME_ENGINE = exports.SCHEDULER = undefined;
 exports.initTiming = initTiming;
 
-var _rotJs = __webpack_require__(46);
+var _rotJs = __webpack_require__(47);
 
 var _rotJs2 = _interopRequireDefault(_rotJs);
 
@@ -10071,7 +10071,7 @@ var _mixable_symbol = __webpack_require__(96);
 
 var _util = __webpack_require__(93);
 
-var _datastore = __webpack_require__(47);
+var _datastore = __webpack_require__(42);
 
 var _map = __webpack_require__(132);
 
@@ -10213,7 +10213,7 @@ var Entity = exports.Entity = function (_MixableSymbol) {
 
 __webpack_require__(136);
 
-var _rotJs = __webpack_require__(46);
+var _rotJs = __webpack_require__(47);
 
 var _rotJs2 = _interopRequireDefault(_rotJs);
 
@@ -10496,7 +10496,7 @@ var redefine = __webpack_require__(13);
 var META = __webpack_require__(29).KEY;
 var $fails = __webpack_require__(3);
 var shared = __webpack_require__(51);
-var setToStringTag = __webpack_require__(42);
+var setToStringTag = __webpack_require__(43);
 var uid = __webpack_require__(32);
 var wks = __webpack_require__(5);
 var wksExt = __webpack_require__(98);
@@ -11055,7 +11055,7 @@ var fails = __webpack_require__(3);
 var gOPN = __webpack_require__(37).f;
 var gOPD = __webpack_require__(16).f;
 var dP = __webpack_require__(7).f;
-var $trim = __webpack_require__(43).trim;
+var $trim = __webpack_require__(44).trim;
 var NUMBER = 'Number';
 var $Number = global[NUMBER];
 var Base = $Number;
@@ -11704,7 +11704,7 @@ $export($export.S, 'String', {
 "use strict";
 
 // 21.1.3.25 String.prototype.trim()
-__webpack_require__(43)('trim', function ($trim) {
+__webpack_require__(44)('trim', function ($trim) {
   return function trim() {
     return $trim(this, 3);
   };
@@ -12992,7 +12992,7 @@ if (!USE_NATIVE) {
 }
 
 $export($export.G + $export.W + $export.F * !USE_NATIVE, { Promise: $Promise });
-__webpack_require__(42)($Promise, PROMISE);
+__webpack_require__(43)($Promise, PROMISE);
 __webpack_require__(38)(PROMISE);
 Wrapper = __webpack_require__(21)[PROMISE];
 
@@ -13065,7 +13065,7 @@ $export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(56)(function
 "use strict";
 
 var weak = __webpack_require__(122);
-var validate = __webpack_require__(45);
+var validate = __webpack_require__(46);
 var WEAK_SET = 'WeakSet';
 
 // 23.4 WeakSet Objects
@@ -13713,7 +13713,7 @@ $export($export.P + $export.F * /Version\/10\.\d+(\.\d+)? Safari\//.test(userAge
 "use strict";
 
 // https://github.com/sebmarkbage/ecmascript-string-left-right-trim
-__webpack_require__(43)('trimLeft', function ($trim) {
+__webpack_require__(44)('trimLeft', function ($trim) {
   return function trimLeft() {
     return $trim(this, 1);
   };
@@ -13727,7 +13727,7 @@ __webpack_require__(43)('trimLeft', function ($trim) {
 "use strict";
 
 // https://github.com/sebmarkbage/ecmascript-string-left-right-trim
-__webpack_require__(43)('trimRight', function ($trim) {
+__webpack_require__(44)('trimRight', function ($trim) {
   return function trimRight() {
     return $trim(this, 2);
   };
@@ -14718,7 +14718,7 @@ var getKeys = __webpack_require__(34);
 var redefine = __webpack_require__(13);
 var global = __webpack_require__(2);
 var hide = __webpack_require__(12);
-var Iterators = __webpack_require__(44);
+var Iterators = __webpack_require__(45);
 var wks = __webpack_require__(5);
 var ITERATOR = wks('iterator');
 var TO_STRING_TAG = wks('toStringTag');
@@ -15755,7 +15755,7 @@ var _get = function get(object, property, receiver) { if (object === null) objec
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // Game Modes
 
-var _rotJs = __webpack_require__(46);
+var _rotJs = __webpack_require__(47);
 
 var _rotJs2 = _interopRequireDefault(_rotJs);
 
@@ -15767,7 +15767,7 @@ var _message = __webpack_require__(95);
 
 var _mixable_symbol = __webpack_require__(96);
 
-var _datastore = __webpack_require__(47);
+var _datastore = __webpack_require__(42);
 
 var _entity = __webpack_require__(134);
 
@@ -16098,6 +16098,15 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
       display.drawText(0, 0, "time: " + this.getAvatar().getTime());
       display.drawText(0, 3, "HP: " + this.getAvatar().getCurHP() + " / " + this.getAvatar().getMaxHP());
       display.drawText(0, 4, "AE: " + this.getAvatar().getCurAE() + " / " + this.getAvatar().getMaxAE());
+      display.drawText(0, 5, "Money: Many");
+
+      display.drawText(0, 7, "Strength: " + this.getAvatar().getSTR());
+      display.drawText(0, 8, "Perception: " + this.getAvatar().getPER());
+      display.drawText(0, 9, "Endurance: " + this.getAvatar().getEND());
+      display.drawText(0, 10, "Charisma: " + this.getAvatar().getCRM());
+      display.drawText(0, 11, "Intelligence: " + this.getAvatar().getINT());
+      display.drawText(0, 12, "Agility: " + this.getAvatar().getAGI());
+      display.drawText(0, 13, "Luck: " + this.getAvatar().getLUK());
     }
   }, {
     key: 'handleInput',
@@ -16366,7 +16375,8 @@ var Tile = exports.Tile = function (_DisplaySymbol) {
 var TILES = exports.TILES = {
   NULLTILE: new Tile({ name: 'nulltile', chr: 'x', transparent: false, passable: false }),
   WALL: new Tile({ name: 'wall', chr: '#', transparent: false, passable: false }),
-  FLOOR: new Tile({ name: 'floor', chr: '.', transparent: true, passable: true })
+  FLOOR: new Tile({ name: 'floor', chr: '.', transparent: true, passable: true }),
+  DOOR: new Tile({ name: 'door', chr: '门', transparent: true, passable: true })
 };
 
 /***/ }),
@@ -16397,18 +16407,21 @@ Color.BG = '#000';
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.RandomWalker = exports.PlayerActor = exports.PlayerMessages = exports.MeleeAttacker = exports.Aether = exports.HitPoints = exports.WalkerCorporeal = exports.TimeTracker = undefined;
+exports.Special = exports.RandomWalker = exports.PlayerActor = exports.NPCMessages = exports.PlayerMessages = exports.MeleeAttacker = exports.Aether = exports.HitPoints = exports.WalkerCorporeal = exports.TimeTracker = undefined;
 
 var _message = __webpack_require__(95);
 
 var _timing = __webpack_require__(133);
 
-var _rotJs = __webpack_require__(46);
+var _rotJs = __webpack_require__(47);
 
 var _rotJs2 = _interopRequireDefault(_rotJs);
 
+var _datastore = __webpack_require__(42);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//defines the various mixins that can be added to an Entity
 var _exampleMixin = {
   META: {
     mixinName: 'ExampleMixin',
@@ -16427,7 +16440,8 @@ var _exampleMixin = {
       // can access / manipulate this.state._ExampleMixin
     }
   }
-}; //defines the various mixins that can be added to an Entity
+};
+
 var TimeTracker = exports.TimeTracker = {
   META: {
     mixinName: 'TimeTracker',
@@ -16687,6 +16701,28 @@ var PlayerMessages = exports.PlayerMessages = {
   }
 };
 
+var NPCMessages = exports.NPCMessages = {
+  META: {
+    mixinName: 'NPCMessages',
+    mixinGroupName: 'NPCMessages',
+    stateNameSpace: '_NPCMessages'
+  },
+  LISTENERS: {
+    'attacks': function attacks(evtData) {
+      _message.Message.send(this.getName() + " attacks " + evtData.target.getName() + "!");
+    },
+    'damages': function damages(evtData) {
+      _message.Message.send("" + this.getName() + " attacks " + evtData.target.getName() + " for " + evtData.damageAmount + " damage!");
+    },
+    'defeats': function defeats(evtData) {
+      _message.Message.send(this.getName() + " has defeated " + evtData.target.getName() + "!");
+    },
+    'defeatedBY': function defeatedBY(evtData) {
+      _message.Message.send(this.getName() + " has been defeated by " + evtData.src.getName() + "!");
+    }
+  }
+};
+
 var PlayerActor = exports.PlayerActor = {
   META: {
     mixinName: 'PlayerActor',
@@ -16705,7 +16741,9 @@ var PlayerActor = exports.PlayerActor = {
       this.actingState = false;
       console.log("it is now the enemy turn");
       // console.log(SCHEDULER.next());
-      _timing.SCHEDULER.next().raiseMixinEvent('enemyTurn');
+      for (var ent in _datastore.DATASTORE.ENTITIES) {
+        _timing.SCHEDULER.next().raiseMixinEvent('enemyTurn');
+      }
     }
   },
   LISTENERS: {
@@ -16768,6 +16806,68 @@ var RandomWalker = exports.RandomWalker = {
   }
 };
 
+var Special = exports.Special = {
+  META: {
+    mixinName: 'Special',
+    mixinGroupName: 'SP',
+    stateNameSpace: '_SP',
+    stateModel: {
+      str: 0,
+      per: 0,
+      end: 0,
+      crm: 0,
+      int: 0,
+      agi: 0,
+      luk: 0
+    },
+    initialize: function initialize(template) {
+      // do any initialization
+      this.state._SP.str = template.str || 1;
+      this.state._SP.per = template.per || 1;
+      this.state._SP.end = template.end || 1;
+      this.state._SP.crm = template.crm || 1;
+      this.state._SP.int = template.int || 1;
+      this.state._SP.agi = template.agi || 1;
+      this.state._SP.luk = template.luk || 1;
+    }
+  },
+  METHODS: {
+    setSTR: function setSTR(newSTR) {
+      this.state._SP.str = newSTR;
+    },
+
+    changeSTR: function changeSTR(delta) {
+      if (this.state._SP.str - delta <= 0) {
+        this.state._SP.str = 0;
+      } else {
+        this.state._SP.str -= delta;
+      }
+    },
+
+    getSTR: function getSTR() {
+      return this.state._SP.str;
+    },
+    getPER: function getPER() {
+      return this.state._SP.per;
+    },
+    getEND: function getEND() {
+      return this.state._SP.end;
+    },
+    getCRM: function getCRM() {
+      return this.state._SP.crm;
+    },
+    getINT: function getINT() {
+      return this.state._SP.int;
+    },
+    getAGI: function getAGI() {
+      return this.state._SP.agi;
+    },
+    getLUK: function getLUK() {
+      return this.state._SP.luk;
+    }
+  }
+};
+
 /***/ }),
 /* 343 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -16793,7 +16893,14 @@ EntityFactory.learn({
   'maxHP': 100,
   'maxAE': 100,
   'meleeDamage': 10,
-  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'PlayerMessages', 'PlayerActor']
+  'str': 1,
+  'per': 1,
+  'end': 1,
+  'crm': 1,
+  'int': 1,
+  'agi': 1,
+  'luk': 1,
+  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'PlayerMessages', 'PlayerActor', 'Special']
 });
 
 EntityFactory.learn({
@@ -16803,7 +16910,7 @@ EntityFactory.learn({
   'maxHP': 10,
   'maxAE': 100,
   'meleeDamage': 20,
-  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker', 'PlayerMessages']
+  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker', 'NPCMessages']
 });
 
 /***/ }),
@@ -16821,7 +16928,7 @@ exports.Factory = undefined;
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // a colonel factory system = objects that create other objects
 
 
-var _datastore = __webpack_require__(47);
+var _datastore = __webpack_require__(42);
 
 var _mixable_symbol = __webpack_require__(96);
 

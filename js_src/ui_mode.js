@@ -253,6 +253,15 @@ export class PlayMode extends UIMode {
     display.drawText(0,0,"time: " + this.getAvatar().getTime());
     display.drawText(0,3,"HP: " + this.getAvatar().getCurHP() + " / " + this.getAvatar().getMaxHP());
     display.drawText(0,4,"AE: " + this.getAvatar().getCurAE() + " / " + this.getAvatar().getMaxAE());
+    display.drawText(0,5,"Money: Many");
+
+    display.drawText(0,7,"Strength: " + this.getAvatar().getSTR());
+    display.drawText(0,8,"Perception: " + this.getAvatar().getPER());
+    display.drawText(0,9,"Endurance: " + this.getAvatar().getEND());
+    display.drawText(0,10,"Charisma: " + this.getAvatar().getCRM());
+    display.drawText(0,11,"Intelligence: " + this.getAvatar().getINT());
+    display.drawText(0,12,"Agility: " + this.getAvatar().getAGI());
+    display.drawText(0,13,"Luck: " + this.getAvatar().getLUK());
   }
 
   handleInput(eventType, evt) {
