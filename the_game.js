@@ -9644,6 +9644,7 @@ var Game = exports.Game = {
     startup: '',
     persistence: '',
     play: '',
+    messages: '',
     win: '',
     lose: ''
   },
@@ -9652,10 +9653,6 @@ var Game = exports.Game = {
   hasSaved: false,
 
   init: function init() {
-    // this._randomSeed = 5 + Math.floor(Math.random()*100000);
-    // //this._randomSeed = 76250;
-    // console.log("using random seed "+this._randomSeed);
-    // ROT.RNG.setSeed(this._randomSeed);
     console.log("Game object:");
     console.dir(Game);
 
@@ -9679,10 +9676,7 @@ var Game = exports.Game = {
     _message.Message.send("A game made by Will & Grace");
 
     this.switchMode("startup");
-    console.dir(this);
-    // this.switchMode("play");
-    // this.switchMode("lose");
-    // this.switchMode("win");
+    // console.dir(this);
 
     console.log('datastore');
     console.dir(_datastore.DATASTORE);
@@ -9694,6 +9688,7 @@ var Game = exports.Game = {
     this.modes.lose = new _ui_mode.LoseMode(this);
     this.modes.win = new _ui_mode.WinMode(this);
     this.modes.persistence = new _ui_mode.PersistenceMode(this);
+    //this.modes.messages = new MessageMode(this);
   },
 
   switchMode: function switchMode(newModeName) {
@@ -9963,9 +9958,7 @@ var Map = function () {
       for (var xi = xstart; xi < xend; xi++) {
         for (var yi = ystart; yi < yend; yi++) {
           var pos = xi + ',' + yi;
-          if (this.mapState.mapPostoEntityID[pos]) {
-            // console.log("trying to render entities");
-            // console.dir(this.mapState.mapPostoEntityID[pos]);
+          if (_datastore.DATASTORE.ENTITIES[this.mapState.mapPostoEntityID[pos]]) {
             _datastore.DATASTORE.ENTITIES[this.mapState.mapPostoEntityID[pos]].render(display, cx, cy);
           } else {
             this.getTile(xi, yi).render(display, cx, cy);
@@ -15756,7 +15749,7 @@ process.umask = function() { return 0; };
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.WinMode = exports.LoseMode = exports.UIModeMessages = exports.PlayMode = exports.PersistenceMode = exports.StartupMode = undefined;
+exports.WinMode = exports.LoseMode = exports.MessageMode = exports.PlayMode = exports.PersistenceMode = exports.StartupMode = undefined;
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
@@ -15781,6 +15774,8 @@ var _entity = __webpack_require__(134);
 var _entitiesspawn = __webpack_require__(343);
 
 var _timing = __webpack_require__(133);
+
+var _keybinds = __webpack_require__(345);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15896,43 +15891,54 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
     key: 'enter',
     value: function enter() {
       _get(PersistenceMode.prototype.__proto__ || Object.getPrototypeOf(PersistenceMode.prototype), 'enter', this).call(this);
-      if (window.localStorage.getItem("roguetwogame")) {
-        this.game.hasSaved = true;
-      }
+      // if (window.localStorage.getItem("roguetwogame")){
+      //   this.game.hasSaved = true;
+      // }
+      (0, _keybinds.setKey)('persistence');
     }
   }, {
     key: 'render',
     value: function render(display) {
       display.clear();
       display.drawText(33, 2, "N for new game");
-      display.drawText(33, 3, "S to save game");
-      display.drawText(33, 4, "L to load previously saved game");
+      if (this.game.isPlaying) {
+        display.drawText(33, 3, "S to save game");
+        display.drawText(33, 6, "Escape to cancel and return to game");
+      }
+      if (this.game.hasSaved) {
+        display.drawText(33, 4, "L to load previously saved game");
+      }
     }
   }, {
     key: 'handleInput',
-    value: function handleInput(inputType, inputData) {
-      // super.handleInput(inputType,inputData);
-      if (inputType == 'keyup') {
-        if (inputData.key == 'n' || inputData.key == 'N') {
-          console.log('new game');
+    value: function handleInput(eventType, evt) {
+      if (eventType == 'keyup') {
+        var input = (0, _keybinds.getInput)(eventType, evt);
+        if (input == _keybinds.COMMAND.NULLCOMMAND) {
+          return false;
+        }
+
+        if (input == _keybinds.COMMAND.NEW_GAME) {
           this.game.startNewGame();
+          _message.Message.send("Started new game");
           this.game.switchMode('play');
           return true;
         }
-        if (inputData.key == 's' || inputData.key == 'S') {
+        if (input == _keybinds.COMMAND.SAVE_GAME) {
           this.handleSave();
+          _message.Message.send("Saved current game");
           return true;
         }
-        if (inputData.key == 'l' || inputData.key == 'L') {
+        if (input == _keybinds.COMMAND.LOAD_GAME) {
           this.handleRestore();
+          _message.Message.send("Loaded previously saved game");
           return true;
         }
-        if (inputData.key == 'Escape') {
+        if (input == _keybinds.COMMAND.CANCEL) {
           this.game.switchMode('play');
           return true;
         }
       }
-      return false;
     }
   }, {
     key: 'handleSave',
@@ -16021,6 +16027,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
     value: function enter() {
       _get(PlayMode.prototype.__proto__ || Object.getPrototypeOf(PlayMode.prototype), 'enter', this).call(this);
       this.game.isPlaying = true;
+      (0, _keybinds.setKey)(['play', 'movement']);
     }
   }, {
     key: 'toJSON',
@@ -16062,7 +16069,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
 
       this.curry.avatarID = a.getID();
 
-      var bradyNumber = 25;
+      var bradyNumber = 5;
       for (var i = 0; i < bradyNumber; i++) {
         var b = _entitiesspawn.EntityFactory.create("Brady");
         m.addEntityAtRandPos(b);
@@ -16095,67 +16102,67 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
   }, {
     key: 'handleInput',
     value: function handleInput(eventType, evt) {
-      if (evt.key == 'l') {
-        //console.dir(this);
-        this.game.switchMode('lose');
-        return true;
-      }
-      if (evt.key == 'w') {
-        //console.dir(this);
-        this.game.switchMode('win');
-        return true;
-      }
-      if (evt.key == 'Escape' && eventType == 'keyup') {
-        this.game.switchMode('persistence');
-        return true;
-      }
+      if (eventType == 'keyup') {
+        var input = (0, _keybinds.getInput)(eventType, evt);
+        if (input == _keybinds.COMMAND.NULLCOMMAND) {
+          return false;
+        }
 
-      //-----------------------------------------------------
-      //-----------------------------------------------------
+        if (input == _keybinds.COMMAND.TO_PERSISTENCE) {
+          this.game.switchMode('persistence');
+          return true;
+        }
 
-      //upper left
-      if (evt.key == '7' && eventType == 'keydown') {
-        this.moveAvatar(-1, -1);
-        return true;
-      }
-      //up
-      if (evt.key == '8' && eventType == 'keydown') {
-        this.moveAvatar(0, -1);
-        return true;
-      }
-      //upper right
-      if (evt.key == '9' && eventType == 'keydown') {
-        this.moveAvatar(1, -1);
-        return true;
-      }
-      //left
-      if (evt.key == '4' && eventType == 'keydown') {
-        this.moveAvatar(-1, 0);
-        return true;
-      }
-      //right
-      if (evt.key == '6' && eventType == 'keydown') {
-        this.moveAvatar(1, 0);
-        return true;
-      }
-      //lower left
-      if (evt.key == '1' && eventType == 'keydown') {
-        this.moveAvatar(-1, 1);
-        return true;
-      }
-      //down
-      if (evt.key == '2' && eventType == 'keydown') {
-        this.moveAvatar(0, 1);
-        return true;
-      }
-      //lower right
-      if (evt.key == '3' && eventType == 'keydown') {
-        this.moveAvatar(1, 1);
-        return true;
-      }
+        // if (input == COMMAND.MESSAGES) {
+        //   this.game.switchMode('messages');
+        //   return true;
+        // }
 
-      //-----------------------------------------------------
-      //-----------------------------------------------------
+        //upper left
+        if (input == _keybinds.COMMAND.UL) {
+          this.moveAvatar(-1, -1);
+          return true;
+        }
+        //up
+        if (input == _keybinds.COMMAND.U) {
+          this.moveAvatar(0, -1);
+          return true;
+        }
+        //upper right
+        if (input == _keybinds.COMMAND.UR) {
+          this.moveAvatar(1, -1);
+          return true;
+        }
+        //left
+        if (input == _keybinds.COMMAND.L) {
+          this.moveAvatar(-1, 0);
+          return true;
+        }
+        //right
+        if (input == _keybinds.COMMAND.R) {
+          this.moveAvatar(1, 0);
+          return true;
+        }
+        //lower left
+        if (input == _keybinds.COMMAND.DL) {
+          this.moveAvatar(-1, 1);
+          return true;
+        }
+        //down
+        if (input == _keybinds.COMMAND.D) {
+          this.moveAvatar(0, 1);
+          return true;
+        }
+        //lower right
+        if (input == _keybinds.COMMAND.DR) {
+          this.moveAvatar(1, 1);
+          return true;
+        }
+        //wait, don't move
+        if (input == _keybinds.COMMAND.WAIT) {
+          return true;
+        }
+      }
     }
   }, {
     key: 'moveAvatar',
@@ -16184,19 +16191,19 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
 //-----------------------------------------------------
 //-----------------------------------------------------
 
-var UIModeMessages = exports.UIModeMessages = function (_UIMode4) {
-  _inherits(UIModeMessages, _UIMode4);
+var MessageMode = exports.MessageMode = function (_UIMode4) {
+  _inherits(MessageMode, _UIMode4);
 
-  function UIModeMessages() {
-    _classCallCheck(this, UIModeMessages);
+  function MessageMode() {
+    _classCallCheck(this, MessageMode);
 
-    return _possibleConstructorReturn(this, (UIModeMessages.__proto__ || Object.getPrototypeOf(UIModeMessages)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (MessageMode.__proto__ || Object.getPrototypeOf(MessageMode)).apply(this, arguments));
   }
 
-  _createClass(UIModeMessages, [{
+  _createClass(MessageMode, [{
     key: 'render',
     value: function render() {
-      _message.Message.renderOn(this.display);
+      _message.Message.render(this.display);
     }
   }, {
     key: 'handleInput',
@@ -16212,7 +16219,7 @@ var UIModeMessages = exports.UIModeMessages = function (_UIMode4) {
     }
   }]);
 
-  return UIModeMessages;
+  return MessageMode;
 }(UIMode);
 //don't need to export parent classes to export subclasses
 
@@ -16854,6 +16861,109 @@ var Factory = exports.Factory = function () {
 
   return Factory;
 }();
+
+/***/ }),
+/* 345 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getInput = getInput;
+exports.setKey = setKey;
+// keybindings
+
+// Some command constants that are populated by setKey
+var COMMAND = exports.COMMAND = { 'NULLCOMMAND': 1 };
+
+function getInput(eventType, evt) {
+  if (eventType != 'keyup') {
+    return COMMAND.NULLCOMMAND;
+  }
+
+  var bindingSet = 'key:' + evt.key;
+
+  console.log('binding type');
+  console.log(BINDING_TYPE);
+  if (!BINDING_TYPE[bindingSet]) {
+    return COMMAND.NULLCOMMAND;
+  }
+  return BINDING_TYPE[bindingSet];
+}
+
+// Used by getInput, dynamically populated by setKey
+var BINDING_TYPE = {};
+
+// takes a set name and preps the commands and binding lookups
+// later items override earlier ones, allowing a sort of hierarchical binding system
+function setKey(list) {
+  // make sure named list exists
+  if (typeof list === 'string') {
+    list = [list];
+  }
+
+  if (list[0] != 'universal') {
+    list.unshift('universal');
+  }
+
+  var commandNum = 1;
+  exports.COMMAND = COMMAND = {
+    NULLCOMMAND: commandNum
+  };
+
+  BINDING_TYPE = {};
+
+  for (var i = 0; i < list.length; i++) {
+    var name = list[i];
+
+    if (!KEY_SETS.hasOwnProperty(name)) {
+      return;
+    }
+
+    for (var command in KEY_SETS[name]) {
+      commandNum++;
+      COMMAND[command] = commandNum;
+
+      for (var j = 0; j < KEY_SETS[name][command].length; j++) {
+        console.log('in third for');
+        BINDING_TYPE[KEY_SETS[name][command][j]] = commandNum;
+      }
+    }
+  }
+}
+
+var KEY_SETS = {
+  'universal': {
+    'HELP': ['key:h']
+  },
+
+  'persistence': {
+    'NEW_GAME': ['key:n', 'key:N'],
+    'SAVE_GAME': ['key:s', 'key:S'],
+    'LOAD_GAME': ['key:l', 'key:L'],
+    'CANCEL': ['key:Escape']
+  },
+
+  'play': {
+    'TO_PERSISTENCE': ['key:Escape'],
+    'MESSAGES': ['key:m', 'key:M']
+  },
+
+  'movement': {
+    'U': ['key:w', 'key:W', 'key:8', 'key:ArrowUp'],
+    'L': ['key:a', 'key:A', 'key:4', 'key:ArrowLeft'],
+    'D': ['key:s', 'key:S', 'key:2', 'key:ArrowDown'],
+    'R': ['key:d', 'key:D', 'key:6', 'key:ArrowRight'],
+    'UL': ['key:q', 'key:Q', 'key:7'],
+    'UR': ['key:e', 'key:E', 'key:9'],
+    'DL': ['key:z', 'key:Z', 'key:1'],
+    'DR': ['key:c', 'key:C', 'key:3'],
+    'WAIT': ['key:Space', 'key:5']
+  }
+};
 
 /***/ })
 /******/ ]);
