@@ -1,7 +1,7 @@
 {
-  "name": "weedstrikeroguelike",
+  "name": "Rogue_Two",
   "version": "1.0.0",
-  "description": "A demo roguelike game using rot.js",
+  "description": "Williams Fung and Grace Mazzarella's to-be epic roguelike game",
   "main": "index.js",
   "directories": {
     "doc": "doc"
@@ -13,18 +13,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cwarren/weedstrikeroguelike.git"
+    "url": "git+https://github.com/Fungsten/Rogue_Two.git"
   },
   "keywords": [
     "game",
     "roguelike"
   ],
-  "author": "Chris Warren",
+  "author": "William Fung and Grace Mazzarella",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/cwarren/weedstrikeroguelike/issues"
+    "url": "https://github.com/Fungsten/Rogue_Two/issues"
   },
-  "homepage": "https://github.com/cwarren/weedstrikeroguelike#readme",
+  "homepage": "https://github.com/Fungsten/Rogue_Two#readme",
   "dependencies": {
     "rot-js": "^0.6.5",
     "babel-polyfill": "^6.26.0"
