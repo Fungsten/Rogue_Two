@@ -146,7 +146,11 @@ export let HitPoints = {
 
     changeHP: function(delta) {
       if (this.state._HP.curHP <= 0) {return;}
-      console.log(this.getName() + " has lost " + delta + " hp!");
+      if (delta < 0) {
+        console.log(this.getName() + " has healed " + delta + " hp!");
+      } else {
+        console.log(this.getName() + " has lost " + delta + " hp!");
+      }
       this.state._HP.curHP -= delta;
     },
 
@@ -174,6 +178,14 @@ export let HitPoints = {
         this.raiseMixinEvent('defeatedBy', {src: evtData.src});
         evtData.src.raiseMixinEvent('defeats', {target: this});
         this.destroy();
+      }
+    },
+    'levelUp': function() {
+      this.setHP(this.getMaxHP());
+    },
+    'turnTaken': function(evtData) {
+      if (this.getCurHP() < this.getMaxHP()) {
+        this.changeHP(evtData.timeUsed * -1);
       }
     }
   }
@@ -422,6 +434,48 @@ export let Special = {
         this.state._SP.str += delta;
       }
     },
+    changePER: function(delta) {
+      if (this.state._SP.per + delta <= 0) {
+        this.state._SP.per = 0;
+      } else {
+        this.state._SP.per += delta;
+      }
+    },
+    changeEND: function(delta) {
+      if (this.state._SP.end + delta <= 0) {
+        this.state._SP.end = 0;
+      } else {
+        this.state._SP.end += delta;
+      }
+    },
+    changeCRM: function(delta) {
+      if (this.state._SP.crm + delta <= 0) {
+        this.state._SP.crm = 0;
+      } else {
+        this.state._SP.crm += delta;
+      }
+    },
+    changeINT: function(delta) {
+      if (this.state._SP.int + delta <= 0) {
+        this.state._SP.int = 0;
+      } else {
+        this.state._SP.int += delta;
+      }
+    },
+    changeAGI: function(delta) {
+      if (this.state._SP.agi + delta <= 0) {
+        this.state._SP.agi = 0;
+      } else {
+        this.state._SP.agi += delta;
+      }
+    },
+    changeLUK: function(delta) {
+      if (this.state._SP.luk + delta <= 0) {
+        this.state._SP.luk = 0;
+      } else {
+        this.state._SP.luk += delta;
+      }
+    },
 
     getSTR: function() {
       return this.state._SP.str;
@@ -448,6 +502,12 @@ export let Special = {
   LISTENERS: {
     'levelUp': function() {
       this.changeSTR(1);
+      this.changePER(1);
+      this.changeEND(1);
+      this.changeCRM(1);
+      this.changeINT(1);
+      this.changeAGI(1);
+      this.changeLUK(1);
     }
   }
 };
@@ -480,7 +540,7 @@ export let Experience = {
     },
     gainExp: function(exp) {
       this.state._Exp.currExp += exp;
-      if (this.state._Exp.currExp >= this.state._Exp.nextExp) {
+      while (this.state._Exp.currExp >= this.state._Exp.nextExp) {
         this.state._Exp.currExp -= this.state._Exp.nextExp;
         this.state._Exp.level += 1;
         this.state._Exp.nextExp = Math.ceil(this.state._Exp.nextExp * 1.2);

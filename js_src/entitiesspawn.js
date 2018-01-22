@@ -28,7 +28,7 @@ EntityFactory.learn({
   'fg': '#eb4',
   'maxHP': 10,
   'maxAE': 100,
-  'meleeDamage' : 20,
+  'meleeDamage' : 10,
   'str': 1,
   'per': 1,
   'end': 1,
@@ -37,6 +37,6 @@ EntityFactory.learn({
   'agi': 1,
   'luk': 1,
   'level': 0,
-  'yield': 5,
+  'yield': 10,
   'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker', 'NPCMessages', 'Special', 'Experience']
 });

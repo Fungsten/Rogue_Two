@@ -16568,7 +16568,11 @@ var HitPoints = exports.HitPoints = {
       if (this.state._HP.curHP <= 0) {
         return;
       }
-      console.log(this.getName() + " has lost " + delta + " hp!");
+      if (delta < 0) {
+        console.log(this.getName() + " has healed " + delta + " hp!");
+      } else {
+        console.log(this.getName() + " has lost " + delta + " hp!");
+      }
       this.state._HP.curHP -= delta;
     },
 
@@ -16596,6 +16600,14 @@ var HitPoints = exports.HitPoints = {
         this.raiseMixinEvent('defeatedBy', { src: evtData.src });
         evtData.src.raiseMixinEvent('defeats', { target: this });
         this.destroy();
+      }
+    },
+    'levelUp': function levelUp() {
+      this.setHP(this.getMaxHP());
+    },
+    'turnTaken': function turnTaken(evtData) {
+      if (this.getCurHP() < this.getMaxHP()) {
+        this.changeHP(evtData.timeUsed * -1);
       }
     }
   }
@@ -16845,6 +16857,48 @@ var Special = exports.Special = {
         this.state._SP.str += delta;
       }
     },
+    changePER: function changePER(delta) {
+      if (this.state._SP.per + delta <= 0) {
+        this.state._SP.per = 0;
+      } else {
+        this.state._SP.per += delta;
+      }
+    },
+    changeEND: function changeEND(delta) {
+      if (this.state._SP.end + delta <= 0) {
+        this.state._SP.end = 0;
+      } else {
+        this.state._SP.end += delta;
+      }
+    },
+    changeCRM: function changeCRM(delta) {
+      if (this.state._SP.crm + delta <= 0) {
+        this.state._SP.crm = 0;
+      } else {
+        this.state._SP.crm += delta;
+      }
+    },
+    changeINT: function changeINT(delta) {
+      if (this.state._SP.int + delta <= 0) {
+        this.state._SP.int = 0;
+      } else {
+        this.state._SP.int += delta;
+      }
+    },
+    changeAGI: function changeAGI(delta) {
+      if (this.state._SP.agi + delta <= 0) {
+        this.state._SP.agi = 0;
+      } else {
+        this.state._SP.agi += delta;
+      }
+    },
+    changeLUK: function changeLUK(delta) {
+      if (this.state._SP.luk + delta <= 0) {
+        this.state._SP.luk = 0;
+      } else {
+        this.state._SP.luk += delta;
+      }
+    },
 
     getSTR: function getSTR() {
       return this.state._SP.str;
@@ -16871,6 +16925,12 @@ var Special = exports.Special = {
   LISTENERS: {
     'levelUp': function levelUp() {
       this.changeSTR(1);
+      this.changePER(1);
+      this.changeEND(1);
+      this.changeCRM(1);
+      this.changeINT(1);
+      this.changeAGI(1);
+      this.changeLUK(1);
     }
   }
 };
@@ -16903,7 +16963,7 @@ var Experience = exports.Experience = {
     },
     gainExp: function gainExp(exp) {
       this.state._Exp.currExp += exp;
-      if (this.state._Exp.currExp >= this.state._Exp.nextExp) {
+      while (this.state._Exp.currExp >= this.state._Exp.nextExp) {
         this.state._Exp.currExp -= this.state._Exp.nextExp;
         this.state._Exp.level += 1;
         this.state._Exp.nextExp = Math.ceil(this.state._Exp.nextExp * 1.2);
@@ -16965,7 +17025,7 @@ EntityFactory.learn({
   'fg': '#eb4',
   'maxHP': 10,
   'maxAE': 100,
-  'meleeDamage': 20,
+  'meleeDamage': 10,
   'str': 1,
   'per': 1,
   'end': 1,
@@ -16974,7 +17034,7 @@ EntityFactory.learn({
   'agi': 1,
   'luk': 1,
   'level': 0,
-  'yield': 5,
+  'yield': 10,
   'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker', 'NPCMessages', 'Special', 'Experience']
 });
 
