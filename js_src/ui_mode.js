@@ -11,36 +11,6 @@ import {EntityFactory} from './entitiesspawn.js';
 import {SCHEDULER, TIME_ENGINE, initTiming} from './timing.js';
 import {COMMAND, getInput, setKey} from './keybinds.js';
 
-class UIMode {
-  constructor(thegame) {
-    console.log("created "+this.constructor.name);
-    this.game = thegame;
-  }
-
-  enter() {
-    console.log("entered "+this.constructor.name);
-  } //do something when entering this state
-  exit() {
-    console.log("exitted "+this.constructor.name);
-  } //do something when leaving this state
-  handleInput(eventType, evt) {
-    console.log("handling input for "+this.constructor.name);
-    console.log(`event type is ${eventType}`);
-    console.dir(evt);
-    return false;
-  } //take input from user / player
-  render(display) {
-    console.log("rendering "+this.constructor.name);
-    display.drawText(2,2,"rendering "+this.constructor.name);
-  } //render
-  renderAvatar(display) {
-    display.clear();
-  }
-}
-
-//-----------------------------------------------------
-//-----------------------------------------------------
-
 export class StartupMode extends UIMode { //defines how an object exists
 
   render(display) {
@@ -265,7 +235,7 @@ export class PlayMode extends UIMode {
   }
 
   handleInput(eventType, evt) {
-    if (eventType == 'keyup') {
+    if (eventType == 'keydown') {
       let input = getInput(eventType,evt);
       if (input == COMMAND.NULLCOMMAND) { return false; }
 
@@ -285,42 +255,42 @@ export class PlayMode extends UIMode {
         return true;
       }
       //up
-      if (input == COMMAND.U) {
+      else if (input == COMMAND.U) {
         this.moveAvatar(0, -1);
         return true;
       }
       //upper right
-      if (input == COMMAND.UR) {
+      else if (input == COMMAND.UR) {
         this.moveAvatar(1, -1);
         return true;
       }
       //left
-      if (input == COMMAND.L) {
+      else if (input == COMMAND.L) {
         this.moveAvatar(-1, 0);
         return true;
       }
       //right
-      if (input == COMMAND.R) {
+      else if (input == COMMAND.R) {
         this.moveAvatar(1, 0);
         return true;
       }
       //lower left
-      if (input == COMMAND.DL) {
+      else if (input == COMMAND.DL) {
         this.moveAvatar(-1, 1);
         return true;
       }
       //down
-      if (input == COMMAND.D) {
+      else if (input == COMMAND.D) {
         this.moveAvatar(0, 1);
         return true;
       }
       //lower right
-      if (input == COMMAND.DR) {
+      else if (input == COMMAND.DR) {
         this.moveAvatar(1, 1);
         return true;
       }
       //wait, don't move
-      if (input == COMMAND.WAIT) {
+      else if (input == COMMAND.WAIT) {
         return true;
       }
     }

@@ -81,5 +81,13 @@ let KEY_SETS = {
     'DL': ['key:z','key:Z','key:1'],
     'DR': ['key:c','key:C','key:3'],
     'WAIT': ['key:Space','key:5'],
+  },
+
+  'textNav': {
+    'LU': ['key:ArrowUp'],
+    'LD': ['key:ArrowDown'],
+    'PU': ['key:ArrowRight'],
+    'PD': ['key:ArrowLeft'],
+    'CANCEL': ['key:Escape'],
   }
 };

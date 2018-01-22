@@ -25,7 +25,7 @@ export let Game = {
     }
 
   },
-  curMode: '',
+  curModeStack: [],
   modes: {
     startup: '',
     persistence: '',
@@ -79,14 +79,36 @@ export let Game = {
 
 
   switchMode: function(newModeName) {
-    if (this.curMode) {
-      this.curMode.exit();
+    if (this.curModeStack.length > 0) {
+      this.delAllUILayers();
+      this.curModeStack[0].exit();
     }
-    this.curMode = this.modes[newModeName];
-    if (this.curMode) {
-      this.curMode.enter();
+    this.curModeStack[0] = this.modes[newModeName];
+    if (this.curModeStack[0]) {
+      this.curModeStack[0].enter();
+      this.render();
     }
   },
+
+  addUILayer: function(layer) {
+    this.curModeStack.unshift(layer);
+    this.curModeStack[0].enter();
+    this.render();
+  }
+
+  removeUILayer: function(layer){
+    if (this.curModeStack.length > 0 && this.curModeStack[0].isLayer()) {
+      this.curModeStack[0].exit();
+      this.curModeStack.shift();
+    }
+    this.render();
+  }
+
+  delAllUILayers: function() {
+    while (this.curModeStack.length > 0 && this.curModeStack[0].isLayer()) {
+      this.removeUILayer;
+    }
+  }
 
   startNewGame: function() {
     //this._randomSeed = 5 + Math.floor(Math.random()*100000);
@@ -117,12 +139,12 @@ export let Game = {
   },
 
   renderMain: function() {
-    this.curMode.render(this.display.main.o);
+    this.curModeStack[0].render(this.display.main.o);
   },
 
   renderAvatar: function() {
     let d = this.display.avatar.o;
-    this.curMode.renderAvatar(d);
+    this.curModeStack[0].renderAvatar(d);
   },
 
   renderMessage: function() {
@@ -137,8 +159,8 @@ export let Game = {
 
   eventHandler: function(eventType, evt) {
       // When an event is received have the current ui handle it
-      if (this.curMode !== null && this.curMode != '') {
-        if (this.curMode.handleInput(eventType, evt)) {
+      if (this.curModeStack[0] !== null && this.curMode != '') {
+        if (this.curModeStack[0].handleInput(eventType, evt)) {
           this.render();
           //Message.ageMessages();
         }
