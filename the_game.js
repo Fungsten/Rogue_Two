@@ -16069,7 +16069,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
 
       this.curry.avatarID = a.getID();
 
-      var bradyNumber = 25;
+      var bradyNumber = 50;
       for (var i = 0; i < bradyNumber; i++) {
         var b = _entitiesspawn.EntityFactory.create("Brady");
         m.addEntityAtRandPos(b);
@@ -16094,7 +16094,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
     key: 'renderAvatar',
     value: function renderAvatar(display) {
       display.clear();
-      display.drawText(0, 2, "Avatar");
+      display.drawText(0, 2, "Avatar Level: " + this.getAvatar().getLevel());
       display.drawText(0, 0, "time: " + this.getAvatar().getTime());
       display.drawText(0, 3, "HP: " + this.getAvatar().getCurHP() + " / " + this.getAvatar().getMaxHP());
       display.drawText(0, 4, "AE: " + this.getAvatar().getCurAE() + " / " + this.getAvatar().getMaxAE());
@@ -16107,6 +16107,8 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
       display.drawText(0, 11, "Intelligence: " + this.getAvatar().getINT());
       display.drawText(0, 12, "Agility:      " + this.getAvatar().getAGI());
       display.drawText(0, 13, "Luck:         " + this.getAvatar().getLUK());
+
+      display.drawText(0, 15, "EXP: " + this.getAvatar().getCurrExp() + " / " + this.getAvatar().getNextExp());
     }
   }, {
     key: 'handleInput',
@@ -16373,7 +16375,7 @@ var Tile = exports.Tile = function (_DisplaySymbol) {
 }(_display_symbol.DisplaySymbol);
 
 var TILES = exports.TILES = {
-  NULLTILE: new Tile({ name: 'nulltile', chr: 'x', transparent: false, passable: false }),
+  NULLTILE: new Tile({ name: 'nulltile', chr: ' ', transparent: false, passable: false }),
   WALL: new Tile({ name: 'wall', chr: '#', transparent: false, passable: false }),
   FLOOR: new Tile({ name: 'floor', chr: '.', transparent: true, passable: true }),
   DOOR: new Tile({ name: 'door', chr: '门', transparent: true, passable: true })
@@ -16407,7 +16409,7 @@ Color.BG = '#000';
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Special = exports.RandomWalker = exports.PlayerActor = exports.NPCMessages = exports.PlayerMessages = exports.MeleeAttacker = exports.Aether = exports.HitPoints = exports.WalkerCorporeal = exports.TimeTracker = undefined;
+exports.Experience = exports.Special = exports.RandomWalker = exports.PlayerActor = exports.NPCMessages = exports.PlayerMessages = exports.MeleeAttacker = exports.Aether = exports.HitPoints = exports.WalkerCorporeal = exports.TimeTracker = undefined;
 
 var _message = __webpack_require__(95);
 
@@ -16837,10 +16839,10 @@ var Special = exports.Special = {
     },
 
     changeSTR: function changeSTR(delta) {
-      if (this.state._SP.str - delta <= 0) {
+      if (this.state._SP.str + delta <= 0) {
         this.state._SP.str = 0;
       } else {
-        this.state._SP.str -= delta;
+        this.state._SP.str += delta;
       }
     },
 
@@ -16864,6 +16866,58 @@ var Special = exports.Special = {
     },
     getLUK: function getLUK() {
       return this.state._SP.luk;
+    }
+  },
+  LISTENERS: {
+    'levelUp': function levelUp() {
+      this.changeSTR(1);
+    }
+  }
+};
+
+var Experience = exports.Experience = {
+  META: {
+    mixinName: 'Experience',
+    mixinGroupName: 'Experience',
+    stateNameSpace: '_Exp',
+    stateModel: {
+      level: 0,
+      currExp: 0,
+      nextExp: 10,
+      yield: 10
+    },
+    initialize: function initialize(template) {
+      this.state._Exp.level = template.level || 0;
+      this.state._Exp.yield = template.yield * (this.state._Exp.level + 1) || 1;
+    }
+  },
+  METHODS: {
+    getLevel: function getLevel() {
+      return this.state._Exp.level;
+    },
+    getCurrExp: function getCurrExp() {
+      return this.state._Exp.currExp;
+    },
+    getNextExp: function getNextExp() {
+      return this.state._Exp.nextExp;
+    },
+    gainExp: function gainExp(exp) {
+      this.state._Exp.currExp += exp;
+      if (this.state._Exp.currExp >= this.state._Exp.nextExp) {
+        this.state._Exp.currExp -= this.state._Exp.nextExp;
+        this.state._Exp.level += 1;
+        this.state._Exp.nextExp = Math.ceil(this.state._Exp.nextExp * 1.2);
+        this.state._Exp.yield = this.state._Exp.yield * this.state._Exp.level;
+        this.raiseMixinEvent('levelUp');
+      }
+    },
+    getYield: function getYield() {
+      return this.state._Exp.yield;
+    }
+  },
+  LISTENERS: {
+    'defeats': function defeats(evtData) {
+      this.gainExp(evtData.target.getYield());
     }
   }
 };
@@ -16889,7 +16943,7 @@ var EntityFactory = exports.EntityFactory = new _factory.Factory(_entity.Entity,
 EntityFactory.learn({
   'name': 'avatar',
   'chr': '@',
-  'fg': '#eb4',
+  'fg': '#0e2',
   'maxHP': 100,
   'maxAE': 100,
   'meleeDamage': 10,
@@ -16900,7 +16954,9 @@ EntityFactory.learn({
   'int': 1,
   'agi': 1,
   'luk': 1,
-  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'PlayerMessages', 'PlayerActor', 'Special']
+  'level': 0,
+  'yield': 1,
+  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'PlayerMessages', 'PlayerActor', 'Special', 'Experience']
 });
 
 EntityFactory.learn({
@@ -16910,7 +16966,16 @@ EntityFactory.learn({
   'maxHP': 10,
   'maxAE': 100,
   'meleeDamage': 20,
-  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker', 'NPCMessages']
+  'str': 1,
+  'per': 1,
+  'end': 1,
+  'crm': 1,
+  'int': 1,
+  'agi': 1,
+  'luk': 1,
+  'level': 0,
+  'yield': 5,
+  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker', 'NPCMessages', 'Special', 'Experience']
 });
 
 /***/ }),

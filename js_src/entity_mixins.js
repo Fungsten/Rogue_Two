@@ -416,10 +416,10 @@ export let Special = {
     },
 
     changeSTR: function(delta) {
-      if (this.state._SP.str - delta <= 0) {
+      if (this.state._SP.str + delta <= 0) {
         this.state._SP.str = 0;
       } else {
-        this.state._SP.str -= delta;
+        this.state._SP.str += delta;
       }
     },
 
@@ -445,4 +445,56 @@ export let Special = {
       return this.state._SP.luk;
     },
   },
-}
+  LISTENERS: {
+    'levelUp': function() {
+      this.changeSTR(1);
+    }
+  }
+};
+
+export let Experience = {
+  META: {
+    mixinName: 'Experience',
+    mixinGroupName: 'Experience',
+    stateNameSpace: '_Exp',
+    stateModel: {
+      level: 0,
+      currExp: 0,
+      nextExp: 10,
+      yield: 10
+    },
+    initialize: function(template) {
+      this.state._Exp.level = template.level || 0;
+      this.state._Exp.yield = template.yield * (this.state._Exp.level + 1) || 1;
+    }
+  },
+  METHODS: {
+    getLevel: function() {
+      return this.state._Exp.level;
+    },
+    getCurrExp: function() {
+      return this.state._Exp.currExp;
+    },
+    getNextExp: function() {
+      return this.state._Exp.nextExp;
+    },
+    gainExp: function(exp) {
+      this.state._Exp.currExp += exp;
+      if (this.state._Exp.currExp >= this.state._Exp.nextExp) {
+        this.state._Exp.currExp -= this.state._Exp.nextExp;
+        this.state._Exp.level += 1;
+        this.state._Exp.nextExp = Math.ceil(this.state._Exp.nextExp * 1.2);
+        this.state._Exp.yield = this.state._Exp.yield * this.state._Exp.level;
+        this.raiseMixinEvent('levelUp');
+      }
+    },
+    getYield: function() {
+      return this.state._Exp.yield;
+    }
+  },
+  LISTENERS: {
+    'defeats': function(evtData) {
+      this.gainExp(evtData.target.getYield());
+    }
+  }
+};
