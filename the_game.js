@@ -16069,7 +16069,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
 
       this.curry.avatarID = a.getID();
 
-      var bradyNumber = 5;
+      var bradyNumber = 25;
       for (var i = 0; i < bradyNumber; i++) {
         var b = _entitiesspawn.EntityFactory.create("Brady");
         m.addEntityAtRandPos(b);
@@ -16100,13 +16100,13 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
       display.drawText(0, 4, "AE: " + this.getAvatar().getCurAE() + " / " + this.getAvatar().getMaxAE());
       display.drawText(0, 5, "Money: Many");
 
-      display.drawText(0, 7, "Strength: " + this.getAvatar().getSTR());
-      display.drawText(0, 8, "Perception: " + this.getAvatar().getPER());
-      display.drawText(0, 9, "Endurance: " + this.getAvatar().getEND());
-      display.drawText(0, 10, "Charisma: " + this.getAvatar().getCRM());
+      display.drawText(0, 7, "Strength:     " + this.getAvatar().getSTR());
+      display.drawText(0, 8, "Perception:   " + this.getAvatar().getPER());
+      display.drawText(0, 9, "Endurance:    " + this.getAvatar().getEND());
+      display.drawText(0, 10, "Charisma:     " + this.getAvatar().getCRM());
       display.drawText(0, 11, "Intelligence: " + this.getAvatar().getINT());
-      display.drawText(0, 12, "Agility: " + this.getAvatar().getAGI());
-      display.drawText(0, 13, "Luck: " + this.getAvatar().getLUK());
+      display.drawText(0, 12, "Agility:      " + this.getAvatar().getAGI());
+      display.drawText(0, 13, "Luck:         " + this.getAvatar().getLUK());
     }
   }, {
     key: 'handleInput',

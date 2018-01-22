@@ -226,7 +226,7 @@ export class PlayMode extends UIMode {
 
     this.curry.avatarID = a.getID();
 
-    let bradyNumber = 5;
+    let bradyNumber = 25;
     for (let i = 0; i < bradyNumber; i++) {
       let b = EntityFactory.create("Brady");
       m.addEntityAtRandPos(b);
@@ -255,13 +255,13 @@ export class PlayMode extends UIMode {
     display.drawText(0,4,"AE: " + this.getAvatar().getCurAE() + " / " + this.getAvatar().getMaxAE());
     display.drawText(0,5,"Money: Many");
 
-    display.drawText(0,7,"Strength: " + this.getAvatar().getSTR());
-    display.drawText(0,8,"Perception: " + this.getAvatar().getPER());
-    display.drawText(0,9,"Endurance: " + this.getAvatar().getEND());
-    display.drawText(0,10,"Charisma: " + this.getAvatar().getCRM());
+    display.drawText(0,7,"Strength:     " + this.getAvatar().getSTR());
+    display.drawText(0,8,"Perception:   " + this.getAvatar().getPER());
+    display.drawText(0,9,"Endurance:    " + this.getAvatar().getEND());
+    display.drawText(0,10,"Charisma:     " + this.getAvatar().getCRM());
     display.drawText(0,11,"Intelligence: " + this.getAvatar().getINT());
-    display.drawText(0,12,"Agility: " + this.getAvatar().getAGI());
-    display.drawText(0,13,"Luck: " + this.getAvatar().getLUK());
+    display.drawText(0,12,"Agility:      " + this.getAvatar().getAGI());
+    display.drawText(0,13,"Luck:         " + this.getAvatar().getLUK());
   }
 
   handleInput(eventType, evt) {
