@@ -2,6 +2,7 @@
 import {Message} from './message.js';
 import {TIME_ENGINE, SCHEDULER} from './timing.js';
 import ROT from 'rot-js';
+import {DATASTORE} from './datastore.js'
 
 let _exampleMixin = {
   META: {
@@ -296,7 +297,10 @@ export let PlayerActor = {
       this.actingState = false;
       console.log("it is now the enemy turn");
       // console.log(SCHEDULER.next());
-      SCHEDULER.next().raiseMixinEvent('enemyTurn');
+      for (let ent in DATASTORE.ENTITIES)
+      {
+        SCHEDULER.next().raiseMixinEvent('enemyTurn');
+      }
     }
   },
   LISTENERS: {
