@@ -11,7 +11,7 @@ export class Entity extends MixableSymbol {
 
     // this.state = {};
     if (! this.state) { this.state = {}; }
-    // this.state.chr = template.chr;
+    this.state.faction = template.faction;
     this.state.x = 0;
     this.state.y = 0;
     this.state.mapID = 0;
@@ -24,6 +24,9 @@ export class Entity extends MixableSymbol {
   setX(newInfo) { this.state.x = newInfo; }
   getY() { return this.state.y; }
   setY(newInfo) { this.state.y = newInfo; }
+
+  getFaction() { return this.state.faction; }
+  setFaction(newInfo) { this.state.faction = newInfo; }
 
   getPos() { return `${this.state.x}${this.state.y}`; }
 

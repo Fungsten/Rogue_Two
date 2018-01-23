@@ -10093,7 +10093,7 @@ var Entity = exports.Entity = function (_MixableSymbol) {
     if (!_this.state) {
       _this.state = {};
     }
-    // this.state.chr = template.chr;
+    _this.state.faction = template.faction;
     _this.state.x = 0;
     _this.state.y = 0;
     _this.state.mapID = 0;
@@ -10130,6 +10130,16 @@ var Entity = exports.Entity = function (_MixableSymbol) {
     key: 'setY',
     value: function setY(newInfo) {
       this.state.y = newInfo;
+    }
+  }, {
+    key: 'getFaction',
+    value: function getFaction() {
+      return this.state.faction;
+    }
+  }, {
+    key: 'setFaction',
+    value: function setFaction(newInfo) {
+      this.state.faction = newInfo;
     }
   }, {
     key: 'getPos',
@@ -16069,10 +16079,16 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
 
       this.curry.avatarID = a.getID();
 
-      var bradyNumber = 50;
+      var bradyNumber = 40;
       for (var i = 0; i < bradyNumber; i++) {
         var b = _entitiesspawn.EntityFactory.create("Brady");
         m.addEntityAtRandPos(b);
+      }
+
+      var jarNumber = 10;
+      for (var _i = 0; _i < jarNumber; _i++) {
+        var _b = _entitiesspawn.EntityFactory.create("Jar Jar");
+        m.addEntityAtRandPos(_b);
       }
 
       a.setmapID(this.curry.curMapID);
@@ -16508,8 +16524,10 @@ var WalkerCorporeal = exports.WalkerCorporeal = {
       var targetPositionInfo = this.getMap().getTargetPositionInfo(newX, newY);
       // {{if entity, bump it}}
       if (targetPositionInfo.entity) {
-        this.raiseMixinEvent('bumpEntity', { actor: this, target: targetPositionInfo.entity });
-        console.dir(targetPositionInfo);
+        if (this.getFaction() != targetPositionInfo.entity.getFaction()) {
+          this.raiseMixinEvent('bumpEntity', { actor: this, target: targetPositionInfo.entity });
+        }
+        // console.dir(targetPositionInfo);
         if (this.getName() == 'avatar') {
           // console.log("the player has moved");
           this.raiseMixinEvent('playerHasMoved');
@@ -16597,7 +16615,7 @@ var HitPoints = exports.HitPoints = {
       this.changeHP(evtData.damageAmount);
       evtData.src.raiseMixinEvent('damages', { target: this, damageAmount: evtData.damageAmount });
       if (this.getCurHP() <= 0) {
-        this.raiseMixinEvent('defeatedBy', { src: evtData.src });
+        if (this.getName() != 'avatar') this.raiseMixinEvent('defeatedBy', { src: evtData.src });
         evtData.src.raiseMixinEvent('defeats', { target: this });
         this.destroy();
       }
@@ -17004,6 +17022,7 @@ EntityFactory.learn({
   'name': 'avatar',
   'chr': '@',
   'fg': '#0e2',
+  'faction': 'player',
   'maxHP': 100,
   'maxAE': 100,
   'meleeDamage': 10,
@@ -17023,7 +17042,28 @@ EntityFactory.learn({
   'name': 'Brady',
   'chr': 'B',
   'fg': '#eb4',
+  'faction': 'neutrals',
   'maxHP': 10,
+  'maxAE': 100,
+  'meleeDamage': 10,
+  'str': 1,
+  'per': 1,
+  'end': 1,
+  'crm': 1,
+  'int': 1,
+  'agi': 1,
+  'luk': 1,
+  'level': 0,
+  'yield': 10,
+  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker', 'NPCMessages', 'Special', 'Experience']
+});
+
+EntityFactory.learn({
+  'name': 'Jar Jar',
+  'chr': 'J',
+  'fg': '#c00',
+  'faction': 'criminal',
+  'maxHP': 100,
   'maxAE': 100,
   'meleeDamage': 10,
   'str': 1,

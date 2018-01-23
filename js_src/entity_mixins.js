@@ -88,8 +88,10 @@ export let WalkerCorporeal = {
       let targetPositionInfo = this.getMap().getTargetPositionInfo(newX, newY);
       // {{if entity, bump it}}
       if (targetPositionInfo.entity) {
-        this.raiseMixinEvent('bumpEntity', {actor: this, target: targetPositionInfo.entity});
-        console.dir(targetPositionInfo);
+        if (this.getFaction() != targetPositionInfo.entity.getFaction()) {
+          this.raiseMixinEvent('bumpEntity', {actor: this, target: targetPositionInfo.entity});
+        }
+        // console.dir(targetPositionInfo);
         if (this.getName() == 'avatar') {
           // console.log("the player has moved");
           this.raiseMixinEvent('playerHasMoved');
@@ -175,6 +177,7 @@ export let HitPoints = {
       this.changeHP(evtData.damageAmount);
       evtData.src.raiseMixinEvent('damages', {target: this, damageAmount: evtData.damageAmount});
       if (this.getCurHP() <= 0) {
+        if (this.getName() != 'avatar')
         this.raiseMixinEvent('defeatedBy', {src: evtData.src});
         evtData.src.raiseMixinEvent('defeats', {target: this});
         this.destroy();
