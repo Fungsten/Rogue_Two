@@ -81,5 +81,12 @@ let KEY_SETS = {
     'DL': ['key:z','key:Z','key:1'],
     'DR': ['key:c','key:C','key:3'],
     'WAIT': ['key:Space','key:5'],
+  },
+
+  'interact': {
+    'INTERACT': ['key:1'],
+    'ATTACK': ['key:2'],
+    'STEAL': ['key:3'],
+    'BLUFF': ['key:4'],
   }
 };

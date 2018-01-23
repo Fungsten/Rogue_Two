@@ -2,7 +2,8 @@
 import {Message} from './message.js';
 import {TIME_ENGINE, SCHEDULER} from './timing.js';
 import ROT from 'rot-js';
-import {DATASTORE} from './datastore.js'
+import {DATASTORE} from './datastore.js';
+import {COMMAND, getInput, setKey} from './keybinds.js';
 
 let _exampleMixin = {
   META: {
@@ -90,12 +91,13 @@ export let WalkerCorporeal = {
       if (targetPositionInfo.entity) {
         if (this.getFaction() != targetPositionInfo.entity.getFaction()) {
           this.raiseMixinEvent('bumpEntity', {actor: this, target: targetPositionInfo.entity});
+          // if (this.getName() == 'avatar') {
+          //   // console.log("the player has moved");
+          //   this.raiseMixinEvent('playerHasMoved');
+          // }
         }
         // console.dir(targetPositionInfo);
-        if (this.getName() == 'avatar') {
-          // console.log("the player has moved");
-          this.raiseMixinEvent('playerHasMoved');
-        }
+
       } else if (targetPositionInfo.tile.isImpassable()) {
         //console.log("the tile is isImpassable");
         this.raiseMixinEvent('walkblocked');
@@ -253,6 +255,35 @@ export let MeleeAttacker = {
     },
     setMeleeDamage: function(n) {
       this.state._MeleeAttacker.meleeDamage = n;
+    },
+    handleInput: function(eventType,evt) {
+      console.log("handling input?");
+      if (eventType == 'keyup') {
+        let input = getInput(eventType,evt);
+        if (input == COMMAND.NULLCOMMAND) { return false; }
+
+        if (input == COMMAND.INTERACT) {
+          Message.send("You drop a little sarcasm.");
+          return true;
+        }
+        if (input == COMMAND.ATTACK) {
+          this.raiseMixinEvent('attacks', {actor: this, target: evtData.target});
+          this.raiseMixinEvent('turnTaken', {'timeUsed': 1});
+          evtData.target.raiseMixinEvent('damaged', {src: this, damageAmount: this.getMeleeDamage()});
+        }
+        if (input == COMMAND.STEAL) {
+          Message.send("You attempt stealing.");
+          return true;
+        }
+        if (input == COMMAND.BLUFF) {
+          Message.send("You attempt conning.");
+          return true;
+        }
+        if (input != COMMAND.INTERACT || input != COMMAND.ATTACK || input != COMMAND.STEAL || input != COMMAND.BLUFF) {
+          Message.send("You decide not to interact.");
+          return true;
+        }
+      }
     }
   },
   LISTENERS: {
@@ -260,11 +291,25 @@ export let MeleeAttacker = {
       // this
       // evtData.target
 
-      this.raiseMixinEvent('attacks', {actor: this, target: evtData.target});
-      this.raiseMixinEvent('turnTaken', {'timeUsed': 1});
-      evtData.target.raiseMixinEvent('damaged', {src: this, damageAmount: this.getMeleeDamage()});
-      console.log("ATTACK");
-    }
+      // this.raiseMixinEvent('attacks', {actor: this, target: evtData.target});
+      // this.raiseMixinEvent('turnTaken', {'timeUsed': 1});
+      // evtData.target.raiseMixinEvent('damaged', {src: this, damageAmount: this.getMeleeDamage()});
+      // console.log("ATTACK");
+      if (this.getName() == 'avatar') {
+        setKey(['interact']);
+        Message.send("What would you like to do? \n" +
+                      "1. Interact \n" +
+                      "2. Attack \n" +
+                      "3. Steal \n" +
+                      "4. Bluff \n" +
+                      "5. Cancel");
+        // this.handleInput(eventType,evt);
+      } else {
+        this.raiseMixinEvent('attacks', {actor: this, target: evtData.target});
+        this.raiseMixinEvent('turnTaken', {'timeUsed': 0});
+        evtData.target.raiseMixinEvent('damaged', {src: this, damageAmount: this.getMeleeDamage()});
+      }
+    },
   }
 };
 
@@ -558,6 +603,33 @@ export let Experience = {
   LISTENERS: {
     'defeats': function(evtData) {
       this.gainExp(evtData.target.getYield());
+    }
+  }
+};
+
+export let Currency = {
+  META: {
+    mixinName: 'Currency',
+    mixinGroupName: 'Currency',
+    stateNameSpace: '_Currency',
+    stateModel: {
+      money: 10
+    },
+    initialize: function(template) {
+      this.state._Currency = template.money || 10;
+    }
+  },
+  METHODS: {
+    getMoney: function() {
+      return this.state._Currency;
+    },
+    getMoreMoney: function(n) {
+      this.state._Currency += n;
+    }
+  },
+  LISTENERS: {
+    'defeats': function(evtData) {
+      this.getMoreMoney(evtData.target.getYield());
     }
   }
 };

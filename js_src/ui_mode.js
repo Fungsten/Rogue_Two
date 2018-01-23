@@ -262,7 +262,7 @@ export class PlayMode extends UIMode {
     display.drawText(0,0,"time: " + this.getAvatar().getTime());
     display.drawText(0,3,"HP: " + this.getAvatar().getCurHP() + " / " + this.getAvatar().getMaxHP());
     display.drawText(0,4,"AE: " + this.getAvatar().getCurAE() + " / " + this.getAvatar().getMaxAE());
-    display.drawText(0,5,"Money: Many");
+    display.drawText(0,5,"Money: " + this.getAvatar().getMoney() +" credits");
 
     display.drawText(0,7,"Strength:     " + this.getAvatar().getSTR());
     display.drawText(0,8,"Perception:   " + this.getAvatar().getPER());

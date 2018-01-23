@@ -8,6 +8,7 @@ EntityFactory.learn({
   'chr': '@',
   'fg': '#0e2',
   'faction': 'player',
+  'rep': 0,
   'maxHP': 100,
   'maxAE': 100,
   'meleeDamage': 10,
@@ -20,7 +21,8 @@ EntityFactory.learn({
   'luk': 1,
   'level': 0,
   'yield': 1,
-  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'PlayerMessages', 'PlayerActor', 'Special', 'Experience']
+  'money': 10,
+  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'PlayerMessages', 'PlayerActor', 'Special', 'Experience', 'Currency']
 });
 
 EntityFactory.learn({
@@ -40,7 +42,8 @@ EntityFactory.learn({
   'luk': 1,
   'level': 0,
   'yield': 10,
-  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker', 'NPCMessages', 'Special', 'Experience']
+  'money': 100,
+  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker', 'NPCMessages', 'Special', 'Experience', 'Currency']
 });
 
 EntityFactory.learn({
@@ -60,7 +63,8 @@ EntityFactory.learn({
   'luk': 1,
   'level': 0,
   'yield': 10,
-  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker', 'NPCMessages', 'Special', 'Experience']
+  'money': 1000,
+  'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker', 'NPCMessages', 'Special', 'Experience', 'Currency']
 });
 
 EntityFactory.learn({

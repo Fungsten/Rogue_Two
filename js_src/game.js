@@ -20,7 +20,7 @@ export let Game = {
     },
     message: {
       w: 100,
-      h: 6,
+      h: 8,
       o: null
     }
 
