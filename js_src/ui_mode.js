@@ -226,7 +226,7 @@ export class PlayMode extends UIMode {
 
     this.curry.avatarID = a.getID();
 
-    let bradyNumber = 40;
+    let bradyNumber = 10;
     for (let i = 0; i < bradyNumber; i++) {
       let b = EntityFactory.create("Brady");
       m.addEntityAtRandPos(b);
@@ -237,6 +237,9 @@ export class PlayMode extends UIMode {
       let b = EntityFactory.create("Jar Jar");
       m.addEntityAtRandPos(b);
     }
+
+    let d = EntityFactory.create("Door");
+    m.addEntityAtRandPos(d);
 
     a.setmapID(this.curry.curMapID);
     this.updateCameraToAvatar();

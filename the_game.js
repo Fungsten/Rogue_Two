@@ -16079,7 +16079,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
 
       this.curry.avatarID = a.getID();
 
-      var bradyNumber = 40;
+      var bradyNumber = 10;
       for (var i = 0; i < bradyNumber; i++) {
         var b = _entitiesspawn.EntityFactory.create("Brady");
         m.addEntityAtRandPos(b);
@@ -16090,6 +16090,9 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
         var _b = _entitiesspawn.EntityFactory.create("Jar Jar");
         m.addEntityAtRandPos(_b);
       }
+
+      var d = _entitiesspawn.EntityFactory.create("Door");
+      m.addEntityAtRandPos(d);
 
       a.setmapID(this.curry.curMapID);
       this.updateCameraToAvatar();
@@ -17060,10 +17063,10 @@ EntityFactory.learn({
 
 EntityFactory.learn({
   'name': 'Jar Jar',
-  'chr': 'J',
+  'chr': '\u2FD3',
   'fg': '#c00',
   'faction': 'criminal',
-  'maxHP': 100,
+  'maxHP': 10,
   'maxAE': 100,
   'meleeDamage': 10,
   'str': 1,
@@ -17076,6 +17079,26 @@ EntityFactory.learn({
   'level': 0,
   'yield': 10,
   'mixinName': ['TimeTracker', 'WalkerCorporeal', 'HitPoints', 'Aether', 'MeleeAttacker', 'RandomWalker', 'NPCMessages', 'Special', 'Experience']
+});
+
+EntityFactory.learn({
+  'name': 'Door',
+  'chr': '\u2FA8',
+  'fg': '#8f0',
+  'faction': 'neutral',
+  'maxHP': 1000,
+  'maxAE': 1,
+  'meleeDamage': 0,
+  'str': 1,
+  'per': 1,
+  'end': 1,
+  'crm': 1,
+  'int': 1,
+  'agi': 1,
+  'luk': 1,
+  'level': 0,
+  'yield': 10,
+  'mixinName': ['HitPoints', 'Aether', 'NPCMessages']
 });
 
 /***/ }),
