@@ -258,25 +258,29 @@ export let MeleeAttacker = {
     },
     handleInput: function(eventType,evt) {
       console.log("handling input?");
-      if (eventType == 'keyup') {
+      if (eventType == 'keydown') {
+        console.log('found keydown');
         let input = getInput(eventType,evt);
+        console.log('got input');
         if (input == COMMAND.NULLCOMMAND) { return false; }
-
+        console.log('made it past null');
         if (input == COMMAND.INTERACT) {
           Message.send("You drop a little sarcasm.");
           return true;
         }
         if (input == COMMAND.ATTACK) {
+
           this.raiseMixinEvent('attacks', {actor: this, target: evtData.target});
           this.raiseMixinEvent('turnTaken', {'timeUsed': 1});
           evtData.target.raiseMixinEvent('damaged', {src: this, damageAmount: this.getMeleeDamage()});
+          return true;
         }
         if (input == COMMAND.STEAL) {
           Message.send("You attempt stealing.");
           return true;
         }
         if (input == COMMAND.BLUFF) {
-          Message.send("You attempt conning.");
+          Message.send("You attempt bluffing.");
           return true;
         }
         if (input != COMMAND.INTERACT || input != COMMAND.ATTACK || input != COMMAND.STEAL || input != COMMAND.BLUFF) {
@@ -295,15 +299,20 @@ export let MeleeAttacker = {
       // this.raiseMixinEvent('turnTaken', {'timeUsed': 1});
       // evtData.target.raiseMixinEvent('damaged', {src: this, damageAmount: this.getMeleeDamage()});
       // console.log("ATTACK");
-      if (this.getName() == 'avatar') {
-        setKey(['interact']);
-        Message.send("What would you like to do? \n" +
+      if (this.getName() == 'avatar' && evtData.target.getName() != 'Door') {
+        this.state.bumped = true;
+
+        Message.send("What would you like to do to " + evtData.target.getName() + "?\n" +
                       "1. Interact \n" +
                       "2. Attack \n" +
                       "3. Steal \n" +
                       "4. Bluff \n" +
                       "5. Cancel");
         // this.handleInput(eventType,evt);
+      } else if (this.getName() == 'avatar' && evtData.target.getName() == 'Door') {
+        Message.send("You've found the door \n" +
+                      "1. Enter \n" +
+                      "5. Cancel \n");
       } else {
         this.raiseMixinEvent('attacks', {actor: this, target: evtData.target});
         this.raiseMixinEvent('turnTaken', {'timeUsed': 0});

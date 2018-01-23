@@ -188,7 +188,7 @@ export class PlayMode extends UIMode {
   enter() {
     super.enter();
     this.game.isPlaying = true;
-    setKey(['play','movement']);
+    setKey(['play','movement','interact']);
   }
 
   toJSON() {
@@ -276,6 +276,15 @@ export class PlayMode extends UIMode {
   }
 
   handleInput(eventType, evt) {
+    console.log('entered uimode play handle input');
+
+    // check for bumped
+    if (this.getAvatar().state.bumped == true) {
+      console.log('entered if');
+      this.getAvatar().handleInput(eventType,evt);
+      this.getAvatar().state.bumped = false;
+    }
+
     if (eventType == 'keyup') {
       let input = getInput(eventType,evt);
       if (input == COMMAND.NULLCOMMAND) { return false; }

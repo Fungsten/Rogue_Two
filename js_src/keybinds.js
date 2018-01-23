@@ -8,8 +8,8 @@ export function getInput(eventType, evt){
 
   let bindingSet = `key:${evt.key}`;
 
-  console.log('binding type');
-  console.log(BINDING_TYPE);
+  // console.log('binding type');
+  // console.log(BINDING_TYPE);
   if (!BINDING_TYPE[bindingSet]) {
     return COMMAND.NULLCOMMAND; }
   return BINDING_TYPE[bindingSet];
@@ -47,7 +47,7 @@ export function setKey(list) {
       COMMAND[command] = commandNum;
 
       for (let j = 0; j < KEY_SETS[name][command].length; j++){
-        console.log('in third for');
+        // console.log('in third for');
         BINDING_TYPE[KEY_SETS[name][command][j]] = commandNum;
       }
     }

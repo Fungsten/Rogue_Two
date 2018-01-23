@@ -16,6 +16,7 @@ export class Entity extends MixableSymbol {
     this.state.y = 0;
     this.state.mapID = 0;
     this.state.id = uniqueID();
+    this.bumped = false;
   }
 
   getName() { return this.state.name; }

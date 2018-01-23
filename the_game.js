@@ -10077,8 +10077,8 @@ function getInput(eventType, evt) {
 
   var bindingSet = 'key:' + evt.key;
 
-  console.log('binding type');
-  console.log(BINDING_TYPE);
+  // console.log('binding type');
+  // console.log(BINDING_TYPE);
   if (!BINDING_TYPE[bindingSet]) {
     return COMMAND.NULLCOMMAND;
   }
@@ -10119,7 +10119,7 @@ function setKey(list) {
       COMMAND[command] = commandNum;
 
       for (var j = 0; j < KEY_SETS[name][command].length; j++) {
-        console.log('in third for');
+        // console.log('in third for');
         BINDING_TYPE[KEY_SETS[name][command][j]] = commandNum;
       }
     }
@@ -10208,6 +10208,7 @@ var Entity = exports.Entity = function (_MixableSymbol) {
     _this.state.y = 0;
     _this.state.mapID = 0;
     _this.state.id = (0, _util.uniqueID)();
+    _this.bumped = false;
     return _this;
   }
 
@@ -16147,7 +16148,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
     value: function enter() {
       _get(PlayMode.prototype.__proto__ || Object.getPrototypeOf(PlayMode.prototype), 'enter', this).call(this);
       this.game.isPlaying = true;
-      (0, _keybinds.setKey)(['play', 'movement']);
+      (0, _keybinds.setKey)(['play', 'movement', 'interact']);
     }
   }, {
     key: 'toJSON',
@@ -16242,6 +16243,15 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
   }, {
     key: 'handleInput',
     value: function handleInput(eventType, evt) {
+      console.log('entered uimode play handle input');
+
+      // check for bumped
+      if (this.getAvatar().state.bumped == true) {
+        console.log('entered if');
+        this.getAvatar().handleInput(eventType, evt);
+        this.getAvatar().state.bumped = false;
+      }
+
       if (eventType == 'keyup') {
         var input = (0, _keybinds.getInput)(eventType, evt);
         if (input == _keybinds.COMMAND.NULLCOMMAND) {
@@ -16808,27 +16818,31 @@ var MeleeAttacker = exports.MeleeAttacker = {
     },
     handleInput: function handleInput(eventType, evt) {
       console.log("handling input?");
-      if (eventType == 'keyup') {
+      if (eventType == 'keydown') {
+        console.log('found keydown');
         var input = (0, _keybinds.getInput)(eventType, evt);
+        console.log('got input');
         if (input == _keybinds.COMMAND.NULLCOMMAND) {
           return false;
         }
-
+        console.log('made it past null');
         if (input == _keybinds.COMMAND.INTERACT) {
           _message.Message.send("You drop a little sarcasm.");
           return true;
         }
         if (input == _keybinds.COMMAND.ATTACK) {
+
           this.raiseMixinEvent('attacks', { actor: this, target: evtData.target });
           this.raiseMixinEvent('turnTaken', { 'timeUsed': 1 });
           evtData.target.raiseMixinEvent('damaged', { src: this, damageAmount: this.getMeleeDamage() });
+          return true;
         }
         if (input == _keybinds.COMMAND.STEAL) {
           _message.Message.send("You attempt stealing.");
           return true;
         }
         if (input == _keybinds.COMMAND.BLUFF) {
-          _message.Message.send("You attempt conning.");
+          _message.Message.send("You attempt bluffing.");
           return true;
         }
         if (input != _keybinds.COMMAND.INTERACT || input != _keybinds.COMMAND.ATTACK || input != _keybinds.COMMAND.STEAL || input != _keybinds.COMMAND.BLUFF) {
@@ -16847,10 +16861,13 @@ var MeleeAttacker = exports.MeleeAttacker = {
       // this.raiseMixinEvent('turnTaken', {'timeUsed': 1});
       // evtData.target.raiseMixinEvent('damaged', {src: this, damageAmount: this.getMeleeDamage()});
       // console.log("ATTACK");
-      if (this.getName() == 'avatar') {
-        (0, _keybinds.setKey)(['interact']);
-        _message.Message.send("What would you like to do? \n" + "1. Interact \n" + "2. Attack \n" + "3. Steal \n" + "4. Bluff \n" + "5. Cancel");
+      if (this.getName() == 'avatar' && evtData.target.getName() != 'Door') {
+        this.state.bumped = true;
+
+        _message.Message.send("What would you like to do to " + evtData.target.getName() + "?\n" + "1. Interact \n" + "2. Attack \n" + "3. Steal \n" + "4. Bluff \n" + "5. Cancel");
         // this.handleInput(eventType,evt);
+      } else if (this.getName() == 'avatar' && evtData.target.getName() == 'Door') {
+        _message.Message.send("You've found the door \n" + "1. Enter \n" + "5. Cancel \n");
       } else {
         this.raiseMixinEvent('attacks', { actor: this, target: evtData.target });
         this.raiseMixinEvent('turnTaken', { 'timeUsed': 0 });
