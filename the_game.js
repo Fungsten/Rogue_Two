@@ -16268,46 +16268,55 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
 
         //upper left
         if (input == _keybinds.COMMAND.UL) {
+          _message.Message.clear();
           this.moveAvatar(-1, -1);
           return true;
         }
         //up
         if (input == _keybinds.COMMAND.U) {
+          _message.Message.clear();
           this.moveAvatar(0, -1);
           return true;
         }
         //upper right
         if (input == _keybinds.COMMAND.UR) {
+          _message.Message.clear();
           this.moveAvatar(1, -1);
           return true;
         }
         //left
         if (input == _keybinds.COMMAND.L) {
+          _message.Message.clear();
           this.moveAvatar(-1, 0);
           return true;
         }
         //right
         if (input == _keybinds.COMMAND.R) {
+          _message.Message.clear();
           this.moveAvatar(1, 0);
           return true;
         }
         //lower left
         if (input == _keybinds.COMMAND.DL) {
+          _message.Message.clear();
           this.moveAvatar(-1, 1);
           return true;
         }
         //down
         if (input == _keybinds.COMMAND.D) {
+          _message.Message.clear();
           this.moveAvatar(0, 1);
           return true;
         }
         //lower right
         if (input == _keybinds.COMMAND.DR) {
+          _message.Message.clear();
           this.moveAvatar(1, 1);
           return true;
         }
         //wait, don't move
         if (input == _keybinds.COMMAND.WAIT) {
+          _message.Message.clear();
           return true;
         }
         if (input == _keybinds.COMMAND.INTERACT) {
@@ -16853,10 +16862,10 @@ var MeleeAttacker = exports.MeleeAttacker = {
         this.state.bumped = true;
         this.setTarget(evtData.target);
 
-        _message.Message.send("What would you like to do to " + evtData.target.getName() + "?\n" + "1. Interact \n" + "2. Attack \n" + "3. Steal \n" + "4. Bluff \n" + "5. Cancel");
+        _message.Message.send("What would you like to do to " + evtData.target.getName() + "?\n" + "1. Interact \n" + "2. Attack \n" + "3. Steal \n" + "4. Bluff \n" + "m. Cancel");
         // this.handleInput(eventType,evt);
       } else if (this.getName() == 'avatar' && evtData.target.getName() == 'Door') {
-        _message.Message.send("You've found the door \n" + "1. Enter \n" + "5. Cancel \n");
+        _message.Message.send("You've found the door \n" + "1. Enter \n" + "m. Cancel \n");
       } else {
         this.raiseMixinEvent('attacks', { actor: this, target: evtData.target });
         this.raiseMixinEvent('turnTaken', { 'timeUsed': 0 });

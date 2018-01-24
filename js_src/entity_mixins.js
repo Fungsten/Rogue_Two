@@ -275,12 +275,12 @@ export let MeleeAttacker = {
                       "2. Attack \n" +
                       "3. Steal \n" +
                       "4. Bluff \n" +
-                      "5. Cancel");
+                      "m. Cancel");
         // this.handleInput(eventType,evt);
       } else if (this.getName() == 'avatar' && evtData.target.getName() == 'Door') {
         Message.send("You've found the door \n" +
                       "1. Enter \n" +
-                      "5. Cancel \n");
+                      "m. Cancel \n");
       } else {
         this.raiseMixinEvent('attacks', {actor: this, target: evtData.target});
         this.raiseMixinEvent('turnTaken', {'timeUsed': 0});

@@ -294,46 +294,55 @@ export class PlayMode extends UIMode {
 
       //upper left
       if (input == COMMAND.UL) {
+        Message.clear();
         this.moveAvatar(-1, -1);
         return true;
       }
       //up
       if (input == COMMAND.U) {
+        Message.clear();
         this.moveAvatar(0, -1);
         return true;
       }
       //upper right
       if (input == COMMAND.UR) {
+        Message.clear();
         this.moveAvatar(1, -1);
         return true;
       }
       //left
       if (input == COMMAND.L) {
+        Message.clear();
         this.moveAvatar(-1, 0);
         return true;
       }
       //right
       if (input == COMMAND.R) {
+        Message.clear();
         this.moveAvatar(1, 0);
         return true;
       }
       //lower left
       if (input == COMMAND.DL) {
+        Message.clear();
         this.moveAvatar(-1, 1);
         return true;
       }
       //down
       if (input == COMMAND.D) {
+        Message.clear();
         this.moveAvatar(0, 1);
         return true;
       }
       //lower right
       if (input == COMMAND.DR) {
+        Message.clear();
         this.moveAvatar(1, 1);
         return true;
       }
       //wait, don't move
       if (input == COMMAND.WAIT) {
+        Message.clear();
         return true;
       }
       if (input == COMMAND.INTERACT) {
