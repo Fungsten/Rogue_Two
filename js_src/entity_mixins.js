@@ -255,39 +255,6 @@ export let MeleeAttacker = {
     },
     setMeleeDamage: function(n) {
       this.state._MeleeAttacker.meleeDamage = n;
-    },
-    handleInput: function(eventType,evt) {
-      console.log("handling input?");
-      if (eventType == 'keydown') {
-        console.log('found keydown');
-        let input = getInput(eventType,evt);
-        console.log('got input');
-        if (input == COMMAND.NULLCOMMAND) { return false; }
-        console.log('made it past null');
-        if (input == COMMAND.INTERACT) {
-          Message.send("You drop a little sarcasm.");
-          return true;
-        }
-        if (input == COMMAND.ATTACK) {
-
-          this.raiseMixinEvent('attacks', {actor: this, target: evtData.target});
-          this.raiseMixinEvent('turnTaken', {'timeUsed': 1});
-          evtData.target.raiseMixinEvent('damaged', {src: this, damageAmount: this.getMeleeDamage()});
-          return true;
-        }
-        if (input == COMMAND.STEAL) {
-          Message.send("You attempt stealing.");
-          return true;
-        }
-        if (input == COMMAND.BLUFF) {
-          Message.send("You attempt bluffing.");
-          return true;
-        }
-        if (input != COMMAND.INTERACT || input != COMMAND.ATTACK || input != COMMAND.STEAL || input != COMMAND.BLUFF) {
-          Message.send("You decide not to interact.");
-          return true;
-        }
-      }
     }
   },
   LISTENERS: {
@@ -301,6 +268,7 @@ export let MeleeAttacker = {
       // console.log("ATTACK");
       if (this.getName() == 'avatar' && evtData.target.getName() != 'Door') {
         this.state.bumped = true;
+        this.setTarget(evtData.target);
 
         Message.send("What would you like to do to " + evtData.target.getName() + "?\n" +
                       "1. Interact \n" +

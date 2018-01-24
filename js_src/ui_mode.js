@@ -278,13 +278,6 @@ export class PlayMode extends UIMode {
   handleInput(eventType, evt) {
     console.log('entered uimode play handle input');
 
-    // check for bumped
-    if (this.getAvatar().state.bumped == true) {
-      console.log('entered if');
-      this.getAvatar().handleInput(eventType,evt);
-      this.getAvatar().state.bumped = false;
-    }
-
     if (eventType == 'keyup') {
       let input = getInput(eventType,evt);
       if (input == COMMAND.NULLCOMMAND) { return false; }
@@ -341,6 +334,31 @@ export class PlayMode extends UIMode {
       }
       //wait, don't move
       if (input == COMMAND.WAIT) {
+        return true;
+      }
+      if (input == COMMAND.INTERACT) {
+        Message.send("You drop a little sarcasm.");
+        return true;
+      }
+      if (input == COMMAND.ATTACK) {
+        console.log("ATTACK");
+        this.getAvatar().raiseMixinEvent('attacks', {actor: this.getAvatar(), target: this.getAvatar().state.activeTarget});
+        this.getAvatar().raiseMixinEvent('turnTaken', {'timeUsed': 1});
+        this.getAvatar().state.activeTarget.raiseMixinEvent('damaged', {src: this.getAvatar(), damageAmount: this.getAvatar().getMeleeDamage()});
+        this.getAvatar().setTarget('');
+        this.getAvatar().raiseMixinEvent('playerHasMoved');
+        return true;
+      }
+      if (input == COMMAND.STEAL) {
+        Message.send("You attempt stealing.");
+        return true;
+      }
+      if (input == COMMAND.BLUFF) {
+        Message.send("You attempt bluffing.");
+        return true;
+      }
+      if (input != COMMAND.INTERACT || input != COMMAND.ATTACK || input != COMMAND.STEAL || input != COMMAND.BLUFF) {
+        Message.send("You decide not to interact.");
         return true;
       }
     }

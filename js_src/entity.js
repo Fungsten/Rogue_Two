@@ -16,7 +16,7 @@ export class Entity extends MixableSymbol {
     this.state.y = 0;
     this.state.mapID = 0;
     this.state.id = uniqueID();
-    this.bumped = false;
+    this.state.activeTarget = '';
   }
 
   getName() { return this.state.name; }
@@ -25,6 +25,8 @@ export class Entity extends MixableSymbol {
   setX(newInfo) { this.state.x = newInfo; }
   getY() { return this.state.y; }
   setY(newInfo) { this.state.y = newInfo; }
+
+  setTarget(newInfo) { this.state.activeTarget = newInfo; }
 
   getFaction() { return this.state.faction; }
   setFaction(newInfo) { this.state.faction = newInfo; }
