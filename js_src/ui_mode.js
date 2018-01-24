@@ -431,8 +431,55 @@ export class LoseMode extends UIMode {
 
   render(display){
     display.clear();
-    display.drawText(33,4,"YOU LOSE. GOOD DAY.");
-    Message.send("It's treason then.");
+    if (this.getAvatar().getMoney() < 100) {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("You were practically broke and a failure of a criminal.");
+    } else if (this.getAvatar().getMoney() < 1100) {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("You may as well be the Solar System's worst thief.");
+    } else if (this.getAvatar().getMoney() < 6100) {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("You were barely an amateur.");
+    } else if (this.getAvatar().getMoney() < 16100) {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("It's a pity you only managed to become sort of an amateur.");
+    } else if (this.getAvatar().getMoney() < 31100) {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("Congratulations, you made it to amateur criminal.");
+    } else if (this.getAvatar().getMoney() < 56100) {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("You were known as a competent criminal.");
+    } else if (this.getAvatar().getMoney() < 106100) {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("You managed to become a noteworthy criminal.");
+    } else if (this.getAvatar().getMoney() < 206100) {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("It's a pity, you were finally becoming reputable as a criminal.");
+    } else if (this.getAvatar().getMoney() < 356100) {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("Well, you managed to become a wanted criminal.");
+    } else if (this.getAvatar().getMoney() < 556100) {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("You were a hunted criminal with considerable cash, so perhaps you had an excuse.");
+    } else if (this.getAvatar().getMoney() < 1056100) {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("A dangerous but reasonably rich criminal died this day.");
+    } else if (this.getAvatar().getMoney() < 2056100) {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("You were really quite a remarkable criminal.");
+    } else if (this.getAvatar().getMoney() < 3556100) {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("You were a master criminal who mastered the art of cash-obtaining.");
+    } else if (this.getAvatar().getMoney() < 6056100) {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("You were one grand master of a criminal.");
+    } else if (this.getAvatar().getMoney() < 11056100) {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("You will be forever known as a supremely wealthy criminal.");
+    } else {
+      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+      Message.send("You made your mark as the ultimate, richest criminal in the Solar System.");
+    }
   }
   handleInput(eventType, evt) {
     if (evt.key == 'Escape' && eventType == 'keyup'){
@@ -443,17 +490,3 @@ export class LoseMode extends UIMode {
 }
 //-----------------------------------------------------
 //-----------------------------------------------------
-export class WinMode extends UIMode {
-  render(display){
-    display.clear();
-    display.drawText(33,4,"A WINNER IS YOU");
-    Message.send("He's right. It's a system we can't afford to lose.");
-  }
-
-  handleInput(eventType, evt) {
-    if (evt.key == 'Escape' && eventType == 'keyup'){
-      this.game.switchMode('persistence');
-      return true;
-    }
-  }
-}
