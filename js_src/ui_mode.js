@@ -232,7 +232,7 @@ export class PlayMode extends UIMode {
       m.addEntityAtRandPos(b);
     }
 
-    let jarNumber = 10;
+    let jarNumber = 40;
     for (let i = 0; i < jarNumber; i++) {
       let b = EntityFactory.create("Jar Jar");
       m.addEntityAtRandPos(b);
@@ -343,6 +343,8 @@ export class PlayMode extends UIMode {
       //wait, don't move
       if (input == COMMAND.WAIT) {
         Message.clear();
+        this.getAvatar().raiseMixinEvent('playerHasMoved');
+        this.getAvatar().raiseMixinEvent('turnTaken', {'timeUsed': 1});
         return true;
       }
       if (input == COMMAND.INTERACT) {
@@ -351,6 +353,9 @@ export class PlayMode extends UIMode {
       }
       if (input == COMMAND.ATTACK) {
         console.log("ATTACK");
+        if (this.getAvatar().getFaction() == this.getAvatar().state.activeTarget.getFaction()) {
+          this.getAvatar().setFaction('player');
+        }
         this.getAvatar().raiseMixinEvent('attacks', {actor: this.getAvatar(), target: this.getAvatar().state.activeTarget});
         this.getAvatar().raiseMixinEvent('turnTaken', {'timeUsed': 1});
         this.getAvatar().state.activeTarget.raiseMixinEvent('damaged', {src: this.getAvatar(), damageAmount: this.getAvatar().getMeleeDamage()});
@@ -359,11 +364,20 @@ export class PlayMode extends UIMode {
         return true;
       }
       if (input == COMMAND.STEAL) {
-        Message.send("You attempt stealing.");
+        // Message.send("You attempt stealing.");
+        Message.send("You stole " + this.getAvatar().state.activeTarget.getMoney() + " credits.");
+        this.getAvatar().getMoreMoney(this.getAvatar().state.activeTarget.getMoney());
+        this.getAvatar().state.activeTarget.getMoreMoney(this.getAvatar().state.activeTarget.getMoney() * -1);
+        this.getAvatar().setTarget('');
+        this.getAvatar().raiseMixinEvent('playerHasMoved');
         return true;
       }
       if (input == COMMAND.BLUFF) {
         Message.send("You attempt bluffing.");
+        // Message.send("You ");
+        this.getAvatar().setFaction(this.getAvatar().state.activeTarget.getFaction());
+        this.getAvatar().setTarget('');
+        this.getAvatar().raiseMixinEvent('playerHasMoved');
         return true;
       }
       if (input != COMMAND.INTERACT || input != COMMAND.ATTACK || input != COMMAND.STEAL || input != COMMAND.BLUFF) {

@@ -89,11 +89,11 @@ export let WalkerCorporeal = {
       let targetPositionInfo = this.getMap().getTargetPositionInfo(newX, newY);
       // {{if entity, bump it}}
       if (targetPositionInfo.entity) {
-        if (this.getFaction() != targetPositionInfo.entity.getFaction()) {
+        if (this.getFaction() != targetPositionInfo.entity.getFaction() || this.getName() == 'avatar') {
           this.raiseMixinEvent('bumpEntity', {actor: this, target: targetPositionInfo.entity});
           // if (this.getName() == 'avatar') {
-          //   // console.log("the player has moved");
-          //   this.raiseMixinEvent('playerHasMoved');
+          // //   // console.log("the player has moved");
+          // //   this.raiseMixinEvent('playerHasMoved');
           // }
         }
         // console.dir(targetPositionInfo);
@@ -111,6 +111,7 @@ export let WalkerCorporeal = {
         this.raiseMixinEvent('turnTaken', {'timeUsed': 1});
         if (this.getName() == 'avatar') {
           // console.log("the player has moved");
+          this.setTarget('');
           this.raiseMixinEvent('playerHasMoved');
         }
 
@@ -151,9 +152,9 @@ export let HitPoints = {
     changeHP: function(delta) {
       if (this.state._HP.curHP <= 0) {return;}
       if (delta < 0) {
-        console.log(this.getName() + " has healed " + delta + " hp!");
+        console.log(this.getName() + " has healed " + delta * -1 + " hp!");
       } else {
-        console.log(this.getName() + " has lost " + delta + " hp!");
+        console.log(this.getName() + " has lost " + delta * -1 + " hp!");
       }
       this.state._HP.curHP -= delta;
     },

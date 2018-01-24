@@ -16201,7 +16201,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
         m.addEntityAtRandPos(b);
       }
 
-      var jarNumber = 10;
+      var jarNumber = 40;
       for (var _i = 0; _i < jarNumber; _i++) {
         var _b = _entitiesspawn.EntityFactory.create("Jar Jar");
         m.addEntityAtRandPos(_b);
@@ -16317,6 +16317,8 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
         //wait, don't move
         if (input == _keybinds.COMMAND.WAIT) {
           _message.Message.clear();
+          this.getAvatar().raiseMixinEvent('playerHasMoved');
+          this.getAvatar().raiseMixinEvent('turnTaken', { 'timeUsed': 1 });
           return true;
         }
         if (input == _keybinds.COMMAND.INTERACT) {
@@ -16325,6 +16327,9 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
         }
         if (input == _keybinds.COMMAND.ATTACK) {
           console.log("ATTACK");
+          if (this.getAvatar().getFaction() == this.getAvatar().state.activeTarget.getFaction()) {
+            this.getAvatar().setFaction('player');
+          }
           this.getAvatar().raiseMixinEvent('attacks', { actor: this.getAvatar(), target: this.getAvatar().state.activeTarget });
           this.getAvatar().raiseMixinEvent('turnTaken', { 'timeUsed': 1 });
           this.getAvatar().state.activeTarget.raiseMixinEvent('damaged', { src: this.getAvatar(), damageAmount: this.getAvatar().getMeleeDamage() });
@@ -16334,10 +16339,17 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
         }
         if (input == _keybinds.COMMAND.STEAL) {
           _message.Message.send("You attempt stealing.");
+          this.getAvatar().getMoreMoney(this.getAvatar().state.activeTarget.getMoney());
+          this.getAvatar().state.activeTarget.getMoreMoney(this.getAvatar().state.activeTarget.getMoney() * -1);
+          this.getAvatar().setTarget('');
+          this.getAvatar().raiseMixinEvent('playerHasMoved');
           return true;
         }
         if (input == _keybinds.COMMAND.BLUFF) {
           _message.Message.send("You attempt bluffing.");
+          this.getAvatar().setFaction(this.getAvatar().state.activeTarget.getFaction());
+          this.getAvatar().setTarget('');
+          this.getAvatar().raiseMixinEvent('playerHasMoved');
           return true;
         }
         if (input != _keybinds.COMMAND.INTERACT || input != _keybinds.COMMAND.ATTACK || input != _keybinds.COMMAND.STEAL || input != _keybinds.COMMAND.BLUFF) {
@@ -16679,11 +16691,11 @@ var WalkerCorporeal = exports.WalkerCorporeal = {
       var targetPositionInfo = this.getMap().getTargetPositionInfo(newX, newY);
       // {{if entity, bump it}}
       if (targetPositionInfo.entity) {
-        if (this.getFaction() != targetPositionInfo.entity.getFaction()) {
+        if (this.getFaction() != targetPositionInfo.entity.getFaction() || this.getName() == 'avatar') {
           this.raiseMixinEvent('bumpEntity', { actor: this, target: targetPositionInfo.entity });
           // if (this.getName() == 'avatar') {
-          //   // console.log("the player has moved");
-          //   this.raiseMixinEvent('playerHasMoved');
+          // //   // console.log("the player has moved");
+          // //   this.raiseMixinEvent('playerHasMoved');
           // }
         }
         // console.dir(targetPositionInfo);
@@ -16700,6 +16712,7 @@ var WalkerCorporeal = exports.WalkerCorporeal = {
         this.raiseMixinEvent('turnTaken', { 'timeUsed': 1 });
         if (this.getName() == 'avatar') {
           // console.log("the player has moved");
+          this.setTarget('');
           this.raiseMixinEvent('playerHasMoved');
         }
 
@@ -16742,9 +16755,9 @@ var HitPoints = exports.HitPoints = {
         return;
       }
       if (delta < 0) {
-        console.log(this.getName() + " has healed " + delta + " hp!");
+        console.log(this.getName() + " has healed " + delta * -1 + " hp!");
       } else {
-        console.log(this.getName() + " has lost " + delta + " hp!");
+        console.log(this.getName() + " has lost " + delta * -1 + " hp!");
       }
       this.state._HP.curHP -= delta;
     },
