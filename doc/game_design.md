@@ -45,7 +45,7 @@ A petty criminal has escaped prison and proceeds to ransack everything in sight.
 
 2. Entropy mechanic (tentative) - every map will spawn at least one law enforcement officer, who will call for troops until the player successfully defeats them in combat or cons them into leaving them be. Non-officer, law-affiliated NPCs willa always move toward the player.
 
-3. Leveling mechanic - a player gains XP by surviving fights, successfully conning, and successfully stealing. Rate of stat increase depends on the race, group, and type of a player.
+3. Leveling mechanic - a player gains XP by surviving fights, successfully conning, and successfully stealing. Rate of stat increase depends on the group and class of a player. See stats here: https://docs.google.com/spreadsheets/d/1vBT80IFHFurX1k2xUf7qmVtnwMY8foYMZiHkPfQJo8Q/edit?usp=sharing
 
 NPC INTERACTION - for every NPC, be them enemy, neutral, or friendly, the player has the option of talking, conning/stealing from, or attacking
 
