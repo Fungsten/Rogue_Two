@@ -226,7 +226,7 @@ export class PlayMode extends UIMode {
 
     this.curry.avatarID = a.getID();
 
-    let bradyNumber = 10;
+    let bradyNumber = 40;
     for (let i = 0; i < bradyNumber; i++) {
       let b = EntityFactory.create("Brady");
       m.addEntityAtRandPos(b);
@@ -365,19 +365,34 @@ export class PlayMode extends UIMode {
       }
       if (input == COMMAND.STEAL) {
         // Message.send("You attempt stealing.");
-        Message.send("You stole " + this.getAvatar().state.activeTarget.getMoney() + " credits.");
-        this.getAvatar().getMoreMoney(this.getAvatar().state.activeTarget.getMoney());
-        this.getAvatar().state.activeTarget.getMoreMoney(this.getAvatar().state.activeTarget.getMoney() * -1);
-        this.getAvatar().setTarget('');
-        this.getAvatar().raiseMixinEvent('playerHasMoved');
+        // Message.send("You stole " + this.getAvatar().state.activeTarget.getMoney() + " credits.");
+
+        if (this.getAvatar().state.activeTarget.getMoney() != 0) {
+          this.getAvatar().getMoreMoney(this.getAvatar().state.activeTarget.getMoney());
+          this.getAvatar().state.activeTarget.getMoreMoney(this.getAvatar().state.activeTarget.getMoney() * -1);
+          this.getAvatar().gainExp(50 * (this.getAvatar().state.activeTarget.getLevel() + 1));
+          Message.send("You stole " + this.getAvatar().state.activeTarget.getMoney() + " credits.");
+
+          this.getAvatar().setTarget('');
+          this.getAvatar().raiseMixinEvent('playerHasMoved');
+        } else {
+          Message.send("You've already stolen from this poor schmuck.")
+        }
         return true;
       }
       if (input == COMMAND.BLUFF) {
         Message.send("You attempt bluffing.");
-        // Message.send("You ");
-        this.getAvatar().setFaction(this.getAvatar().state.activeTarget.getFaction());
-        this.getAvatar().setTarget('');
-        this.getAvatar().raiseMixinEvent('playerHasMoved');
+
+        if (this.getAvatar().getFaction() != this.getAvatar().state.activeTarget.getFaction()) {
+          this.getAvatar().setFaction(this.getAvatar().state.activeTarget.getFaction());
+          this.getAvatar().gainExp(50 * (this.getAvatar().state.activeTarget.getLevel() + 1));
+          Message.send("They now think you're one of them.");
+
+          this.getAvatar().setTarget('');
+          this.getAvatar().raiseMixinEvent('playerHasMoved');
+        } else {
+          Message.send("They already think you're one of them.");
+        }
         return true;
       }
       if (input != COMMAND.INTERACT || input != COMMAND.ATTACK || input != COMMAND.STEAL || input != COMMAND.BLUFF) {
