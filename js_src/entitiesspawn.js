@@ -53,7 +53,7 @@ EntityFactory.learn({
   'faction': 'criminal',
   'maxHP': 10,
   'maxAE': 100,
-  'meleeDamage' : 10,
+  'meleeDamage' : 100,
   'str': 1,
   'per': 1,
   'end': 1,

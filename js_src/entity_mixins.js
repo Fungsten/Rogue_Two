@@ -4,6 +4,7 @@ import {TIME_ENGINE, SCHEDULER} from './timing.js';
 import ROT from 'rot-js';
 import {DATASTORE} from './datastore.js';
 import {COMMAND, getInput, setKey} from './keybinds.js';
+import {Game} from './game.js';
 
 let _exampleMixin = {
   META: {
@@ -180,10 +181,13 @@ export let HitPoints = {
       this.changeHP(evtData.damageAmount);
       evtData.src.raiseMixinEvent('damages', {target: this, damageAmount: evtData.damageAmount});
       if (this.getCurHP() <= 0) {
-        if (this.getName() != 'avatar')
-        this.raiseMixinEvent('defeatedBy', {src: evtData.src});
-        evtData.src.raiseMixinEvent('defeats', {target: this});
-        this.destroy();
+        if (this.getName() != 'avatar') {
+          this.raiseMixinEvent('defeatedBy', {src: evtData.src});
+          evtData.src.raiseMixinEvent('defeats', {target: this});
+          this.destroy();
+        } else {
+          Game.switchMode('lose');
+        }
       }
     },
     'levelUp': function() {
