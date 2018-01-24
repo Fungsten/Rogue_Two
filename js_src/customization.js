@@ -91,7 +91,7 @@ export function customizeChar(num, ent) {
     mc.changeLukMul(1.6);
     return;
   } else if (num in unk_unk) {
-    mc.changeLukMul(Math.ceil(9));
+    mc.changeLukMul(9);
     return;
   } else if (num in pre_sol) {
     mc.changeHpMul(1.25*0.75);
