@@ -368,10 +368,11 @@ export class PlayMode extends UIMode {
         // Message.send("You stole " + this.getAvatar().state.activeTarget.getMoney() + " credits.");
 
         if (this.getAvatar().state.activeTarget.getMoney() != 0) {
+          Message.send("You stole " + this.getAvatar().state.activeTarget.getMoney() + " credits.");
           this.getAvatar().getMoreMoney(this.getAvatar().state.activeTarget.getMoney());
           this.getAvatar().state.activeTarget.getMoreMoney(this.getAvatar().state.activeTarget.getMoney() * -1);
           this.getAvatar().gainExp(50 * (this.getAvatar().state.activeTarget.getLevel() + 1));
-          Message.send("You stole " + this.getAvatar().state.activeTarget.getMoney() + " credits.");
+
 
           this.getAvatar().setTarget('');
           this.getAvatar().raiseMixinEvent('playerHasMoved');

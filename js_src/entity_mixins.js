@@ -191,6 +191,7 @@ export let HitPoints = {
       }
     },
     'levelUp': function() {
+      this.setMaxHP(this.getMaxHP() + 2);
       this.setHP(this.getMaxHP());
     },
     'turnTaken': function(evtData) {
@@ -237,6 +238,12 @@ export let Aether = {
 
     getMaxAE: function(max) {
       return this.state._AE.maxAE;
+    }
+  },
+  LISTENERS: {
+    'levelUp': function() {
+      this.setMaxAE(Math.ceil(this.getMaxAE() * 1.01));
+      this.setAE(this.getMaxAE());
     }
   }
 };

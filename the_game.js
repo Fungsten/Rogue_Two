@@ -16340,10 +16340,10 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
           // Message.send("You stole " + this.getAvatar().state.activeTarget.getMoney() + " credits.");
 
           if (this.getAvatar().state.activeTarget.getMoney() != 0) {
+            _message.Message.send("You stole " + this.getAvatar().state.activeTarget.getMoney() + " credits.");
             this.getAvatar().getMoreMoney(this.getAvatar().state.activeTarget.getMoney());
             this.getAvatar().state.activeTarget.getMoreMoney(this.getAvatar().state.activeTarget.getMoney() * -1);
             this.getAvatar().gainExp(50 * (this.getAvatar().state.activeTarget.getLevel() + 1));
-            _message.Message.send("You stole " + this.getAvatar().state.activeTarget.getMoney() + " credits.");
 
             this.getAvatar().setTarget('');
             this.getAvatar().raiseMixinEvent('playerHasMoved');
@@ -16829,6 +16829,7 @@ var HitPoints = exports.HitPoints = {
       }
     },
     'levelUp': function levelUp() {
+      this.setMaxHP(this.getMaxHP() + 2);
       this.setHP(this.getMaxHP());
     },
     'turnTaken': function turnTaken(evtData) {
@@ -16877,6 +16878,12 @@ var Aether = exports.Aether = {
 
     getMaxAE: function getMaxAE(max) {
       return this.state._AE.maxAE;
+    }
+  },
+  LISTENERS: {
+    'levelUp': function levelUp() {
+      this.setMaxAE(Math.ceil(this.getMaxAE() * 1.01));
+      this.setAE(this.getMaxAE());
     }
   }
 };
