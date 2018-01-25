@@ -16884,6 +16884,11 @@ var Aether = exports.Aether = {
     'levelUp': function levelUp() {
       this.setMaxAE(Math.ceil(this.getMaxAE() * 1.01));
       this.setAE(this.getMaxAE());
+    },
+    'turnTaken': function turnTaken(evtData) {
+      if (this.getCurAE() < this.getMaxAE()) {
+        this.changeAE(evtData.timeUsed);
+      }
     }
   }
 };
