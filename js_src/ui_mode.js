@@ -226,13 +226,13 @@ export class PlayMode extends UIMode {
 
     this.curry.avatarID = a.getID();
 
-    let bradyNumber = 40;
+    let bradyNumber = 4;
     for (let i = 0; i < bradyNumber; i++) {
       let b = EntityFactory.create("Brady");
       m.addEntityAtRandPos(b);
     }
 
-    let jarNumber = 40;
+    let jarNumber = 4;
     for (let i = 0; i < jarNumber; i++) {
       let b = EntityFactory.create("Jar Jar");
       m.addEntityAtRandPos(b);
@@ -348,7 +348,45 @@ export class PlayMode extends UIMode {
         return true;
       }
       if (input == COMMAND.INTERACT) {
-        Message.send("You drop a little sarcasm.");
+        Message.send("You drop a little sarcasm. " + this.getAvatar().state.activeTarget.getName() + " did not respond well.");
+        let a = this.getAvatar();
+        if (this.getAvatar().state.activeTarget.getName() == 'Door') {
+          let m = MapMaker({xdim: 30, ydim: 20});
+
+          this.curry = {};
+          this.curry.curMapID = m.getID();
+          this.curry.view = {};
+          this.curry.camerax = 40;
+          this.curry.cameray = 12;
+
+          initTiming();
+          console.dir(a);
+
+          // let a = this.getAvatar();
+          m.addEntityAtRandPos(a);
+
+          this.curry.avatarID = a.getID();
+
+          let bradyNumber = 4;
+          for (let i = 0; i < bradyNumber; i++) {
+            let b = EntityFactory.create("Brady");
+            m.addEntityAtRandPos(b);
+          }
+
+          let jarNumber = 4;
+          for (let i = 0; i < jarNumber; i++) {
+            let b = EntityFactory.create("Jar Jar");
+            m.addEntityAtRandPos(b);
+          }
+
+          let d = EntityFactory.create("Door");
+          m.addEntityAtRandPos(d);
+
+          a.setmapID(this.curry.curMapID);
+          this.updateCameraToAvatar();
+          Message.clear();
+          Message.send("Arrived in new area.");
+        }
         return true;
       }
       if (input == COMMAND.ATTACK) {

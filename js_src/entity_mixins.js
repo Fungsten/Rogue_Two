@@ -295,6 +295,9 @@ export let MeleeAttacker = {
                       "m. Cancel");
         // this.handleInput(eventType,evt);
       } else if (this.getName() == 'avatar' && evtData.target.getName() == 'Door') {
+        this.state.bumped = true;
+        this.setTarget(evtData.target);
+
         Message.send("You've found the door \n" +
                       "1. Enter \n" +
                       "m. Cancel \n");

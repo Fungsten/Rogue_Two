@@ -16193,13 +16193,13 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
 
       this.curry.avatarID = a.getID();
 
-      var bradyNumber = 40;
+      var bradyNumber = 4;
       for (var i = 0; i < bradyNumber; i++) {
         var b = _entitiesspawn.EntityFactory.create("Brady");
         m.addEntityAtRandPos(b);
       }
 
-      var jarNumber = 40;
+      var jarNumber = 4;
       for (var _i = 0; _i < jarNumber; _i++) {
         var _b = _entitiesspawn.EntityFactory.create("Jar Jar");
         m.addEntityAtRandPos(_b);
@@ -16320,7 +16320,45 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
           return true;
         }
         if (input == _keybinds.COMMAND.INTERACT) {
-          _message.Message.send("You drop a little sarcasm.");
+          _message.Message.send("You drop a little sarcasm. " + this.getAvatar().state.activeTarget.getName() + " did not respond well.");
+          var a = this.getAvatar();
+          if (this.getAvatar().state.activeTarget.getName() == 'Door') {
+            var m = (0, _map.MapMaker)({ xdim: 30, ydim: 20 });
+
+            this.curry = {};
+            this.curry.curMapID = m.getID();
+            this.curry.view = {};
+            this.curry.camerax = 40;
+            this.curry.cameray = 12;
+
+            (0, _timing.initTiming)();
+            console.dir(a);
+
+            // let a = this.getAvatar();
+            m.addEntityAtRandPos(a);
+
+            this.curry.avatarID = a.getID();
+
+            var bradyNumber = 4;
+            for (var i = 0; i < bradyNumber; i++) {
+              var b = _entitiesspawn.EntityFactory.create("Brady");
+              m.addEntityAtRandPos(b);
+            }
+
+            var jarNumber = 4;
+            for (var _i2 = 0; _i2 < jarNumber; _i2++) {
+              var _b2 = _entitiesspawn.EntityFactory.create("Jar Jar");
+              m.addEntityAtRandPos(_b2);
+            }
+
+            var d = _entitiesspawn.EntityFactory.create("Door");
+            m.addEntityAtRandPos(d);
+
+            a.setmapID(this.curry.curMapID);
+            this.updateCameraToAvatar();
+            _message.Message.clear();
+            _message.Message.send("Arrived in new area.");
+          }
           return true;
         }
         if (input == _keybinds.COMMAND.ATTACK) {
@@ -16930,6 +16968,9 @@ var MeleeAttacker = exports.MeleeAttacker = {
         _message.Message.send("What would you like to do to " + evtData.target.getName() + "?\n" + "1. Interact \n" + "2. Attack \n" + "3. Steal \n" + "4. Bluff \n" + "m. Cancel");
         // this.handleInput(eventType,evt);
       } else if (this.getName() == 'avatar' && evtData.target.getName() == 'Door') {
+        this.state.bumped = true;
+        this.setTarget(evtData.target);
+
         _message.Message.send("You've found the door \n" + "1. Enter \n" + "m. Cancel \n");
       } else {
         this.raiseMixinEvent('attacks', { actor: this, target: evtData.target });
