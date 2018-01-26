@@ -10,6 +10,7 @@ import {Entity} from './entity.js';
 import {EntityFactory} from './entitiesspawn.js';
 import {SCHEDULER, TIME_ENGINE, initTiming} from './timing.js';
 import {COMMAND, getInput, setKey} from './keybinds.js';
+import {customizeChar} from './customization.js';
 
 class UIMode {
   constructor(thegame) {
@@ -44,6 +45,8 @@ class UIMode {
 export class StartupMode extends UIMode { //defines how an object exists
 
   render(display) {
+
+    //test
     display.drawText(2,3,"Welcome to ");
     display.drawText(2,5," _______  _______ _________          _______  _______ ");
     display.drawText(2,6,"(  ___  )(  ____ \\\\__   __/|\\     /|(  ____ \\(  ____ )");
@@ -99,8 +102,8 @@ export class PersistenceMode extends UIMode {
 
       if (input == COMMAND.NEW_GAME) {
         this.game.startNewGame();
-        Message.send("Started new game")
-        this.game.switchMode('play');
+        //Message.send("Started new game")
+        this.game.switchMode('customize');
         return true;
       }
       if (input == COMMAND.SAVE_GAME) {
@@ -182,12 +185,68 @@ export class PersistenceMode extends UIMode {
 
 //-----------------------------------------------------
 //-----------------------------------------------------
+export class AvatarCreateMode extends UIMode {
+  enter() {
+    super.enter();
+    this.game.isPlaying = true;
+    this.currNum = 0;
+
+    initTiming();
+
+    this.game.globalAvatar = EntityFactory.create("avatar");
+    setKey(['customize']);
+  }
+
+  chooseElement() {
+    this.random = ROT.RNG.getUniform();
+    console.log('this.random');
+    console.log(this.random);
+    this.currNum = Math.ceil( this.random * 118);
+    console.log('this.currNum');
+    console.log(this.currNum);
+    Message.send("Press Y for yes or N for no.");
+  }
+
+  render(display) {
+    display.clear();
+    this.chooseElement();
+    display.drawText(2,5, "Here is a number: " + this.currNum);
+    display.drawText(2,7, "Do you like it?");
+
+  }
+
+  handleInput(eventType,evt) {
+    if (eventType == 'keyup') {
+      let input = getInput(eventType,evt);
+      if (input == COMMAND.NULLCOMMAND) { return false; }
+
+      if (input == COMMAND.YES) {
+        console.log('in yes');
+        customizeChar(this.currNum,this.game.globalAvatar);
+        console.log('global avatar:');
+        console.dir(this.game.globalAvatar);
+        this.game.modes.play.setupNewGame();
+        this.game.switchMode('play');
+        return false;
+      }
+      if (input == COMMAND.NO) {
+        console.log('in no');
+        // this.chooseElement()
+        // this.render(this.game.display);
+        return true;
+      }
+    }
+  }
+
+}
+//-----------------------------------------------------
+//-----------------------------------------------------
 
 export class PlayMode extends UIMode {
 
   enter() {
     super.enter();
-    this.game.isPlaying = true;
+    //this.game.isPlaying = true;
     setKey(['play','movement','interact']);
   }
 
@@ -218,10 +277,26 @@ export class PlayMode extends UIMode {
     //   x: Math.round(display.getOptions().width/2),
     //   y: Math.round(display.getOptions().height/2)
     // };
-    initTiming();
 
-    let a = EntityFactory.create("avatar");
-    this.game.globalAvatar = a;
+    let a = this.game.globalAvatar;
+    a.setMaxHP(Math.ceil(a.getMaxHP() * a.getHPMul()));
+    a.setHP(a.getMaxHP());
+
+    console.log('max AE: '+ a.getMaxAE());
+    console.log('AE mul: '+ a.getAEMul());
+    console.log('multiplied: '+ a.getMaxAE()*a.getAEMul());
+    console.log('ceil: '+Math.ceil(a.getMaxAE() * a.getAEMul()));
+    a.setMaxAE(Math.ceil(a.getMaxAE() * a.getAEMul()));
+    a.setAE(a.getMaxAE());
+
+    a.setSTR((a.getSTR() * a.getSTRMul()).toFixed(2));
+    a.setPER((a.getPER() * a.getPERMul()).toFixed(2));
+    a.setEND((a.getEND() * a.getENDMul()).toFixed(2));
+    a.setCRM((a.getCRM() * a.getCRMMul()).toFixed(2));
+    a.setINT((a.getINT() * a.getINTMul()).toFixed(2));
+    a.setAGI((a.getAGI() * a.getAGIMul()).toFixed(2));
+    a.setLUK((a.getLUK() * a.getLUKMul()).toFixed(2));
+
     m.addEntityAtRandPos(a);
     // let b = EntityFactory.create("Brady");
 
