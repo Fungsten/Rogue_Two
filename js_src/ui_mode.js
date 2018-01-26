@@ -373,13 +373,13 @@ export class PlayMode extends UIMode {
 
           this.curry.avatarID = a.getID();
 
-          let bradyNumber = 40;
+          let bradyNumber = ROT.RNG.getUniformInt(0, 20);
           for (let i = 0; i < bradyNumber; i++) {
             let b = EntityFactory.create("Brady");
             m.addEntityAtRandPos(b);
           }
 
-          let jarNumber = 40;
+          let jarNumber = ROT.RNG.getUniformInt(0, 20);
           for (let i = 0; i < jarNumber; i++) {
             let b = EntityFactory.create("Jar Jar");
             m.addEntityAtRandPos(b);

@@ -193,10 +193,9 @@ export let HitPoints = {
     'levelUp': function() {
       this.setMaxHP(this.getMaxHP() + 2);
       this.setHP(this.getMaxHP());
-      if (this.getName() == 'avatar') {
+      if (this.getName() =='avatar') {
         Message.send("Leveled up!");
       }
-      
     },
     'turnTaken': function(evtData) {
       if (this.getCurHP() < this.getMaxHP()) {
@@ -228,7 +227,7 @@ export let Aether = {
     },
 
     changeAE: function(delta) {
-      if (this.state._AE.curAE) {return;}
+      // if (this.state._AE.curAE) {return;}
       this.state._AE.curAE += delta;
     },
 
@@ -255,7 +254,7 @@ export let Aether = {
       }
     },
     'attackUsed': function() {
-      if (this.getCurAE < 0) {
+      if (this.getCurAE() > 10) {
         this.changeAE(-10);
       }
     }

@@ -8487,6 +8487,7 @@ var Game = exports.Game = {
     lose: ''
   },
 
+  globalAvatar: '',
   isPlaying: false,
   hasSaved: false,
   globalAvatar: '',
@@ -16346,13 +16347,13 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
 
             this.curry.avatarID = a.getID();
 
-            var bradyNumber = 40;
+            var bradyNumber = _rotJs2.default.RNG.getUniformInt(0, 20);
             for (var i = 0; i < bradyNumber; i++) {
               var b = _entitiesspawn.EntityFactory.create("Brady");
               m.addEntityAtRandPos(b);
             }
 
-            var jarNumber = 40;
+            var jarNumber = _rotJs2.default.RNG.getUniformInt(0, 20);
             for (var _i2 = 0; _i2 < jarNumber; _i2++) {
               var _b2 = _entitiesspawn.EntityFactory.create("Jar Jar");
               m.addEntityAtRandPos(_b2);
@@ -16902,9 +16903,7 @@ var Aether = exports.Aether = {
     },
 
     changeAE: function changeAE(delta) {
-      if (this.state._AE.curAE) {
-        return;
-      }
+      // if (this.state._AE.curAE) {return;}
       this.state._AE.curAE += delta;
     },
 
@@ -16931,7 +16930,11 @@ var Aether = exports.Aether = {
       }
     },
     'attackUsed': function attackUsed() {
+<<<<<<< HEAD
       if (this.getCurAE < 0) {
+=======
+      if (this.getCurAE() > 10) {
+>>>>>>> 4e95f7b554ff6284bf137c926b129f6eae7662f7
         this.changeAE(-10);
       }
     }
