@@ -1,6 +1,6 @@
 import * as U from './util.js';
 import ROT from 'rot-js';
-import {StartupMode, PlayMode, LoseMode,PersistenceMode, MessageMode} from './ui_mode.js';
+import {StartupMode, PlayMode, LoseMode,PersistenceMode, MessageMode, AvatarCreateMode} from './ui_mode.js';
 import {Message} from './message.js';
 import {DATASTORE, clearDatastore} from './datastore.js';
 
@@ -29,6 +29,7 @@ export let Game = {
   modes: {
     startup: '',
     persistence: '',
+    customize: '',
     play: '',
     messages: '',
     lose: ''
@@ -73,7 +74,8 @@ export let Game = {
     this.modes.play = new PlayMode(this);
     this.modes.lose = new LoseMode(this);
     this.modes.persistence = new PersistenceMode(this);
-    //this.modes.messages = new MessageMode(this);
+    this.modes.customize = new AvatarCreateMode(this);
+    this.modes.messages = new MessageMode(this);
   },
 
 
