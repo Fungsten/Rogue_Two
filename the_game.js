@@ -16339,13 +16339,13 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
 
             this.curry.avatarID = a.getID();
 
-            var bradyNumber = 4;
+            var bradyNumber = 40;
             for (var i = 0; i < bradyNumber; i++) {
               var b = _entitiesspawn.EntityFactory.create("Brady");
               m.addEntityAtRandPos(b);
             }
 
-            var jarNumber = 4;
+            var jarNumber = 40;
             for (var _i2 = 0; _i2 < jarNumber; _i2++) {
               var _b2 = _entitiesspawn.EntityFactory.create("Jar Jar");
               m.addEntityAtRandPos(_b2);

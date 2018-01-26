@@ -249,6 +249,11 @@ export let Aether = {
       if (this.getCurAE() < this.getMaxAE()) {
         this.changeAE(evtData.timeUsed);
       }
+    },
+    'attackUsed': function() {
+      if (this.getCurAE < 0) {
+        this.changeAE(-10);
+      }
     }
   }
 };

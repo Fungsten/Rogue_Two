@@ -367,13 +367,13 @@ export class PlayMode extends UIMode {
 
           this.curry.avatarID = a.getID();
 
-          let bradyNumber = 4;
+          let bradyNumber = 40;
           for (let i = 0; i < bradyNumber; i++) {
             let b = EntityFactory.create("Brady");
             m.addEntityAtRandPos(b);
           }
 
-          let jarNumber = 4;
+          let jarNumber = 40;
           for (let i = 0; i < jarNumber; i++) {
             let b = EntityFactory.create("Jar Jar");
             m.addEntityAtRandPos(b);
@@ -396,6 +396,7 @@ export class PlayMode extends UIMode {
         }
         this.getAvatar().raiseMixinEvent('attacks', {actor: this.getAvatar(), target: this.getAvatar().state.activeTarget});
         this.getAvatar().raiseMixinEvent('turnTaken', {'timeUsed': 1});
+        this.getAvatar().raiseMixinEvent('attackUsed');
         this.getAvatar().state.activeTarget.raiseMixinEvent('damaged', {src: this.getAvatar(), damageAmount: this.getAvatar().getMeleeDamage()});
         this.getAvatar().setTarget('');
         this.getAvatar().raiseMixinEvent('playerHasMoved');
