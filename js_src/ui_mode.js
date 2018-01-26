@@ -221,6 +221,7 @@ export class PlayMode extends UIMode {
     initTiming();
 
     let a = EntityFactory.create("avatar");
+    this.game.globalAvatar = a;
     m.addEntityAtRandPos(a);
     // let b = EntityFactory.create("Brady");
 
@@ -277,6 +278,11 @@ export class PlayMode extends UIMode {
 
   handleInput(eventType, evt) {
     console.log('entered uimode play handle input');
+
+    if (this.getAvatar().getCurHP() <= 0){
+      this.game.globalAvatar = this.getAvatar();
+      this.game.switchMode('lose');
+    }
 
     if (eventType == 'keyup') {
       let input = getInput(eventType,evt);
@@ -483,56 +489,45 @@ export class MessageMode extends UIMode {
 //-----------------------------------------------------
 
 export class LoseMode extends UIMode {
+  enter() {
+    super.enter();
+    this.endMoney = this.game.globalAvatar.getMoney();
+  }
 
   render(display){
     display.clear();
-    if (this.getAvatar().getMoney() < 100) {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+    display.drawText(33,12,`You died with ${this.endMoney} credits.`);
+    if (this.endMoney < 100) {
       Message.send("You were practically broke and a failure of a criminal.");
-    } else if (this.getAvatar().getMoney() < 1100) {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+    } else if (this.endMoney < 1100) {
       Message.send("You may as well be the Solar System's worst thief.");
-    } else if (this.getAvatar().getMoney() < 6100) {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+    } else if (this.endMoney < 6100) {
       Message.send("You were barely an amateur.");
-    } else if (this.getAvatar().getMoney() < 16100) {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+    } else if (this.endMoney < 16100) {
       Message.send("It's a pity you only managed to become sort of an amateur.");
-    } else if (this.getAvatar().getMoney() < 31100) {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+    } else if (this.endMoney < 31100) {
       Message.send("Congratulations, you made it to amateur criminal.");
-    } else if (this.getAvatar().getMoney() < 56100) {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+    } else if (this.endMoney < 56100) {
       Message.send("You were known as a competent criminal.");
-    } else if (this.getAvatar().getMoney() < 106100) {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+    } else if (this.endMoney < 106100) {
       Message.send("You managed to become a noteworthy criminal.");
-    } else if (this.getAvatar().getMoney() < 206100) {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+    } else if (this.endMoney < 206100) {
       Message.send("It's a pity, you were finally becoming reputable as a criminal.");
-    } else if (this.getAvatar().getMoney() < 356100) {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+    } else if (this.endMoney < 356100) {
       Message.send("Well, you managed to become a wanted criminal.");
-    } else if (this.getAvatar().getMoney() < 556100) {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+    } else if (this.endMoney < 556100) {
       Message.send("You were a hunted criminal with considerable cash, so perhaps you had an excuse.");
-    } else if (this.getAvatar().getMoney() < 1056100) {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+    } else if (this.endMoney < 1056100) {
       Message.send("A dangerous but reasonably rich criminal died this day.");
-    } else if (this.getAvatar().getMoney() < 2056100) {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+    } else if (this.endMoney < 2056100) {
       Message.send("You were really quite a remarkable criminal.");
-    } else if (this.getAvatar().getMoney() < 3556100) {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+    } else if (this.endMoney < 3556100) {
       Message.send("You were a master criminal who mastered the art of cash-obtaining.");
-    } else if (this.getAvatar().getMoney() < 6056100) {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+    } else if (this.endMoney < 6056100) {
       Message.send("You were one grand master of a criminal.");
-    } else if (this.getAvatar().getMoney() < 11056100) {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
+    } else if (this.endMoney < 11056100) {
       Message.send("You will be forever known as a supremely wealthy criminal.");
     } else {
-      display.drawText(33,4,`You died with ${this.getAvatar().getMoney()}.`);
       Message.send("You made your mark as the ultimate, richest criminal in the Solar System.");
     }
   }

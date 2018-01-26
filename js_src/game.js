@@ -36,6 +36,7 @@ export let Game = {
 
   isPlaying: false,
   hasSaved: false,
+  globalAvatar: '',
 
   init: function() {
     console.log("Game object:");
