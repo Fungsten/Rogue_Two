@@ -19,7 +19,7 @@ export function customizeChar(num, avatar) {
   let tox_sol = [4, 16, 24, 33, 34, 82, 84];
   let unk_unk = [104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118];
 
-  if (num in con_sol) {
+  if (con_sol.includes(num)) {
     console.log('in con_sol');
     avatar.setHPMul(1.25*1.4);
     avatar.setAEMul(0.75*1.4);
@@ -31,7 +31,7 @@ export function customizeChar(num, avatar) {
     avatar.setAGIMul(0.8*0.6);
     avatar.setLUKMul(0.6);
   }
-  if (num in rad_sol) {
+  else if (rad_sol.includes(num)) {
     console.log('in rad_sol');
     avatar.setHPMul(1.25*0.75);
     avatar.setAEMul(0.75*1.25);
@@ -43,11 +43,11 @@ export function customizeChar(num, avatar) {
     avatar.setAGIMul(0.8*1.4);
     avatar.setLUKMul(1.6);
   }
-  if (num in unk_unk) {
+  else if (unk_unk.includes(num)) {
     console.log('in unk_unk');
     avatar.setLUKMul(9);
   }
-  if (num in pre_sol) {
+  else if (pre_sol.includes(num)) {
     console.log('in pre_sol');
     avatar.setHPMul(1.25*0.75);
     avatar.setAEMul(0.75*1.2);
@@ -59,7 +59,7 @@ export function customizeChar(num, avatar) {
     avatar.setAGIMul(0.8);
     avatar.setLUKMul(1.4);
   }
-  if (num in stu_sol) {
+  else if (stu_sol.includes(num)) {
     console.log('in stu_sol');
     avatar.setHPMul(1.25*2);
     avatar.setAEMul(0.75*0.5);
@@ -71,7 +71,7 @@ export function customizeChar(num, avatar) {
     avatar.setAGIMul(0.8*0.8);
     //avatar.setLUKMul(1);
   }
-  if (num in rea_sol) {
+  else if (rea_sol.includes(num)) {
     console.log('in rea_sol');
     avatar.setHPMul(1.25*0.8);
     avatar.setAEMul(0.75*1.6);
@@ -83,7 +83,7 @@ export function customizeChar(num, avatar) {
     avatar.setAGIMul(0.8);
     avatar.setLUKMul(1.2);
   }
-  if (num in tox_sol) {
+  else if (tox_sol.includes(num)) {
     console.log('in tox_sol');
     avatar.setHPMul(1.25);
     avatar.setAEMul(0.75*1.2);
@@ -95,7 +95,7 @@ export function customizeChar(num, avatar) {
     avatar.setAGIMul(0.8);
     avatar.setLUKMul(0.8);
   }
-  if (num in nob_gas) {
+  else if (nob_gas.includes(num)) {
     console.log('in nob_gas');
     avatar.setHPMul(0.75*0.9);
     avatar.setAEMul(1.25*0.9);
@@ -107,7 +107,7 @@ export function customizeChar(num, avatar) {
     avatar.setAGIMul(1.2*0.9);
     avatar.setLUKMul(2);
   }
-  if (num in rea_gas) {
+  else if (rea_gas.includes(num)) {
     console.log('in rea_gas');
     avatar.setHPMul(0.75*0.8);
     avatar.setAEMul(1.25*1.6);
@@ -119,7 +119,7 @@ export function customizeChar(num, avatar) {
     avatar.setAGIMul(1.2);
     avatar.setLUKMul(1.2);
   }
-  if (num in rea_liq) {
+  else if (rea_liq.includes(num)) {
     console.log('in rea_liq');
     avatar.setHPMul(0.8);
     avatar.setAEMul(1.6);
@@ -131,7 +131,7 @@ export function customizeChar(num, avatar) {
     //avatar.setAGIMul(1);
     avatar.setLUKMul(1.2);
   }
-  if (num in tox_gas) {
+  else if (tox_gas.includes(num)) {
     console.log('in tox_gas');
     avatar.setHPMul(0.75);
     avatar.setAEMul(1.25*1.2);
@@ -143,7 +143,7 @@ export function customizeChar(num, avatar) {
     avatar.setAGIMul(1.2);
     avatar.setLUKMul(0.8);
   }
-  if (num in tox_liq) {
+  else if (tox_liq.includes(num)) {
     console.log('in tox_liq');
     //avatar.setHPMul(1);
     avatar.setAEMul(1.2);
@@ -155,5 +155,4 @@ export function customizeChar(num, avatar) {
     //avatar.setAGIMul(1);
     avatar.setLUKMul(0.8);
   }
-  console.log('did not set');
 }

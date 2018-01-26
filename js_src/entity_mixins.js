@@ -139,6 +139,7 @@ export let HitPoints = {
     },
 
     setHPMul: function(newMul) {
+      console.log('set HP');
       this.state._HP.hpMul = newMul;
     },
 

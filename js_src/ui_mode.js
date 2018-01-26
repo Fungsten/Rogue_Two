@@ -199,6 +199,7 @@ export class AvatarCreateMode extends UIMode {
 
   chooseElement() {
     this.currNum = Math.ceil(ROT.RNG.getUniform() * 118);
+    console.log('this.currNum');
     console.log(this.currNum);
     Message.send("Press Y for yes or N for no.");
   }
@@ -221,13 +222,13 @@ export class AvatarCreateMode extends UIMode {
         console.log('global avatar:');
         console.dir(this.game.globalAvatar);
         this.game.modes.play.enter();
-        return true;
+        return false;
       }
       if (input == COMMAND.NO) {
         console.log('in no');
-        this.chooseElement()
-        this.render(this.game.display);
-        return false;
+        // this.chooseElement()
+        // this.render(this.game.display);
+        return true;
       }
     }
   }
