@@ -16276,10 +16276,6 @@ var PlayMode = exports.PlayMode = function (_UIMode4) {
       a.setMaxHP(Math.ceil(a.getMaxHP() * a.getHPMul()));
       a.setHP(a.getMaxHP());
 
-      console.log('max AE: ' + a.getMaxAE());
-      console.log('AE mul: ' + a.getAEMul());
-      console.log('multiplied: ' + a.getMaxAE() * a.getAEMul());
-      console.log('ceil: ' + Math.ceil(a.getMaxAE() * a.getAEMul()));
       a.setMaxAE(Math.ceil(a.getMaxAE() * a.getAEMul()));
       a.setAE(a.getMaxAE());
 
@@ -16337,19 +16333,12 @@ var PlayMode = exports.PlayMode = function (_UIMode4) {
       display.drawText(0, 5, "Money: " + this.getAvatar().getMoney() + " credits");
 
       display.drawText(0, 7, "Strength:     " + this.getAvatar().getSTR());
-      console.log('STR: ' + this.getAvatar().getSTR());
       display.drawText(0, 8, "Perception:   " + this.getAvatar().getPER());
-      console.log('PER: ' + this.getAvatar().getPER());
       display.drawText(0, 9, "Endurance:    " + this.getAvatar().getEND());
-      console.log('END: ' + this.getAvatar().getEND());
       display.drawText(0, 10, "Charisma:     " + this.getAvatar().getCRM());
-      console.log('CRM: ' + this.getAvatar().getCRM());
       display.drawText(0, 11, "Intelligence: " + this.getAvatar().getINT());
-      console.log('INT: ' + this.getAvatar().getINT());
       display.drawText(0, 12, "Agility:      " + this.getAvatar().getAGI());
-      console.log('AGI: ' + this.getAvatar().getAGI());
       display.drawText(0, 13, "Luck:         " + this.getAvatar().getLUK());
-      console.log('LUK: ' + this.getAvatar().getLUK());
 
       display.drawText(0, 15, "EXP: " + this.getAvatar().getCurrExp() + " / " + this.getAvatar().getNextExp());
     }
@@ -16948,8 +16937,14 @@ var HitPoints = exports.HitPoints = {
       }
     },
     'levelUp': function levelUp() {
-      this.setMaxHP(Math.ceil(this.getMaxHP() + 2 * this.getHPMul()));
-      this.setHP(this.getMaxHP());
+      if (this.getLevel() <= 66) {
+        this.setMaxHP(Math.ceil(this.getMaxHP() + 2 * this.getHPMul()));
+        this.setHP(this.getMaxHP());
+      } else {
+        this.setMaxHP(Math.ceil(this.getMaxHP() - 5 * this.getHPMul()));
+        this.setHP(this.getMaxHP());
+      }
+
       if (this.getName() == 'avatar') {
         _message.Message.send("Leveled up!");
       }
@@ -17010,8 +17005,13 @@ var Aether = exports.Aether = {
   },
   LISTENERS: {
     'levelUp': function levelUp() {
-      this.setMaxAE(Math.ceil(this.getMaxAE() + 2 * this.getAEMul()));
-      this.setAE(this.getMaxAE());
+      if (this.getLevel() <= 66) {
+        this.setMaxAE(Math.ceil(this.getMaxAE() + 2 * this.getAEMul()));
+        this.setAE(this.getMaxAE());
+      } else {
+        this.setMaxAE(Math.ceil(this.getMaxAE() - 2 * this.getAEMul()));
+        this.setAE(this.getMaxAE());
+      }
     },
     'turnTaken': function turnTaken(evtData) {
       if (this.getCurAE() < this.getMaxAE()) {
@@ -17398,13 +17398,23 @@ var Special = exports.Special = {
   },
   LISTENERS: {
     'levelUp': function levelUp() {
-      this.changeSTR(1);
-      this.changePER(1);
-      this.changeEND(1);
-      this.changeCRM(1);
-      this.changeINT(1);
-      this.changeAGI(1);
-      this.changeLUK(1);
+      if (this.getLevel() <= 66) {
+        this.changeSTR(1);
+        this.changePER(1);
+        this.changeEND(1);
+        this.changeCRM(1);
+        this.changeINT(1);
+        this.changeAGI(1);
+        this.changeLUK(1);
+      } else {
+        this.changeSTR(-1);
+        this.changePER(1);
+        this.changeEND(-1);
+        this.changeCRM(1);
+        this.changeINT(1);
+        this.changeAGI(1);
+        this.changeLUK(1);
+      }
     }
   }
 };

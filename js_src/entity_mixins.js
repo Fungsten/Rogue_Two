@@ -164,8 +164,14 @@ export let HitPoints = {
       }
     },
     'levelUp': function() {
-      this.setMaxHP(Math.ceil(this.getMaxHP() + 2*this.getHPMul()));
-      this.setHP(this.getMaxHP());
+      if (this.getLevel() <= 66) {
+        this.setMaxHP(Math.ceil(this.getMaxHP() + 2*this.getHPMul()));
+        this.setHP(this.getMaxHP());
+      } else {
+        this.setMaxHP(Math.ceil(this.getMaxHP() - 5*this.getHPMul()));
+        this.setHP(this.getMaxHP());
+      }
+
       if (this.getName() =='avatar') {
         Message.send("Leveled up!");
       }
@@ -226,8 +232,14 @@ export let Aether = {
   },
   LISTENERS: {
     'levelUp': function() {
-      this.setMaxAE(Math.ceil(this.getMaxAE() + 2*this.getAEMul()));
-      this.setAE(this.getMaxAE());
+      if (this.getLevel() <= 66) {
+        this.setMaxAE(Math.ceil(this.getMaxAE() + 2*this.getAEMul()));
+        this.setAE(this.getMaxAE());
+      } else {
+        this.setMaxAE(Math.ceil(this.getMaxAE() - 2*this.getAEMul()));
+        this.setAE(this.getMaxAE());
+      }
+
     },
     'turnTaken': function(evtData) {
       if (this.getCurAE() < this.getMaxAE()) {
@@ -622,13 +634,24 @@ export let Special = {
   },
   LISTENERS: {
     'levelUp': function() {
-      this.changeSTR(1);
-      this.changePER(1);
-      this.changeEND(1);
-      this.changeCRM(1);
-      this.changeINT(1);
-      this.changeAGI(1);
-      this.changeLUK(1);
+      if (this.getLevel() <= 66) {
+        this.changeSTR(1);
+        this.changePER(1);
+        this.changeEND(1);
+        this.changeCRM(1);
+        this.changeINT(1);
+        this.changeAGI(1);
+        this.changeLUK(1);
+      } else {
+        this.changeSTR(-1);
+        this.changePER(1);
+        this.changeEND(-1);
+        this.changeCRM(1);
+        this.changeINT(1);
+        this.changeAGI(1);
+        this.changeLUK(1);
+      }
+
     }
   }
 };

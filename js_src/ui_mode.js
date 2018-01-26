@@ -282,10 +282,6 @@ export class PlayMode extends UIMode {
     a.setMaxHP(Math.ceil(a.getMaxHP() * a.getHPMul()));
     a.setHP(a.getMaxHP());
 
-    console.log('max AE: '+ a.getMaxAE());
-    console.log('AE mul: '+ a.getAEMul());
-    console.log('multiplied: '+ a.getMaxAE()*a.getAEMul());
-    console.log('ceil: '+Math.ceil(a.getMaxAE() * a.getAEMul()));
     a.setMaxAE(Math.ceil(a.getMaxAE() * a.getAEMul()));
     a.setAE(a.getMaxAE());
 
@@ -341,19 +337,12 @@ export class PlayMode extends UIMode {
     display.drawText(0,5,"Money: " + this.getAvatar().getMoney() +" credits");
 
     display.drawText(0,7,"Strength:     " + this.getAvatar().getSTR());
-    console.log('STR: ' + this.getAvatar().getSTR());
     display.drawText(0,8,"Perception:   " + this.getAvatar().getPER());
-    console.log('PER: ' + this.getAvatar().getPER());
     display.drawText(0,9,"Endurance:    " + this.getAvatar().getEND());
-    console.log('END: ' + this.getAvatar().getEND());
     display.drawText(0,10,"Charisma:     " + this.getAvatar().getCRM());
-    console.log('CRM: ' + this.getAvatar().getCRM());
     display.drawText(0,11,"Intelligence: " + this.getAvatar().getINT());
-    console.log('INT: ' + this.getAvatar().getINT());
     display.drawText(0,12,"Agility:      " + this.getAvatar().getAGI());
-    console.log('AGI: ' + this.getAvatar().getAGI());
     display.drawText(0,13,"Luck:         " + this.getAvatar().getLUK());
-    console.log('LUK: ' + this.getAvatar().getLUK());
 
     display.drawText(0,15,"EXP: " + this.getAvatar().getCurrExp() + " / " + this.getAvatar().getNextExp());
   }
