@@ -16902,9 +16902,7 @@ var Aether = exports.Aether = {
     },
 
     changeAE: function changeAE(delta) {
-      if (this.state._AE.curAE) {
-        return;
-      }
+      // if (this.state._AE.curAE) {return;}
       this.state._AE.curAE += delta;
     },
 
@@ -16931,7 +16929,7 @@ var Aether = exports.Aether = {
       }
     },
     'attackUsed': function attackUsed() {
-      if (this.getCurAE < 0) {
+      if (this.getCurAE() > 10) {
         this.changeAE(-10);
       }
     }

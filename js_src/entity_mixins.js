@@ -227,7 +227,7 @@ export let Aether = {
     },
 
     changeAE: function(delta) {
-      if (this.state._AE.curAE) {return;}
+      // if (this.state._AE.curAE) {return;}
       this.state._AE.curAE += delta;
     },
 
@@ -254,7 +254,7 @@ export let Aether = {
       }
     },
     'attackUsed': function() {
-      if (this.getCurAE < 0) {
+      if (this.getCurAE() > 10) {
         this.changeAE(-10);
       }
     }
