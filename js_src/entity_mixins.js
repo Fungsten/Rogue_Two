@@ -193,6 +193,9 @@ export let HitPoints = {
     'levelUp': function() {
       this.setMaxHP(this.getMaxHP() + 2);
       this.setHP(this.getMaxHP());
+      if (this.getName() =='avatar') {
+        Message.send("Leveled up!");
+      }
     },
     'turnTaken': function(evtData) {
       if (this.getCurHP() < this.getMaxHP()) {

@@ -8487,6 +8487,7 @@ var Game = exports.Game = {
     lose: ''
   },
 
+  globalAvatar: '',
   isPlaying: false,
   hasSaved: false,
 
@@ -16188,6 +16189,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
       (0, _timing.initTiming)();
 
       var a = _entitiesspawn.EntityFactory.create("avatar");
+      this.game.globalAvatar = a;
       m.addEntityAtRandPos(a);
       // let b = EntityFactory.create("Brady");
 
@@ -16247,6 +16249,11 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
     key: 'handleInput',
     value: function handleInput(eventType, evt) {
       console.log('entered uimode play handle input');
+
+      if (this.getAvatar().getCurHP() <= 0) {
+        this.game.globalAvatar = this.getAvatar();
+        this.game.switchMode('lose');
+      }
 
       if (eventType == 'keyup') {
         var input = (0, _keybinds.getInput)(eventType, evt);
@@ -16339,13 +16346,13 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
 
             this.curry.avatarID = a.getID();
 
-            var bradyNumber = 40;
+            var bradyNumber = _rotJs2.default.RNG.getUniformInt(0, 20);
             for (var i = 0; i < bradyNumber; i++) {
               var b = _entitiesspawn.EntityFactory.create("Brady");
               m.addEntityAtRandPos(b);
             }
 
-            var jarNumber = 40;
+            var jarNumber = _rotJs2.default.RNG.getUniformInt(0, 20);
             for (var _i2 = 0; _i2 < jarNumber; _i2++) {
               var _b2 = _entitiesspawn.EntityFactory.create("Jar Jar");
               m.addEntityAtRandPos(_b2);
@@ -16368,6 +16375,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
           }
           this.getAvatar().raiseMixinEvent('attacks', { actor: this.getAvatar(), target: this.getAvatar().state.activeTarget });
           this.getAvatar().raiseMixinEvent('turnTaken', { 'timeUsed': 1 });
+          this.getAvatar().raiseMixinEvent('attackUsed');
           this.getAvatar().state.activeTarget.raiseMixinEvent('damaged', { src: this.getAvatar(), damageAmount: this.getAvatar().getMeleeDamage() });
           this.getAvatar().setTarget('');
           this.getAvatar().raiseMixinEvent('playerHasMoved');
@@ -16483,56 +16491,47 @@ var LoseMode = exports.LoseMode = function (_UIMode5) {
   }
 
   _createClass(LoseMode, [{
+    key: 'enter',
+    value: function enter() {
+      _get(LoseMode.prototype.__proto__ || Object.getPrototypeOf(LoseMode.prototype), 'enter', this).call(this);
+      this.endMoney = this.game.globalAvatar.getMoney();
+    }
+  }, {
     key: 'render',
     value: function render(display) {
       display.clear();
-      if (this.getAvatar().getMoney() < 100) {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
+      display.drawText(33, 12, 'You died with ' + this.endMoney + ' credits.');
+      if (this.endMoney < 100) {
         _message.Message.send("You were practically broke and a failure of a criminal.");
-      } else if (this.getAvatar().getMoney() < 1100) {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
+      } else if (this.endMoney < 1100) {
         _message.Message.send("You may as well be the Solar System's worst thief.");
-      } else if (this.getAvatar().getMoney() < 6100) {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
+      } else if (this.endMoney < 6100) {
         _message.Message.send("You were barely an amateur.");
-      } else if (this.getAvatar().getMoney() < 16100) {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
+      } else if (this.endMoney < 16100) {
         _message.Message.send("It's a pity you only managed to become sort of an amateur.");
-      } else if (this.getAvatar().getMoney() < 31100) {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
+      } else if (this.endMoney < 31100) {
         _message.Message.send("Congratulations, you made it to amateur criminal.");
-      } else if (this.getAvatar().getMoney() < 56100) {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
+      } else if (this.endMoney < 56100) {
         _message.Message.send("You were known as a competent criminal.");
-      } else if (this.getAvatar().getMoney() < 106100) {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
+      } else if (this.endMoney < 106100) {
         _message.Message.send("You managed to become a noteworthy criminal.");
-      } else if (this.getAvatar().getMoney() < 206100) {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
+      } else if (this.endMoney < 206100) {
         _message.Message.send("It's a pity, you were finally becoming reputable as a criminal.");
-      } else if (this.getAvatar().getMoney() < 356100) {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
+      } else if (this.endMoney < 356100) {
         _message.Message.send("Well, you managed to become a wanted criminal.");
-      } else if (this.getAvatar().getMoney() < 556100) {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
+      } else if (this.endMoney < 556100) {
         _message.Message.send("You were a hunted criminal with considerable cash, so perhaps you had an excuse.");
-      } else if (this.getAvatar().getMoney() < 1056100) {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
+      } else if (this.endMoney < 1056100) {
         _message.Message.send("A dangerous but reasonably rich criminal died this day.");
-      } else if (this.getAvatar().getMoney() < 2056100) {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
+      } else if (this.endMoney < 2056100) {
         _message.Message.send("You were really quite a remarkable criminal.");
-      } else if (this.getAvatar().getMoney() < 3556100) {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
+      } else if (this.endMoney < 3556100) {
         _message.Message.send("You were a master criminal who mastered the art of cash-obtaining.");
-      } else if (this.getAvatar().getMoney() < 6056100) {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
+      } else if (this.endMoney < 6056100) {
         _message.Message.send("You were one grand master of a criminal.");
-      } else if (this.getAvatar().getMoney() < 11056100) {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
+      } else if (this.endMoney < 11056100) {
         _message.Message.send("You will be forever known as a supremely wealthy criminal.");
       } else {
-        display.drawText(33, 4, 'You died with ' + this.getAvatar().getMoney() + '.');
         _message.Message.send("You made your mark as the ultimate, richest criminal in the Solar System.");
       }
     }
@@ -16869,6 +16868,9 @@ var HitPoints = exports.HitPoints = {
     'levelUp': function levelUp() {
       this.setMaxHP(this.getMaxHP() + 2);
       this.setHP(this.getMaxHP());
+      if (this.getName() == 'avatar') {
+        _message.Message.send("Leveled up!");
+      }
     },
     'turnTaken': function turnTaken(evtData) {
       if (this.getCurHP() < this.getMaxHP()) {
@@ -16926,6 +16928,11 @@ var Aether = exports.Aether = {
     'turnTaken': function turnTaken(evtData) {
       if (this.getCurAE() < this.getMaxAE()) {
         this.changeAE(evtData.timeUsed);
+      }
+    },
+    'attackUsed': function attackUsed() {
+      if (this.getCurAE < 0) {
+        this.changeAE(-10);
       }
     }
   }

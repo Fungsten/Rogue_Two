@@ -34,6 +34,7 @@ export let Game = {
     lose: ''
   },
 
+  globalAvatar: '',
   isPlaying: false,
   hasSaved: false,
 
