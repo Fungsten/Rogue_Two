@@ -3,6 +3,8 @@
 import {Entity} from './entity.js';
 
 export function customizeChar(num, avatar) {
+  console.log('in customize');
+  console.log('num = ' + num);
 
   let con_sol = [21, 25, 27, 29, 30, 39, 42, 48, 50, 51, 57, 58, 59, 60, 62, 63, 65, 66, 67, 68, 69, 70, 72, 81];
   let nob_gas = [2, 10, 18, 36, 54, 86];
@@ -18,6 +20,7 @@ export function customizeChar(num, avatar) {
   let unk_unk = [104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118];
 
   if (num in con_sol) {
+    console.log('in con_sol');
     avatar.setHPMul(1.25*1.4);
     avatar.setAEMul(0.75*1.4);
     avatar.setSTRMul(1.2);
@@ -27,8 +30,10 @@ export function customizeChar(num, avatar) {
     //avatar.setINTMul(1);
     avatar.setAGIMul(0.8*0.6);
     avatar.setLUKMul(0.6);
-  } else if (num in rad_sol) {
-    avatar.setHpMul(1.25*0.75);
+  }
+  if (num in rad_sol) {
+    console.log('in rad_sol');
+    avatar.setHPMul(1.25*0.75);
     avatar.setAEMul(0.75*1.25);
     avatar.setSTRMul(1.2*0.8);
     avatar.setPERMul(0.8*0.8);
@@ -37,10 +42,14 @@ export function customizeChar(num, avatar) {
     avatar.setINTMul(1.4);
     avatar.setAGIMul(0.8*1.4);
     avatar.setLUKMul(1.6);
-  } else if (num in unk_unk) {
+  }
+  if (num in unk_unk) {
+    console.log('in unk_unk');
     avatar.setLUKMul(9);
-  } else if (num in pre_sol) {
-    avatar.setHpMul(1.25*0.75);
+  }
+  if (num in pre_sol) {
+    console.log('in pre_sol');
+    avatar.setHPMul(1.25*0.75);
     avatar.setAEMul(0.75*1.2);
     avatar.setSTRMul(1.2*0.8);
     avatar.setPERMul(0.8);
@@ -49,8 +58,10 @@ export function customizeChar(num, avatar) {
     avatar.setINTMul(1.1);
     avatar.setAGIMul(0.8);
     avatar.setLUKMul(1.4);
-  } else if (num in stu_sol) {
-    avatar.setHpMul(1.25*2);
+  }
+  if (num in stu_sol) {
+    console.log('in stu_sol');
+    avatar.setHPMul(1.25*2);
     avatar.setAEMul(0.75*0.5);
     avatar.setSTRMul(1.2*1.75);
     avatar.setPERMul(0.8*0.8);
@@ -59,8 +70,10 @@ export function customizeChar(num, avatar) {
     avatar.setINTMul(0.5);
     avatar.setAGIMul(0.8*0.8);
     //avatar.setLUKMul(1);
-  } else if (num in rea_sol) {
-    avatar.setHpMul(1.25*0.8);
+  }
+  if (num in rea_sol) {
+    console.log('in rea_sol');
+    avatar.setHPMul(1.25*0.8);
     avatar.setAEMul(0.75*1.6);
     avatar.setSTRMul(1.2);
     avatar.setPERMul(0.8*1.2);
@@ -69,8 +82,10 @@ export function customizeChar(num, avatar) {
     avatar.setINTMul(1.2);
     avatar.setAGIMul(0.8);
     avatar.setLUKMul(1.2);
-  } else if (num in tox_sol) {
-    avatar.setHpMul(1.25);
+  }
+  if (num in tox_sol) {
+    console.log('in tox_sol');
+    avatar.setHPMul(1.25);
     avatar.setAEMul(0.75*1.2);
     avatar.setSTRMul(1.2);
     avatar.setPERMul(0.8*1.4);
@@ -79,8 +94,10 @@ export function customizeChar(num, avatar) {
     avatar.setINTMul(1.4);
     avatar.setAGIMul(0.8);
     avatar.setLUKMul(0.8);
-  } else if (num in nob_gas) {
-    avatar.setHpMul(0.75*0.9);
+  }
+  if (num in nob_gas) {
+    console.log('in nob_gas');
+    avatar.setHPMul(0.75*0.9);
     avatar.setAEMul(1.25*0.9);
     avatar.setSTRMul(0.6*0.9);
     avatar.setPERMul(1.4*0.9);
@@ -89,8 +106,10 @@ export function customizeChar(num, avatar) {
     avatar.setINTMul(0.9);
     avatar.setAGIMul(1.2*0.9);
     avatar.setLUKMul(2);
-  } else if (num in rea_gas) {
-    avatar.setHpMul(0.75*0.8);
+  }
+  if (num in rea_gas) {
+    console.log('in rea_gas');
+    avatar.setHPMul(0.75*0.8);
     avatar.setAEMul(1.25*1.6);
     avatar.setSTRMul(0.6);
     avatar.setPERMul(1.4*1.2);
@@ -99,8 +118,10 @@ export function customizeChar(num, avatar) {
     avatar.setINTMul(1.2);
     avatar.setAGIMul(1.2);
     avatar.setLUKMul(1.2);
-  } else if (num in rea_liq) {
-    avatar.setHpMul(0.8);
+  }
+  if (num in rea_liq) {
+    console.log('in rea_liq');
+    avatar.setHPMul(0.8);
     avatar.setAEMul(1.6);
     //avatar.setSTRMul(1);
     avatar.setPERMul(1.2);
@@ -109,8 +130,10 @@ export function customizeChar(num, avatar) {
     avatar.setINTMul(1.2);
     //avatar.setAGIMul(1);
     avatar.setLUKMul(1.2);
-  } else if (num in tox_gas) {
-    avatar.setHpMul(0.75);
+  }
+  if (num in tox_gas) {
+    console.log('in tox_gas');
+    avatar.setHPMul(0.75);
     avatar.setAEMul(1.25*1.2);
     avatar.setSTRMul(0.6);
     avatar.setPERMul(1.4*1.4);
@@ -119,8 +142,10 @@ export function customizeChar(num, avatar) {
     avatar.setINTMul(1.4);
     avatar.setAGIMul(1.2);
     avatar.setLUKMul(0.8);
-  } else if (num in tox_liq) {
-    //avatar.setHpMul(1);
+  }
+  if (num in tox_liq) {
+    console.log('in tox_liq');
+    //avatar.setHPMul(1);
     avatar.setAEMul(1.2);
     //avatar.setSTRMul(1);
     avatar.setPERMul(1.4);
@@ -130,4 +155,5 @@ export function customizeChar(num, avatar) {
     //avatar.setAGIMul(1);
     avatar.setLUKMul(0.8);
   }
+  console.log('did not set');
 }

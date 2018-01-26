@@ -66,6 +66,11 @@ let KEY_SETS = {
     'CANCEL': ['key:Escape'],
   },
 
+  'customize': {
+    'YES': ['key:y','key:Y'],
+    'NO': ['key:n','key:N'],
+  },
+
   'play': {
     'TO_PERSISTENCE': ['key:Escape'],
     'MESSAGES': ['key:m','key:M'],

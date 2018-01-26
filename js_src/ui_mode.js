@@ -10,6 +10,7 @@ import {Entity} from './entity.js';
 import {EntityFactory} from './entitiesspawn.js';
 import {SCHEDULER, TIME_ENGINE, initTiming} from './timing.js';
 import {COMMAND, getInput, setKey} from './keybinds.js';
+import {customizeChar} from './customization.js';
 
 class UIMode {
   constructor(thegame) {
@@ -44,6 +45,8 @@ class UIMode {
 export class StartupMode extends UIMode { //defines how an object exists
 
   render(display) {
+
+    //test
     display.drawText(2,3,"Welcome to ");
     display.drawText(2,5," _______  _______ _________          _______  _______ ");
     display.drawText(2,6,"(  ___  )(  ____ \\\\__   __/|\\     /|(  ____ \\(  ____ )");
@@ -99,8 +102,8 @@ export class PersistenceMode extends UIMode {
 
       if (input == COMMAND.NEW_GAME) {
         this.game.startNewGame();
-        Message.send("Started new game")
-        this.game.switchMode('play');
+        //Message.send("Started new game")
+        this.game.switchMode('customize');
         return true;
       }
       if (input == COMMAND.SAVE_GAME) {
@@ -182,13 +185,64 @@ export class PersistenceMode extends UIMode {
 
 //-----------------------------------------------------
 //-----------------------------------------------------
+export class AvatarCreateMode extends UIMode {
+  enter() {
+    super.enter();
+    this.game.isPlaying = true;
+    this.currNum = 0;
+
+    initTiming();
+
+    this.game.globalAvatar = EntityFactory.create("avatar");
+    setKey(['customize']);
+  }
+
+  chooseElement() {
+    this.currNum = Math.ceil(ROT.RNG.getUniform() * 118);
+    console.log(this.currNum);
+    Message.send("Press Y for yes or N for no.");
+  }
+
+  render(display) {
+    this.chooseElement();
+    display.drawText(2,5, "Here is a number: " + this.currNum);
+    display.drawText(2,7, "Do you like it?");
+
+  }
+
+  handleInput(eventType,evt) {
+    if (eventType == 'keyup') {
+      let input = getInput(eventType,evt);
+      if (input == COMMAND.NULLCOMMAND) { return false; }
+
+      if (input == COMMAND.YES) {
+        console.log('in yes');
+        customizeChar(this.currNum,this.game.globalAvatar);
+        console.log('global avatar:');
+        console.dir(this.game.globalAvatar);
+        this.game.modes.play.enter();
+        return true;
+      }
+      if (input == COMMAND.NO) {
+        console.log('in no');
+        this.chooseElement()
+        this.render(this.game.display);
+        return false;
+      }
+    }
+  }
+
+}
+//-----------------------------------------------------
+//-----------------------------------------------------
 
 export class PlayMode extends UIMode {
 
   enter() {
     super.enter();
-    this.game.isPlaying = true;
+    //this.game.isPlaying = true;
     setKey(['play','movement','interact']);
+    this.setupNewGame();
   }
 
   toJSON() {
@@ -218,12 +272,8 @@ export class PlayMode extends UIMode {
     //   x: Math.round(display.getOptions().width/2),
     //   y: Math.round(display.getOptions().height/2)
     // };
-    initTiming();
 
-    let a = EntityFactory.create("avatar");
-    this.game.globalAvatar = a;
-
-    a.setSTRMul(1.2);
+    let a = this.game.globalAvatar;
 
     m.addEntityAtRandPos(a);
     // let b = EntityFactory.create("Brady");
