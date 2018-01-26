@@ -189,7 +189,7 @@ module.exports = !__webpack_require__(3)(function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 var anObject = __webpack_require__(1);
-var IE8_DOM_DEFINE = __webpack_require__(98);
+var IE8_DOM_DEFINE = __webpack_require__(99);
 var toPrimitive = __webpack_require__(22);
 var dP = Object.defineProperty;
 
@@ -346,7 +346,7 @@ var createDesc = __webpack_require__(31);
 var toIObject = __webpack_require__(15);
 var toPrimitive = __webpack_require__(22);
 var has = __webpack_require__(11);
-var IE8_DOM_DEFINE = __webpack_require__(98);
+var IE8_DOM_DEFINE = __webpack_require__(99);
 var gOPD = Object.getOwnPropertyDescriptor;
 
 exports.f = __webpack_require__(6) ? gOPD : function getOwnPropertyDescriptor(O, P) {
@@ -566,7 +566,7 @@ if (__webpack_require__(6)) {
   var redefineAll = __webpack_require__(41);
   var toInteger = __webpack_require__(24);
   var toLength = __webpack_require__(8);
-  var toIndex = __webpack_require__(124);
+  var toIndex = __webpack_require__(125);
   var toAbsoluteIndex = __webpack_require__(35);
   var toPrimitive = __webpack_require__(22);
   var has = __webpack_require__(11);
@@ -588,7 +588,7 @@ if (__webpack_require__(6)) {
   var $iterDetect = __webpack_require__(56);
   var setSpecies = __webpack_require__(38);
   var arrayFill = __webpack_require__(86);
-  var arrayCopyWithin = __webpack_require__(114);
+  var arrayCopyWithin = __webpack_require__(115);
   var $DP = __webpack_require__(7);
   var $GOPD = __webpack_require__(16);
   var dP = $DP.f;
@@ -1037,10 +1037,10 @@ if (__webpack_require__(6)) {
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Map = __webpack_require__(119);
+var Map = __webpack_require__(120);
 var $export = __webpack_require__(0);
 var shared = __webpack_require__(51)('metadata');
-var store = shared.store || (shared.store = new (__webpack_require__(122))());
+var store = shared.store || (shared.store = new (__webpack_require__(123))());
 
 var getOrCreateMetadataMap = function (target, targetKey, create) {
   var targetMetadata = store.get(target);
@@ -1199,7 +1199,7 @@ module.exports = false;
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys = __webpack_require__(100);
+var $keys = __webpack_require__(101);
 var enumBugKeys = __webpack_require__(69);
 
 module.exports = Object.keys || function keys(O) {
@@ -1226,7 +1226,7 @@ module.exports = function (index, length) {
 
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
 var anObject = __webpack_require__(1);
-var dPs = __webpack_require__(101);
+var dPs = __webpack_require__(102);
 var enumBugKeys = __webpack_require__(69);
 var IE_PROTO = __webpack_require__(68)('IE_PROTO');
 var Empty = function () { /* empty */ };
@@ -1272,7 +1272,7 @@ module.exports = Object.create || function create(O, Properties) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-var $keys = __webpack_require__(100);
+var $keys = __webpack_require__(101);
 var hiddenKeys = __webpack_require__(69).concat('length', 'prototype');
 
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
@@ -1316,7 +1316,7 @@ module.exports = function (it, Constructor, name, forbiddenField) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var ctx = __webpack_require__(18);
-var call = __webpack_require__(112);
+var call = __webpack_require__(113);
 var isArrayIter = __webpack_require__(82);
 var anObject = __webpack_require__(1);
 var toLength = __webpack_require__(8);
@@ -7538,7 +7538,7 @@ module.exports = function (it) {
 var global = __webpack_require__(2);
 var core = __webpack_require__(21);
 var LIBRARY = __webpack_require__(33);
-var wksExt = __webpack_require__(99);
+var wksExt = __webpack_require__(100);
 var defineProperty = __webpack_require__(7).f;
 module.exports = function (name) {
   var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
@@ -7911,7 +7911,7 @@ module.exports = function fill(value /* , start = 0, end = @length */) {
 "use strict";
 
 var addToUnscopables = __webpack_require__(30);
-var step = __webpack_require__(115);
+var step = __webpack_require__(116);
 var Iterators = __webpack_require__(45);
 var toIObject = __webpack_require__(15);
 
@@ -7950,7 +7950,7 @@ addToUnscopables('entries');
 /***/ (function(module, exports, __webpack_require__) {
 
 var ctx = __webpack_require__(18);
-var invoke = __webpack_require__(105);
+var invoke = __webpack_require__(106);
 var html = __webpack_require__(70);
 var cel = __webpack_require__(66);
 var global = __webpack_require__(2);
@@ -8150,7 +8150,7 @@ var fails = __webpack_require__(3);
 var anInstance = __webpack_require__(39);
 var toInteger = __webpack_require__(24);
 var toLength = __webpack_require__(8);
-var toIndex = __webpack_require__(124);
+var toIndex = __webpack_require__(125);
 var gOPN = __webpack_require__(37).f;
 var dP = __webpack_require__(7).f;
 var arrayFill = __webpack_require__(86);
@@ -8482,12 +8482,12 @@ var Game = exports.Game = {
   modes: {
     startup: '',
     persistence: '',
+    customize: '',
     play: '',
     messages: '',
     lose: ''
   },
 
-  globalAvatar: '',
   isPlaying: false,
   hasSaved: false,
   globalAvatar: '',
@@ -8527,7 +8527,8 @@ var Game = exports.Game = {
     this.modes.play = new _ui_mode.PlayMode(this);
     this.modes.lose = new _ui_mode.LoseMode(this);
     this.modes.persistence = new _ui_mode.PersistenceMode(this);
-    //this.modes.messages = new MessageMode(this);
+    this.modes.customize = new _ui_mode.AvatarCreateMode(this);
+    this.modes.messages = new _ui_mode.MessageMode(this);
   },
 
   switchMode: function switchMode(newModeName) {
@@ -8550,7 +8551,7 @@ var Game = exports.Game = {
     _datastore.DATASTORE.GAME = this;
     //console.log("using random seed "+this._randomSeed);
     //ROT.RNG.setSeed(this._randomSeed);
-    this.modes.play.setupNewGame();
+    this.modes.customize.chooseElement();
 
     // initTiming();
   },
@@ -8842,20 +8843,187 @@ var MixableSymbol = exports.MixableSymbol = function (_DisplaySymbol) {
 /* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Entity = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _mixable_symbol = __webpack_require__(97);
+
+var _util = __webpack_require__(94);
+
+var _datastore = __webpack_require__(42);
+
+var _map = __webpack_require__(133);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // a base class that defines all entities (creatures etc) in the game
+
+var Entity = exports.Entity = function (_MixableSymbol) {
+  _inherits(Entity, _MixableSymbol);
+
+  function Entity(template) {
+    _classCallCheck(this, Entity);
+
+    // this.state = {};
+    var _this = _possibleConstructorReturn(this, (Entity.__proto__ || Object.getPrototypeOf(Entity)).call(this, template));
+
+    if (!_this.state) {
+      _this.state = {};
+    }
+    _this.state.faction = template.faction;
+    _this.state.x = 0;
+    _this.state.y = 0;
+    _this.state.mapID = 0;
+    _this.state.id = (0, _util.uniqueID)();
+    _this.state.activeTarget = '';
+    return _this;
+  }
+
+  _createClass(Entity, [{
+    key: 'getName',
+    value: function getName() {
+      return this.state.name;
+    }
+  }, {
+    key: 'setName',
+    value: function setName(newInfo) {
+      this.state.name = newInfo;
+    }
+  }, {
+    key: 'getX',
+    value: function getX() {
+      return this.state.x;
+    }
+  }, {
+    key: 'setX',
+    value: function setX(newInfo) {
+      this.state.x = newInfo;
+    }
+  }, {
+    key: 'getY',
+    value: function getY() {
+      return this.state.y;
+    }
+  }, {
+    key: 'setY',
+    value: function setY(newInfo) {
+      this.state.y = newInfo;
+    }
+  }, {
+    key: 'setTarget',
+    value: function setTarget(newInfo) {
+      this.state.activeTarget = newInfo;
+    }
+  }, {
+    key: 'getFaction',
+    value: function getFaction() {
+      return this.state.faction;
+    }
+  }, {
+    key: 'setFaction',
+    value: function setFaction(newInfo) {
+      this.state.faction = newInfo;
+    }
+  }, {
+    key: 'getPos',
+    value: function getPos() {
+      return '' + this.state.x + this.state.y;
+    }
+  }, {
+    key: 'getmapID',
+    value: function getmapID() {
+      return this.state.mapID;
+    }
+  }, {
+    key: 'setmapID',
+    value: function setmapID(newInfo) {
+      this.state.mapID = newInfo;
+    }
+  }, {
+    key: 'getMap',
+    value: function getMap() {
+      return _datastore.DATASTORE.MAPS[this.state.mapID];
+    }
+  }, {
+    key: 'getID',
+    value: function getID() {
+      return this.state.id;
+    }
+  }, {
+    key: 'setID',
+    value: function setID(newInfo) {
+      this.state.id = newInfo;
+    }
+  }, {
+    key: 'destroy',
+    value: function destroy() {
+      console.log("destroying entity");
+      this.getMap().extractEntity(this);
+      delete _datastore.DATASTORE.ENTITIES[this.getID()];
+      console.dir(_datastore.DATASTORE);
+    }
+
+    // moveBy(dx, dy) {
+    //   let newX = this.state.x*1 + dx*1;
+    //   let newY = this.state.y*1 + dy*1;
+    //
+    //   if (this.getMap().isPositionOpen(newX, newY)){
+    //     this.state.x = newX;
+    //     this.state.y = newY;
+    //
+    //     this.getMap().updateEntityPos(this, this.state.x, this.state.y);
+    //     return true;
+    //   }
+    //   return false;
+    // }
+
+  }, {
+    key: 'toJSON',
+    value: function toJSON() {
+      return JSON.stringify(this.state);
+    }
+  }, {
+    key: 'fromJSON',
+    value: function fromJSON(json) {
+      this.state = JSON.parse(json);
+    }
+  }, {
+    key: 'fromState',
+    value: function fromState(state) {
+      this.state = state;
+    }
+  }]);
+
+  return Entity;
+}(_mixable_symbol.MixableSymbol);
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
 module.exports = !__webpack_require__(6) && !__webpack_require__(3)(function () {
   return Object.defineProperty(__webpack_require__(66)('div'), 'a', { get: function () { return 7; } }).a != 7;
 });
 
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports.f = __webpack_require__(5);
 
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var has = __webpack_require__(11);
@@ -8878,7 +9046,7 @@ module.exports = function (object, names) {
 
 
 /***/ }),
-/* 101 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var dP = __webpack_require__(7);
@@ -8897,7 +9065,7 @@ module.exports = __webpack_require__(6) ? Object.defineProperties : function def
 
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
@@ -8922,7 +9090,7 @@ module.exports.f = function getOwnPropertyNames(it) {
 
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8963,14 +9131,14 @@ module.exports = !$assign || __webpack_require__(3)(function () {
 
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var aFunction = __webpack_require__(10);
 var isObject = __webpack_require__(4);
-var invoke = __webpack_require__(105);
+var invoke = __webpack_require__(106);
 var arraySlice = [].slice;
 var factories = {};
 
@@ -8995,7 +9163,7 @@ module.exports = Function.bind || function bind(that /* , ...args */) {
 
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ (function(module, exports) {
 
 // fast apply, http://jsperf.lnkit.com/fast-apply/5
@@ -9017,7 +9185,7 @@ module.exports = function (fn, args, that) {
 
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $parseInt = __webpack_require__(2).parseInt;
@@ -9032,7 +9200,7 @@ module.exports = $parseInt(ws + '08') !== 8 || $parseInt(ws + '0x16') !== 22 ? f
 
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $parseFloat = __webpack_require__(2).parseFloat;
@@ -9046,7 +9214,7 @@ module.exports = 1 / $parseFloat(__webpack_require__(72) + '-0') !== -Infinity ?
 
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var cof = __webpack_require__(19);
@@ -9057,7 +9225,7 @@ module.exports = function (it, msg) {
 
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.3 Number.isInteger(number)
@@ -9069,7 +9237,7 @@ module.exports = function isInteger(it) {
 
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ (function(module, exports) {
 
 // 20.2.2.20 Math.log1p(x)
@@ -9079,7 +9247,7 @@ module.exports = Math.log1p || function log1p(x) {
 
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.2.2.16 Math.fround(x)
@@ -9108,7 +9276,7 @@ module.exports = Math.fround || function fround(x) {
 
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // call something on iterator step with safe closing on error
@@ -9126,7 +9294,7 @@ module.exports = function (iterator, fn, value, entries) {
 
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var aFunction = __webpack_require__(10);
@@ -9160,7 +9328,7 @@ module.exports = function (that, callbackfn, aLen, memo, isRight) {
 
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9193,7 +9361,7 @@ module.exports = [].copyWithin || function copyWithin(target /* = 0 */, start /*
 
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ (function(module, exports) {
 
 module.exports = function (done, value) {
@@ -9202,7 +9370,7 @@ module.exports = function (done, value) {
 
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 21.2.5.3 get RegExp.prototype.flags()
@@ -9213,7 +9381,7 @@ if (__webpack_require__(6) && /./g.flags != 'g') __webpack_require__(7).f(RegExp
 
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ (function(module, exports) {
 
 module.exports = function (exec) {
@@ -9226,7 +9394,7 @@ module.exports = function (exec) {
 
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var anObject = __webpack_require__(1);
@@ -9244,12 +9412,12 @@ module.exports = function (C, x) {
 
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var strong = __webpack_require__(120);
+var strong = __webpack_require__(121);
 var validate = __webpack_require__(46);
 var MAP = 'Map';
 
@@ -9270,7 +9438,7 @@ module.exports = __webpack_require__(60)(MAP, function (get) {
 
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9282,7 +9450,7 @@ var ctx = __webpack_require__(18);
 var anInstance = __webpack_require__(39);
 var forOf = __webpack_require__(40);
 var $iterDefine = __webpack_require__(78);
-var step = __webpack_require__(115);
+var step = __webpack_require__(116);
 var setSpecies = __webpack_require__(38);
 var DESCRIPTORS = __webpack_require__(6);
 var fastKey = __webpack_require__(29).fastKey;
@@ -9421,12 +9589,12 @@ module.exports = {
 
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var strong = __webpack_require__(120);
+var strong = __webpack_require__(121);
 var validate = __webpack_require__(46);
 var SET = 'Set';
 
@@ -9442,7 +9610,7 @@ module.exports = __webpack_require__(60)(SET, function (get) {
 
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9450,8 +9618,8 @@ module.exports = __webpack_require__(60)(SET, function (get) {
 var each = __webpack_require__(26)(0);
 var redefine = __webpack_require__(13);
 var meta = __webpack_require__(29);
-var assign = __webpack_require__(103);
-var weak = __webpack_require__(123);
+var assign = __webpack_require__(104);
+var weak = __webpack_require__(124);
 var isObject = __webpack_require__(4);
 var fails = __webpack_require__(3);
 var validate = __webpack_require__(46);
@@ -9508,7 +9676,7 @@ if (fails(function () { return new $WeakMap().set((Object.freeze || Object)(tmp)
 
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9600,7 +9768,7 @@ module.exports = {
 
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://tc39.github.io/ecma262/#sec-toindex
@@ -9616,7 +9784,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 125 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // all object keys, includes non-enumerable and symbols
@@ -9632,7 +9800,7 @@ module.exports = Reflect && Reflect.ownKeys || function ownKeys(it) {
 
 
 /***/ }),
-/* 126 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9678,7 +9846,7 @@ module.exports = flattenIntoArray;
 
 
 /***/ }),
-/* 127 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/tc39/proposal-string-pad-start-end
@@ -9700,7 +9868,7 @@ module.exports = function (that, maxLength, fillString, left) {
 
 
 /***/ }),
-/* 128 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getKeys = __webpack_require__(34);
@@ -9722,12 +9890,12 @@ module.exports = function (isEntries) {
 
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
 var classof = __webpack_require__(50);
-var from = __webpack_require__(130);
+var from = __webpack_require__(131);
 module.exports = function (NAME) {
   return function toJSON() {
     if (classof(this) != NAME) throw TypeError(NAME + "#toJSON isn't generic");
@@ -9737,7 +9905,7 @@ module.exports = function (NAME) {
 
 
 /***/ }),
-/* 130 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var forOf = __webpack_require__(40);
@@ -9750,7 +9918,7 @@ module.exports = function (iter, ITERATOR) {
 
 
 /***/ }),
-/* 131 */
+/* 132 */
 /***/ (function(module, exports) {
 
 // https://rwaldron.github.io/proposal-math-extensions/
@@ -9774,7 +9942,7 @@ module.exports = Math.scale || function scale(x, inLow, inHigh, outLow, outHigh)
 
 
 /***/ }),
-/* 132 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10027,7 +10195,7 @@ function MapMaker(mapData) {
 }
 
 /***/ }),
-/* 133 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10054,7 +10222,7 @@ function initTiming() {
 }
 
 /***/ }),
-/* 134 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10138,6 +10306,11 @@ var KEY_SETS = {
     'CANCEL': ['key:Escape']
   },
 
+  'customize': {
+    'YES': ['key:y', 'key:Y'],
+    'NO': ['key:n', 'key:N']
+  },
+
   'play': {
     'TO_PERSISTENCE': ['key:Escape'],
     'MESSAGES': ['key:m', 'key:M']
@@ -10162,173 +10335,6 @@ var KEY_SETS = {
     'BLUFF': ['key:4']
   }
 };
-
-/***/ }),
-/* 135 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Entity = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _mixable_symbol = __webpack_require__(97);
-
-var _util = __webpack_require__(94);
-
-var _datastore = __webpack_require__(42);
-
-var _map = __webpack_require__(132);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // a base class that defines all entities (creatures etc) in the game
-
-var Entity = exports.Entity = function (_MixableSymbol) {
-  _inherits(Entity, _MixableSymbol);
-
-  function Entity(template) {
-    _classCallCheck(this, Entity);
-
-    // this.state = {};
-    var _this = _possibleConstructorReturn(this, (Entity.__proto__ || Object.getPrototypeOf(Entity)).call(this, template));
-
-    if (!_this.state) {
-      _this.state = {};
-    }
-    _this.state.faction = template.faction;
-    _this.state.x = 0;
-    _this.state.y = 0;
-    _this.state.mapID = 0;
-    _this.state.id = (0, _util.uniqueID)();
-    _this.state.activeTarget = '';
-    return _this;
-  }
-
-  _createClass(Entity, [{
-    key: 'getName',
-    value: function getName() {
-      return this.state.name;
-    }
-  }, {
-    key: 'setName',
-    value: function setName(newInfo) {
-      this.state.name = newInfo;
-    }
-  }, {
-    key: 'getX',
-    value: function getX() {
-      return this.state.x;
-    }
-  }, {
-    key: 'setX',
-    value: function setX(newInfo) {
-      this.state.x = newInfo;
-    }
-  }, {
-    key: 'getY',
-    value: function getY() {
-      return this.state.y;
-    }
-  }, {
-    key: 'setY',
-    value: function setY(newInfo) {
-      this.state.y = newInfo;
-    }
-  }, {
-    key: 'setTarget',
-    value: function setTarget(newInfo) {
-      this.state.activeTarget = newInfo;
-    }
-  }, {
-    key: 'getFaction',
-    value: function getFaction() {
-      return this.state.faction;
-    }
-  }, {
-    key: 'setFaction',
-    value: function setFaction(newInfo) {
-      this.state.faction = newInfo;
-    }
-  }, {
-    key: 'getPos',
-    value: function getPos() {
-      return '' + this.state.x + this.state.y;
-    }
-  }, {
-    key: 'getmapID',
-    value: function getmapID() {
-      return this.state.mapID;
-    }
-  }, {
-    key: 'setmapID',
-    value: function setmapID(newInfo) {
-      this.state.mapID = newInfo;
-    }
-  }, {
-    key: 'getMap',
-    value: function getMap() {
-      return _datastore.DATASTORE.MAPS[this.state.mapID];
-    }
-  }, {
-    key: 'getID',
-    value: function getID() {
-      return this.state.id;
-    }
-  }, {
-    key: 'setID',
-    value: function setID(newInfo) {
-      this.state.id = newInfo;
-    }
-  }, {
-    key: 'destroy',
-    value: function destroy() {
-      console.log("destroying entity");
-      this.getMap().extractEntity(this);
-      delete _datastore.DATASTORE.ENTITIES[this.getID()];
-      console.dir(_datastore.DATASTORE);
-    }
-
-    // moveBy(dx, dy) {
-    //   let newX = this.state.x*1 + dx*1;
-    //   let newY = this.state.y*1 + dy*1;
-    //
-    //   if (this.getMap().isPositionOpen(newX, newY)){
-    //     this.state.x = newX;
-    //     this.state.y = newY;
-    //
-    //     this.getMap().updateEntityPos(this, this.state.x, this.state.y);
-    //     return true;
-    //   }
-    //   return false;
-    // }
-
-  }, {
-    key: 'toJSON',
-    value: function toJSON() {
-      return JSON.stringify(this.state);
-    }
-  }, {
-    key: 'fromJSON',
-    value: function fromJSON(json) {
-      this.state = JSON.parse(json);
-    }
-  }, {
-    key: 'fromState',
-    value: function fromState(state) {
-      this.state = state;
-    }
-  }]);
-
-  return Entity;
-}(_mixable_symbol.MixableSymbol);
 
 /***/ }),
 /* 136 */
@@ -10510,15 +10516,15 @@ __webpack_require__(242);
 __webpack_require__(87);
 __webpack_require__(243);
 __webpack_require__(244);
-__webpack_require__(116);
+__webpack_require__(117);
 __webpack_require__(245);
 __webpack_require__(246);
 __webpack_require__(247);
 __webpack_require__(248);
 __webpack_require__(249);
-__webpack_require__(119);
-__webpack_require__(121);
+__webpack_require__(120);
 __webpack_require__(122);
+__webpack_require__(123);
 __webpack_require__(250);
 __webpack_require__(251);
 __webpack_require__(252);
@@ -10625,7 +10631,7 @@ var shared = __webpack_require__(51);
 var setToStringTag = __webpack_require__(43);
 var uid = __webpack_require__(32);
 var wks = __webpack_require__(5);
-var wksExt = __webpack_require__(99);
+var wksExt = __webpack_require__(100);
 var wksDefine = __webpack_require__(67);
 var enumKeys = __webpack_require__(140);
 var isArray = __webpack_require__(54);
@@ -10635,7 +10641,7 @@ var toIObject = __webpack_require__(15);
 var toPrimitive = __webpack_require__(22);
 var createDesc = __webpack_require__(31);
 var _create = __webpack_require__(36);
-var gOPNExt = __webpack_require__(102);
+var gOPNExt = __webpack_require__(103);
 var $GOPD = __webpack_require__(16);
 var $DP = __webpack_require__(7);
 var $keys = __webpack_require__(34);
@@ -10893,7 +10899,7 @@ $export($export.S + $export.F * !__webpack_require__(6), 'Object', { definePrope
 
 var $export = __webpack_require__(0);
 // 19.1.2.3 / 15.2.3.7 Object.defineProperties(O, Properties)
-$export($export.S + $export.F * !__webpack_require__(6), 'Object', { defineProperties: __webpack_require__(101) });
+$export($export.S + $export.F * !__webpack_require__(6), 'Object', { defineProperties: __webpack_require__(102) });
 
 
 /***/ }),
@@ -10947,7 +10953,7 @@ __webpack_require__(25)('keys', function () {
 
 // 19.1.2.7 Object.getOwnPropertyNames(O)
 __webpack_require__(25)('getOwnPropertyNames', function () {
-  return __webpack_require__(102).f;
+  return __webpack_require__(103).f;
 });
 
 
@@ -11045,7 +11051,7 @@ __webpack_require__(25)('isExtensible', function ($isExtensible) {
 // 19.1.3.1 Object.assign(target, source)
 var $export = __webpack_require__(0);
 
-$export($export.S + $export.F, 'Object', { assign: __webpack_require__(103) });
+$export($export.S + $export.F, 'Object', { assign: __webpack_require__(104) });
 
 
 /***/ }),
@@ -11101,7 +11107,7 @@ if (test + '' != '[object z]') {
 // 19.2.3.2 / 15.3.4.5 Function.prototype.bind(thisArg, args...)
 var $export = __webpack_require__(0);
 
-$export($export.P, 'Function', { bind: __webpack_require__(104) });
+$export($export.P, 'Function', { bind: __webpack_require__(105) });
 
 
 /***/ }),
@@ -11151,7 +11157,7 @@ if (!(HAS_INSTANCE in FunctionProto)) __webpack_require__(7).f(FunctionProto, HA
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
-var $parseInt = __webpack_require__(106);
+var $parseInt = __webpack_require__(107);
 // 18.2.5 parseInt(string, radix)
 $export($export.G + $export.F * (parseInt != $parseInt), { parseInt: $parseInt });
 
@@ -11161,7 +11167,7 @@ $export($export.G + $export.F * (parseInt != $parseInt), { parseInt: $parseInt }
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
-var $parseFloat = __webpack_require__(107);
+var $parseFloat = __webpack_require__(108);
 // 18.2.4 parseFloat(string)
 $export($export.G + $export.F * (parseFloat != $parseFloat), { parseFloat: $parseFloat });
 
@@ -11250,7 +11256,7 @@ if (!$Number(' 0o1') || !$Number('0b1') || $Number('+0x1')) {
 
 var $export = __webpack_require__(0);
 var toInteger = __webpack_require__(24);
-var aNumberValue = __webpack_require__(108);
+var aNumberValue = __webpack_require__(109);
 var repeat = __webpack_require__(74);
 var $toFixed = 1.0.toFixed;
 var floor = Math.floor;
@@ -11371,7 +11377,7 @@ $export($export.P + $export.F * (!!$toFixed && (
 
 var $export = __webpack_require__(0);
 var $fails = __webpack_require__(3);
-var aNumberValue = __webpack_require__(108);
+var aNumberValue = __webpack_require__(109);
 var $toPrecision = 1.0.toPrecision;
 
 $export($export.P + $export.F * ($fails(function () {
@@ -11420,7 +11426,7 @@ $export($export.S, 'Number', {
 // 20.1.2.3 Number.isInteger(number)
 var $export = __webpack_require__(0);
 
-$export($export.S, 'Number', { isInteger: __webpack_require__(109) });
+$export($export.S, 'Number', { isInteger: __webpack_require__(110) });
 
 
 /***/ }),
@@ -11444,7 +11450,7 @@ $export($export.S, 'Number', {
 
 // 20.1.2.5 Number.isSafeInteger(number)
 var $export = __webpack_require__(0);
-var isInteger = __webpack_require__(109);
+var isInteger = __webpack_require__(110);
 var abs = Math.abs;
 
 $export($export.S, 'Number', {
@@ -11479,7 +11485,7 @@ $export($export.S, 'Number', { MIN_SAFE_INTEGER: -0x1fffffffffffff });
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
-var $parseFloat = __webpack_require__(107);
+var $parseFloat = __webpack_require__(108);
 // 20.1.2.12 Number.parseFloat(string)
 $export($export.S + $export.F * (Number.parseFloat != $parseFloat), 'Number', { parseFloat: $parseFloat });
 
@@ -11489,7 +11495,7 @@ $export($export.S + $export.F * (Number.parseFloat != $parseFloat), 'Number', { 
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
-var $parseInt = __webpack_require__(106);
+var $parseInt = __webpack_require__(107);
 // 20.1.2.13 Number.parseInt(string, radix)
 $export($export.S + $export.F * (Number.parseInt != $parseInt), 'Number', { parseInt: $parseInt });
 
@@ -11500,7 +11506,7 @@ $export($export.S + $export.F * (Number.parseInt != $parseInt), 'Number', { pars
 
 // 20.2.2.3 Math.acosh(x)
 var $export = __webpack_require__(0);
-var log1p = __webpack_require__(110);
+var log1p = __webpack_require__(111);
 var sqrt = Math.sqrt;
 var $acosh = Math.acosh;
 
@@ -11612,7 +11618,7 @@ $export($export.S + $export.F * ($expm1 != Math.expm1), 'Math', { expm1: $expm1 
 // 20.2.2.16 Math.fround(x)
 var $export = __webpack_require__(0);
 
-$export($export.S, 'Math', { fround: __webpack_require__(111) });
+$export($export.S, 'Math', { fround: __webpack_require__(112) });
 
 
 /***/ }),
@@ -11690,7 +11696,7 @@ $export($export.S, 'Math', {
 // 20.2.2.20 Math.log1p(x)
 var $export = __webpack_require__(0);
 
-$export($export.S, 'Math', { log1p: __webpack_require__(110) });
+$export($export.S, 'Math', { log1p: __webpack_require__(111) });
 
 
 /***/ }),
@@ -12285,7 +12291,7 @@ $export($export.S, 'Array', { isArray: __webpack_require__(54) });
 var ctx = __webpack_require__(18);
 var $export = __webpack_require__(0);
 var toObject = __webpack_require__(9);
-var call = __webpack_require__(112);
+var call = __webpack_require__(113);
 var isArrayIter = __webpack_require__(82);
 var toLength = __webpack_require__(8);
 var createProperty = __webpack_require__(83);
@@ -12545,7 +12551,7 @@ $export($export.P + $export.F * !__webpack_require__(20)([].every, true), 'Array
 "use strict";
 
 var $export = __webpack_require__(0);
-var $reduce = __webpack_require__(113);
+var $reduce = __webpack_require__(114);
 
 $export($export.P + $export.F * !__webpack_require__(20)([].reduce, true), 'Array', {
   // 22.1.3.18 / 15.4.4.21 Array.prototype.reduce(callbackfn [, initialValue])
@@ -12562,7 +12568,7 @@ $export($export.P + $export.F * !__webpack_require__(20)([].reduce, true), 'Arra
 "use strict";
 
 var $export = __webpack_require__(0);
-var $reduce = __webpack_require__(113);
+var $reduce = __webpack_require__(114);
 
 $export($export.P + $export.F * !__webpack_require__(20)([].reduceRight, true), 'Array', {
   // 22.1.3.19 / 15.4.4.22 Array.prototype.reduceRight(callbackfn [, initialValue])
@@ -12630,7 +12636,7 @@ $export($export.P + $export.F * (NEGATIVE_ZERO || !__webpack_require__(20)($nati
 // 22.1.3.3 Array.prototype.copyWithin(target, start, end = this.length)
 var $export = __webpack_require__(0);
 
-$export($export.P, 'Array', { copyWithin: __webpack_require__(114) });
+$export($export.P, 'Array', { copyWithin: __webpack_require__(115) });
 
 __webpack_require__(30)('copyWithin');
 
@@ -12751,7 +12757,7 @@ __webpack_require__(38)('RegExp');
 
 "use strict";
 
-__webpack_require__(116);
+__webpack_require__(117);
 var anObject = __webpack_require__(1);
 var $flags = __webpack_require__(57);
 var DESCRIPTORS = __webpack_require__(6);
@@ -12923,8 +12929,8 @@ var speciesConstructor = __webpack_require__(59);
 var task = __webpack_require__(88).set;
 var microtask = __webpack_require__(89)();
 var newPromiseCapabilityModule = __webpack_require__(90);
-var perform = __webpack_require__(117);
-var promiseResolve = __webpack_require__(118);
+var perform = __webpack_require__(118);
+var promiseResolve = __webpack_require__(119);
 var PROMISE = 'Promise';
 var TypeError = global.TypeError;
 var process = global.process;
@@ -13190,7 +13196,7 @@ $export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(56)(function
 
 "use strict";
 
-var weak = __webpack_require__(123);
+var weak = __webpack_require__(124);
 var validate = __webpack_require__(46);
 var WEAK_SET = 'WeakSet';
 
@@ -13400,7 +13406,7 @@ var aFunction = __webpack_require__(10);
 var anObject = __webpack_require__(1);
 var isObject = __webpack_require__(4);
 var fails = __webpack_require__(3);
-var bind = __webpack_require__(104);
+var bind = __webpack_require__(105);
 var rConstruct = (__webpack_require__(2).Reflect || {}).construct;
 
 // MS Edge supports only 2 arguments and argumentsList argument is optional
@@ -13618,7 +13624,7 @@ $export($export.S, 'Reflect', {
 // 26.1.11 Reflect.ownKeys(target)
 var $export = __webpack_require__(0);
 
-$export($export.S, 'Reflect', { ownKeys: __webpack_require__(125) });
+$export($export.S, 'Reflect', { ownKeys: __webpack_require__(126) });
 
 
 /***/ }),
@@ -13728,7 +13734,7 @@ __webpack_require__(30)('includes');
 
 // https://tc39.github.io/proposal-flatMap/#sec-Array.prototype.flatMap
 var $export = __webpack_require__(0);
-var flattenIntoArray = __webpack_require__(126);
+var flattenIntoArray = __webpack_require__(127);
 var toObject = __webpack_require__(9);
 var toLength = __webpack_require__(8);
 var aFunction = __webpack_require__(10);
@@ -13757,7 +13763,7 @@ __webpack_require__(30)('flatMap');
 
 // https://tc39.github.io/proposal-flatMap/#sec-Array.prototype.flatten
 var $export = __webpack_require__(0);
-var flattenIntoArray = __webpack_require__(126);
+var flattenIntoArray = __webpack_require__(127);
 var toObject = __webpack_require__(9);
 var toLength = __webpack_require__(8);
 var toInteger = __webpack_require__(24);
@@ -13802,7 +13808,7 @@ $export($export.P, 'String', {
 
 // https://github.com/tc39/proposal-string-pad-start-end
 var $export = __webpack_require__(0);
-var $pad = __webpack_require__(127);
+var $pad = __webpack_require__(128);
 var userAgent = __webpack_require__(92);
 
 // https://github.com/zloirock/core-js/issues/280
@@ -13821,7 +13827,7 @@ $export($export.P + $export.F * /Version\/10\.\d+(\.\d+)? Safari\//.test(userAge
 
 // https://github.com/tc39/proposal-string-pad-start-end
 var $export = __webpack_require__(0);
-var $pad = __webpack_require__(127);
+var $pad = __webpack_require__(128);
 var userAgent = __webpack_require__(92);
 
 // https://github.com/zloirock/core-js/issues/280
@@ -13917,7 +13923,7 @@ __webpack_require__(67)('observable');
 
 // https://github.com/tc39/proposal-object-getownpropertydescriptors
 var $export = __webpack_require__(0);
-var ownKeys = __webpack_require__(125);
+var ownKeys = __webpack_require__(126);
 var toIObject = __webpack_require__(15);
 var gOPD = __webpack_require__(16);
 var createProperty = __webpack_require__(83);
@@ -13945,7 +13951,7 @@ $export($export.S, 'Object', {
 
 // https://github.com/tc39/proposal-object-values-entries
 var $export = __webpack_require__(0);
-var $values = __webpack_require__(128)(false);
+var $values = __webpack_require__(129)(false);
 
 $export($export.S, 'Object', {
   values: function values(it) {
@@ -13960,7 +13966,7 @@ $export($export.S, 'Object', {
 
 // https://github.com/tc39/proposal-object-values-entries
 var $export = __webpack_require__(0);
-var $entries = __webpack_require__(128)(true);
+var $entries = __webpack_require__(129)(true);
 
 $export($export.S, 'Object', {
   entries: function entries(it) {
@@ -14064,7 +14070,7 @@ __webpack_require__(6) && $export($export.P + __webpack_require__(62), 'Object',
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
 var $export = __webpack_require__(0);
 
-$export($export.P + $export.R, 'Map', { toJSON: __webpack_require__(129)('Map') });
+$export($export.P + $export.R, 'Map', { toJSON: __webpack_require__(130)('Map') });
 
 
 /***/ }),
@@ -14074,7 +14080,7 @@ $export($export.P + $export.R, 'Map', { toJSON: __webpack_require__(129)('Map') 
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
 var $export = __webpack_require__(0);
 
-$export($export.P + $export.R, 'Set', { toJSON: __webpack_require__(129)('Set') });
+$export($export.P + $export.R, 'Set', { toJSON: __webpack_require__(130)('Set') });
 
 
 /***/ }),
@@ -14221,8 +14227,8 @@ $export($export.S, 'Math', {
 
 // https://rwaldron.github.io/proposal-math-extensions/
 var $export = __webpack_require__(0);
-var scale = __webpack_require__(131);
-var fround = __webpack_require__(111);
+var scale = __webpack_require__(132);
+var fround = __webpack_require__(112);
 
 $export($export.S, 'Math', {
   fscale: function fscale(x, inLow, inHigh, outLow, outHigh) {
@@ -14319,7 +14325,7 @@ $export($export.S, 'Math', {
 // https://rwaldron.github.io/proposal-math-extensions/
 var $export = __webpack_require__(0);
 
-$export($export.S, 'Math', { scale: __webpack_require__(131) });
+$export($export.S, 'Math', { scale: __webpack_require__(132) });
 
 
 /***/ }),
@@ -14368,7 +14374,7 @@ var $export = __webpack_require__(0);
 var core = __webpack_require__(21);
 var global = __webpack_require__(2);
 var speciesConstructor = __webpack_require__(59);
-var promiseResolve = __webpack_require__(118);
+var promiseResolve = __webpack_require__(119);
 
 $export($export.P + $export.R, 'Promise', { 'finally': function (onFinally) {
   var C = speciesConstructor(this, core.Promise || global.Promise);
@@ -14393,7 +14399,7 @@ $export($export.P + $export.R, 'Promise', { 'finally': function (onFinally) {
 // https://github.com/tc39/proposal-promise-try
 var $export = __webpack_require__(0);
 var newPromiseCapability = __webpack_require__(90);
-var perform = __webpack_require__(117);
+var perform = __webpack_require__(118);
 
 $export($export.S, 'Promise', { 'try': function (callbackfn) {
   var promiseCapability = newPromiseCapability.f(this);
@@ -14465,8 +14471,8 @@ metadata.exp({ getMetadata: function getMetadata(metadataKey, target /* , target
 /* 324 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Set = __webpack_require__(121);
-var from = __webpack_require__(130);
+var Set = __webpack_require__(122);
+var from = __webpack_require__(131);
 var metadata = __webpack_require__(28);
 var anObject = __webpack_require__(1);
 var getPrototypeOf = __webpack_require__(17);
@@ -15875,7 +15881,7 @@ process.umask = function() { return 0; };
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.LoseMode = exports.MessageMode = exports.PlayMode = exports.PersistenceMode = exports.StartupMode = undefined;
+exports.LoseMode = exports.MessageMode = exports.PlayMode = exports.AvatarCreateMode = exports.PersistenceMode = exports.StartupMode = undefined;
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
@@ -15887,7 +15893,7 @@ var _rotJs2 = _interopRequireDefault(_rotJs);
 
 var _game = __webpack_require__(93);
 
-var _map = __webpack_require__(132);
+var _map = __webpack_require__(133);
 
 var _message = __webpack_require__(96);
 
@@ -15895,13 +15901,15 @@ var _mixable_symbol = __webpack_require__(97);
 
 var _datastore = __webpack_require__(42);
 
-var _entity = __webpack_require__(135);
+var _entity = __webpack_require__(98);
 
 var _entitiesspawn = __webpack_require__(344);
 
-var _timing = __webpack_require__(133);
+var _timing = __webpack_require__(134);
 
-var _keybinds = __webpack_require__(134);
+var _keybinds = __webpack_require__(135);
+
+var _customization = __webpack_require__(346);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15974,6 +15982,8 @@ var StartupMode = exports.StartupMode = function (_UIMode) {
     //defines how an object exists
 
     value: function render(display) {
+
+      //test
       display.drawText(2, 3, "Welcome to ");
       display.drawText(2, 5, " _______  _______ _________          _______  _______ ");
       display.drawText(2, 6, "(  ___  )(  ____ \\\\__   __/|\\     /|(  ____ \\(  ____ )");
@@ -16046,8 +16056,8 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
 
         if (input == _keybinds.COMMAND.NEW_GAME) {
           this.game.startNewGame();
-          _message.Message.send("Started new game");
-          this.game.switchMode('play');
+          //Message.send("Started new game")
+          this.game.switchMode('customize');
           return true;
         }
         if (input == _keybinds.COMMAND.SAVE_GAME) {
@@ -16139,8 +16149,82 @@ var PersistenceMode = exports.PersistenceMode = function (_UIMode2) {
 //-----------------------------------------------------
 //-----------------------------------------------------
 
-var PlayMode = exports.PlayMode = function (_UIMode3) {
-  _inherits(PlayMode, _UIMode3);
+
+var AvatarCreateMode = exports.AvatarCreateMode = function (_UIMode3) {
+  _inherits(AvatarCreateMode, _UIMode3);
+
+  function AvatarCreateMode() {
+    _classCallCheck(this, AvatarCreateMode);
+
+    return _possibleConstructorReturn(this, (AvatarCreateMode.__proto__ || Object.getPrototypeOf(AvatarCreateMode)).apply(this, arguments));
+  }
+
+  _createClass(AvatarCreateMode, [{
+    key: 'enter',
+    value: function enter() {
+      _get(AvatarCreateMode.prototype.__proto__ || Object.getPrototypeOf(AvatarCreateMode.prototype), 'enter', this).call(this);
+      this.game.isPlaying = true;
+      this.currNum = 0;
+
+      (0, _timing.initTiming)();
+
+      this.game.globalAvatar = _entitiesspawn.EntityFactory.create("avatar");
+      (0, _keybinds.setKey)(['customize']);
+    }
+  }, {
+    key: 'chooseElement',
+    value: function chooseElement() {
+      this.random = _rotJs2.default.RNG.getUniform();
+      console.log('this.random');
+      console.log(this.random);
+      this.currNum = Math.ceil(this.random * 118);
+      console.log('this.currNum');
+      console.log(this.currNum);
+      _message.Message.send("Press Y for yes or N for no.");
+    }
+  }, {
+    key: 'render',
+    value: function render(display) {
+      display.clear();
+      this.chooseElement();
+      display.drawText(2, 5, "Here is a number: " + this.currNum);
+      display.drawText(2, 7, "Do you like it?");
+    }
+  }, {
+    key: 'handleInput',
+    value: function handleInput(eventType, evt) {
+      if (eventType == 'keyup') {
+        var input = (0, _keybinds.getInput)(eventType, evt);
+        if (input == _keybinds.COMMAND.NULLCOMMAND) {
+          return false;
+        }
+
+        if (input == _keybinds.COMMAND.YES) {
+          console.log('in yes');
+          (0, _customization.customizeChar)(this.currNum, this.game.globalAvatar);
+          console.log('global avatar:');
+          console.dir(this.game.globalAvatar);
+          this.game.modes.play.setupNewGame();
+          this.game.switchMode('play');
+          return false;
+        }
+        if (input == _keybinds.COMMAND.NO) {
+          console.log('in no');
+          // this.chooseElement()
+          // this.render(this.game.display);
+          return true;
+        }
+      }
+    }
+  }]);
+
+  return AvatarCreateMode;
+}(UIMode);
+//-----------------------------------------------------
+//-----------------------------------------------------
+
+var PlayMode = exports.PlayMode = function (_UIMode4) {
+  _inherits(PlayMode, _UIMode4);
 
   function PlayMode() {
     _classCallCheck(this, PlayMode);
@@ -16152,7 +16236,7 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
     key: 'enter',
     value: function enter() {
       _get(PlayMode.prototype.__proto__ || Object.getPrototypeOf(PlayMode.prototype), 'enter', this).call(this);
-      this.game.isPlaying = true;
+      //this.game.isPlaying = true;
       (0, _keybinds.setKey)(['play', 'movement', 'interact']);
     }
   }, {
@@ -16187,10 +16271,26 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
       //   x: Math.round(display.getOptions().width/2),
       //   y: Math.round(display.getOptions().height/2)
       // };
-      (0, _timing.initTiming)();
 
-      var a = _entitiesspawn.EntityFactory.create("avatar");
-      this.game.globalAvatar = a;
+      var a = this.game.globalAvatar;
+      a.setMaxHP(Math.ceil(a.getMaxHP() * a.getHPMul()));
+      a.setHP(a.getMaxHP());
+
+      console.log('max AE: ' + a.getMaxAE());
+      console.log('AE mul: ' + a.getAEMul());
+      console.log('multiplied: ' + a.getMaxAE() * a.getAEMul());
+      console.log('ceil: ' + Math.ceil(a.getMaxAE() * a.getAEMul()));
+      a.setMaxAE(Math.ceil(a.getMaxAE() * a.getAEMul()));
+      a.setAE(a.getMaxAE());
+
+      a.setSTR((a.getSTR() * a.getSTRMul()).toFixed(2));
+      a.setPER((a.getPER() * a.getPERMul()).toFixed(2));
+      a.setEND((a.getEND() * a.getENDMul()).toFixed(2));
+      a.setCRM((a.getCRM() * a.getCRMMul()).toFixed(2));
+      a.setINT((a.getINT() * a.getINTMul()).toFixed(2));
+      a.setAGI((a.getAGI() * a.getAGIMul()).toFixed(2));
+      a.setLUK((a.getLUK() * a.getLUKMul()).toFixed(2));
+
       m.addEntityAtRandPos(a);
       // let b = EntityFactory.create("Brady");
 
@@ -16237,12 +16337,19 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
       display.drawText(0, 5, "Money: " + this.getAvatar().getMoney() + " credits");
 
       display.drawText(0, 7, "Strength:     " + this.getAvatar().getSTR());
+      console.log('STR: ' + this.getAvatar().getSTR());
       display.drawText(0, 8, "Perception:   " + this.getAvatar().getPER());
+      console.log('PER: ' + this.getAvatar().getPER());
       display.drawText(0, 9, "Endurance:    " + this.getAvatar().getEND());
+      console.log('END: ' + this.getAvatar().getEND());
       display.drawText(0, 10, "Charisma:     " + this.getAvatar().getCRM());
+      console.log('CRM: ' + this.getAvatar().getCRM());
       display.drawText(0, 11, "Intelligence: " + this.getAvatar().getINT());
+      console.log('INT: ' + this.getAvatar().getINT());
       display.drawText(0, 12, "Agility:      " + this.getAvatar().getAGI());
+      console.log('AGI: ' + this.getAvatar().getAGI());
       display.drawText(0, 13, "Luck:         " + this.getAvatar().getLUK());
+      console.log('LUK: ' + this.getAvatar().getLUK());
 
       display.drawText(0, 15, "EXP: " + this.getAvatar().getCurrExp() + " / " + this.getAvatar().getNextExp());
     }
@@ -16447,8 +16554,8 @@ var PlayMode = exports.PlayMode = function (_UIMode3) {
 //-----------------------------------------------------
 //-----------------------------------------------------
 
-var MessageMode = exports.MessageMode = function (_UIMode4) {
-  _inherits(MessageMode, _UIMode4);
+var MessageMode = exports.MessageMode = function (_UIMode5) {
+  _inherits(MessageMode, _UIMode5);
 
   function MessageMode() {
     _classCallCheck(this, MessageMode);
@@ -16482,8 +16589,8 @@ var MessageMode = exports.MessageMode = function (_UIMode4) {
 //-----------------------------------------------------
 //-----------------------------------------------------
 
-var LoseMode = exports.LoseMode = function (_UIMode5) {
-  _inherits(LoseMode, _UIMode5);
+var LoseMode = exports.LoseMode = function (_UIMode6) {
+  _inherits(LoseMode, _UIMode6);
 
   function LoseMode() {
     _classCallCheck(this, LoseMode);
@@ -16666,7 +16773,7 @@ exports.Currency = exports.Experience = exports.Special = exports.RandomWalker =
 
 var _message = __webpack_require__(96);
 
-var _timing = __webpack_require__(133);
+var _timing = __webpack_require__(134);
 
 var _rotJs = __webpack_require__(47);
 
@@ -16674,7 +16781,7 @@ var _rotJs2 = _interopRequireDefault(_rotJs);
 
 var _datastore = __webpack_require__(42);
 
-var _keybinds = __webpack_require__(134);
+var _keybinds = __webpack_require__(135);
 
 var _game = __webpack_require__(93);
 
@@ -16712,22 +16819,12 @@ var TimeTracker = exports.TimeTracker = {
   },
   METHODS: {
     getTime: function getTime() {
-      // do stuff
-      // can access / manipulate this.state._ExampleMixin
       return this.state._TimeTracker.timeTaken;
     },
     setTime: function setTime(t) {
-      // do stuff
-      // can access / manipulate this.state._ExampleMixin
       this.state._TimeTracker.timeTaken = t;
     },
     addTime: function addTime(t) {
-      // do stuff
-      // can access / manipulate this.state._ExampleMixin
-      // console.log("trying to add time");
-      // console.dir(this);
-      // //console.dir(this.state);
-      // console.dir(this.mixins[0].META.stateModel.timeTaken);
       this.state._TimeTracker.timeTaken += t;
     }
   },
@@ -16745,20 +16842,8 @@ var WalkerCorporeal = exports.WalkerCorporeal = {
   },
   METHODS: {
     tryWalk: function tryWalk(dx, dy) {
-      // do stuff
-      // can access / manipulate this.state._ExampleMixin
       var newX = this.state.x * 1 + dx * 1;
       var newY = this.state.y * 1 + dy * 1;
-
-      // if (this.getMap().isPositionOpen(newX, newY)){
-      //   this.state.x = newX;
-      //   this.state.y = newY;
-      //   this.getMap().updateEntityPos(this, this.state.x, this.state.y);
-      //
-      //   this.raiseMixinEvent('turnTaken', {'timeUsed': 1});
-      //
-      //   return true;
-      // }
 
       // {{get target movement location}}
       // {{get info for target location: tile, entity}}
@@ -16767,38 +16852,27 @@ var WalkerCorporeal = exports.WalkerCorporeal = {
       if (targetPositionInfo.entity) {
         if (this.getFaction() != targetPositionInfo.entity.getFaction() || this.getName() == 'avatar') {
           this.raiseMixinEvent('bumpEntity', { actor: this, target: targetPositionInfo.entity });
-          // if (this.getName() == 'avatar') {
-          // //   // console.log("the player has moved");
-          // //   this.raiseMixinEvent('playerHasMoved');
-          // }
         }
-        // console.dir(targetPositionInfo);
       } else if (targetPositionInfo.tile.isImpassable()) {
-        //console.log("the tile is isImpassable");
         this.raiseMixinEvent('walkblocked');
         return false;
       } else {
-        //console.log("moving time");
         this.state.x = newX;
         this.state.y = newY;
         this.getMap().updateEntityPos(this, this.state.x, this.state.y);
 
         this.raiseMixinEvent('turnTaken', { 'timeUsed': 1 });
         if (this.getName() == 'avatar') {
-          // console.log("the player has moved");
           this.setTarget('');
           this.raiseMixinEvent('playerHasMoved');
         }
-
         return true;
       }
-
       return false;
     }
   },
   LISTENERS: {
     'tryWalking': function tryWalking(evtData) {
-      // console.log("trying to walk");
       this.tryWalk(evtData.dx, evtData.dy);
     }
   }
@@ -16814,9 +16888,9 @@ var HitPoints = exports.HitPoints = {
       maxHP: 0
     },
     initialize: function initialize(template) {
-      // do any initialization
       this.state._HP.maxHP = template.maxHP || 1;
       this.state._HP.curHP = template.curHP || this.state._HP.maxHP;
+      this.state._HP.hpMul = 1;
     }
   },
   METHODS: {
@@ -16846,6 +16920,14 @@ var HitPoints = exports.HitPoints = {
 
     getMaxHP: function getMaxHP(max) {
       return this.state._HP.maxHP;
+    },
+
+    setHPMul: function setHPMul(newMul) {
+      this.state._HP.hpMul = newMul;
+    },
+
+    getHPMul: function getHPMul() {
+      return this.state._HP.hpMul;
     }
   },
   LISTENERS: {
@@ -16853,7 +16935,6 @@ var HitPoints = exports.HitPoints = {
       // evtData.src
       // evtData.damageAmount
       console.log("damaging");
-      // console.dir(this);
       this.changeHP(evtData.damageAmount);
       evtData.src.raiseMixinEvent('damages', { target: this, damageAmount: evtData.damageAmount });
       if (this.getCurHP() <= 0) {
@@ -16867,7 +16948,7 @@ var HitPoints = exports.HitPoints = {
       }
     },
     'levelUp': function levelUp() {
-      this.setMaxHP(this.getMaxHP() + 2);
+      this.setMaxHP(Math.ceil(this.getMaxHP() + 2 * this.getHPMul()));
       this.setHP(this.getMaxHP());
       if (this.getName() == 'avatar') {
         _message.Message.send("Leveled up!");
@@ -16892,9 +16973,9 @@ var Aether = exports.Aether = {
       maxAE: 0
     },
     initialize: function initialize(template) {
-      // do any initialization
       this.state._AE.maxAE = template.maxAE || 1;
       this.state._AE.curAE = template.curAE || this.state._AE.maxAE;
+      this.state._AE.AEMul = 1;
     }
   },
   METHODS: {
@@ -16917,11 +16998,19 @@ var Aether = exports.Aether = {
 
     getMaxAE: function getMaxAE(max) {
       return this.state._AE.maxAE;
+    },
+
+    setAEMul: function setAEMul(newMul) {
+      this.state._AE.AEMul = newMul;
+    },
+
+    getAEMul: function getAEMul() {
+      return this.state._AE.AEMul;
     }
   },
   LISTENERS: {
     'levelUp': function levelUp() {
-      this.setMaxAE(Math.ceil(this.getMaxAE() * 1.01));
+      this.setMaxAE(Math.ceil(this.getMaxAE() + 2 * this.getAEMul()));
       this.setAE(this.getMaxAE());
     },
     'turnTaken': function turnTaken(evtData) {
@@ -16930,11 +17019,7 @@ var Aether = exports.Aether = {
       }
     },
     'attackUsed': function attackUsed() {
-<<<<<<< HEAD
-      if (this.getCurAE < 0) {
-=======
       if (this.getCurAE() > 10) {
->>>>>>> 4e95f7b554ff6284bf137c926b129f6eae7662f7
         this.changeAE(-10);
       }
     }
@@ -16950,7 +17035,6 @@ var MeleeAttacker = exports.MeleeAttacker = {
       meleeDamage: 10
     },
     initialize: function initialize(template) {
-      // do any initialization
       this.state._MeleeAttacker.meleeDamage = template.meleeDamage || 1;
     }
   },
@@ -16961,24 +17045,15 @@ var MeleeAttacker = exports.MeleeAttacker = {
     setMeleeDamage: function setMeleeDamage(n) {
       this.state._MeleeAttacker.meleeDamage = n;
     }
+
   },
   LISTENERS: {
     'bumpEntity': function bumpEntity(evtData) {
-      // this
-      // evtData.target
-
-      // this.raiseMixinEvent('attacks', {actor: this, target: evtData.target});
-      // this.raiseMixinEvent('turnTaken', {'timeUsed': 1});
-      // evtData.target.raiseMixinEvent('damaged', {src: this, damageAmount: this.getMeleeDamage()});
-      // console.log("ATTACK");
       if (this.getName() == 'avatar' && evtData.target.getName() != 'Door') {
-        this.state.bumped = true;
         this.setTarget(evtData.target);
 
         _message.Message.send("What would you like to do to " + evtData.target.getName() + "?\n" + "1. Interact \n" + "2. Attack \n" + "3. Steal \n" + "4. Bluff \n" + "m. Cancel");
-        // this.handleInput(eventType,evt);
       } else if (this.getName() == 'avatar' && evtData.target.getName() == 'Door') {
-        this.state.bumped = true;
         this.setTarget(evtData.target);
 
         _message.Message.send("You've found the door \n" + "1. Enter \n" + "m. Cancel \n");
@@ -16999,7 +17074,6 @@ var PlayerMessages = exports.PlayerMessages = {
   },
   LISTENERS: {
     'walkblocked': function walkblocked(evtData) {
-      // console.log("help");
       _message.Message.send("The way is blocked.");
     },
     'attacks': function attacks(evtData) {
@@ -17056,7 +17130,6 @@ var PlayerActor = exports.PlayerActor = {
     act: function act() {
       this.actingState = false;
       console.log("it is now the enemy turn");
-      // console.log(SCHEDULER.next());
       for (var ent in _datastore.DATASTORE.ENTITIES) {
         _timing.SCHEDULER.next().raiseMixinEvent('enemyTurn');
       }
@@ -17090,19 +17163,15 @@ var RandomWalker = exports.RandomWalker = {
   },
   METHODS: {
     act: function act() {
-      //console.log("enemy now moving");
       if (this.actingState == false) {
         return;
       }
-      //console.log("walker is acting");
       //Rand number from -1 to 1
       var dx = _rotJs2.default.RNG.getUniformInt(-1, 1);
-      //console.log(dx);
       var dy = _rotJs2.default.RNG.getUniformInt(-1, 1);
       if (dx == 0 && dy == 0) {
         dy = 1;
       }
-      //console.log(dy);
       this.raiseMixinEvent('tryWalking', { 'dx': dx, 'dy': dy });
       this.actingState = false;
       this.raiseMixinEvent('playerTurn');
@@ -17110,13 +17179,10 @@ var RandomWalker = exports.RandomWalker = {
   },
   LISTENERS: {
     defeats: function defeats(evtData) {
-      // Message.send(this.getName() + " died");
       _timing.SCHEDULER.remove(this);
-      // this.destroy();
     },
     'enemyTurn': function enemyTurn() {
       this.actingState = true;
-      //console.log(this.actingState);
       this.act();
     }
   }
@@ -17129,22 +17195,35 @@ var Special = exports.Special = {
     stateNameSpace: '_SP',
     stateModel: {
       str: 0,
+      strMul: 0,
       per: 0,
+      perMul: 0,
       end: 0,
+      endMul: 0,
       crm: 0,
+      crmMul: 0,
       int: 0,
+      intMul: 0,
       agi: 0,
-      luk: 0
+      agiMul: 0,
+      luk: 0,
+      lukMul: 0
     },
     initialize: function initialize(template) {
-      // do any initialization
       this.state._SP.str = template.str || 1;
+      this.state._SP.strMul = 1;
       this.state._SP.per = template.per || 1;
+      this.state._SP.perMul = 1;
       this.state._SP.end = template.end || 1;
+      this.state._SP.endMul = 1;
       this.state._SP.crm = template.crm || 1;
+      this.state._SP.crmMul = 1;
       this.state._SP.int = template.int || 1;
+      this.state._SP.intMul = 1;
       this.state._SP.agi = template.agi || 1;
+      this.state._SP.agiMul = 1;
       this.state._SP.luk = template.luk || 1;
+      this.state._SP.lukMul = 1;
     }
   },
   METHODS: {
@@ -17152,77 +17231,170 @@ var Special = exports.Special = {
       this.state._SP.str = newSTR;
     },
 
+    getSTR: function getSTR() {
+      return this.state._SP.str;
+    },
+
+    setSTRMul: function setSTRMul(newMul) {
+      this.state._SP.strMul = newMul;
+    },
+
+    getSTRMul: function getSTRMul() {
+      return this.state._SP.strMul;
+    },
+
     changeSTR: function changeSTR(delta) {
       if (this.state._SP.str + delta <= 0) {
         this.state._SP.str = 0;
       } else {
-        this.state._SP.str += delta;
+        this.state._SP.str = (1 * this.getSTR() + delta * this.getSTRMul()).toFixed(2);
       }
     },
+
+    setPER: function setPER(newPER) {
+      this.state._SP.per = newPER;
+    },
+
+    getPER: function getPER() {
+      return this.state._SP.per;
+    },
+
+    setPERMul: function setPERMul(newMul) {
+      this.state._SP.perMul = newMul;
+    },
+
+    getPERMul: function getPERMul() {
+      return this.state._SP.perMul;
+    },
+
     changePER: function changePER(delta) {
       if (this.state._SP.per + delta <= 0) {
         this.state._SP.per = 0;
       } else {
-        this.state._SP.per += delta;
+        this.state._SP.per = (1 * this.getPER() + delta * this.getPERMul()).toFixed(2);
       }
     },
+
+    setEND: function setEND(newEND) {
+      this.state._SP.end = newEND;
+    },
+
+    getEND: function getEND() {
+      return this.state._SP.end;
+    },
+
+    setENDMul: function setENDMul(newMul) {
+      this.state._SP.endMul = newMul;
+    },
+
+    getENDMul: function getENDMul() {
+      return this.state._SP.endMul;
+    },
+
     changeEND: function changeEND(delta) {
       if (this.state._SP.end + delta <= 0) {
         this.state._SP.end = 0;
       } else {
-        this.state._SP.end += delta;
+        this.state._SP.end == (this.getEND() * 1 + delta * this.getENDMul()).toFixed(2);
       }
     },
+
+    setCRM: function setCRM(newCRM) {
+      this.state._SP.crm = newCRM;
+    },
+
+    getCRM: function getCRM() {
+      return this.state._SP.crm;
+    },
+
+    setCRMMul: function setCRMMul(newMul) {
+      this.state._SP.crmMul = newMul;
+    },
+
+    getCRMMul: function getCRMMul() {
+      return this.state._SP.crmMul;
+    },
+
     changeCRM: function changeCRM(delta) {
       if (this.state._SP.crm + delta <= 0) {
         this.state._SP.crm = 0;
       } else {
-        this.state._SP.crm += delta;
+        this.state._SP.crm = (1 * this.getCRM() + delta * this.getCRMMul()).toFixed(2);
       }
     },
+
+    setINT: function setINT(newINT) {
+      this.state._SP.int = newINT;
+    },
+
+    getINT: function getINT() {
+      return this.state._SP.int;
+    },
+
+    setINTMul: function setINTMul(newMul) {
+      this.state._SP.intMul = newMul;
+    },
+
+    getINTMul: function getINTMul() {
+      return this.state._SP.intMul;
+    },
+
     changeINT: function changeINT(delta) {
       if (this.state._SP.int + delta <= 0) {
         this.state._SP.int = 0;
       } else {
-        this.state._SP.int += delta;
+        this.state._SP.int = (1 * this.getINT() + delta * this.getINTMul()).toFixed(2);
       }
     },
+
+    setAGI: function setAGI(newAGI) {
+      this.state._SP.agi = newAGI;
+    },
+
+    getAGI: function getAGI() {
+      return this.state._SP.agi;
+    },
+
+    setAGIMul: function setAGIMul(newMul) {
+      this.state._SP.agiMul = newMul;
+    },
+
+    getAGIMul: function getAGIMul() {
+      return this.state._SP.agiMul;
+    },
+
     changeAGI: function changeAGI(delta) {
       if (this.state._SP.agi + delta <= 0) {
         this.state._SP.agi = 0;
       } else {
-        this.state._SP.agi += delta;
+        this.state._SP.agi == (1 * this.getAGI() + delta * this.getAGIMul()).toFixed(2);
       }
     },
+
+    setLUK: function setLUK(newLUK) {
+      this.state._SP.luk = newLUK;
+    },
+
+    getLUK: function getLUK() {
+      return this.state._SP.luk;
+    },
+
+    setLUKMul: function setLUKMul(newMul) {
+      this.state._SP.lukMul = newMul;
+    },
+
+    getLUKMul: function getLUKMul() {
+      return this.state._SP.lukMul;
+    },
+
     changeLUK: function changeLUK(delta) {
       if (this.state._SP.luk + delta <= 0) {
         this.state._SP.luk = 0;
       } else {
-        this.state._SP.luk += delta;
+        this.state._SP.luk = (1 * this.getLUK() + delta * this.getLUKMul()).toFixed(2);
       }
-    },
-
-    getSTR: function getSTR() {
-      return this.state._SP.str;
-    },
-    getPER: function getPER() {
-      return this.state._SP.per;
-    },
-    getEND: function getEND() {
-      return this.state._SP.end;
-    },
-    getCRM: function getCRM() {
-      return this.state._SP.crm;
-    },
-    getINT: function getINT() {
-      return this.state._SP.int;
-    },
-    getAGI: function getAGI() {
-      return this.state._SP.agi;
-    },
-    getLUK: function getLUK() {
-      return this.state._SP.luk;
     }
+
   },
   LISTENERS: {
     'levelUp': function levelUp() {
@@ -17294,6 +17466,7 @@ var Currency = exports.Currency = {
     },
     initialize: function initialize(template) {
       this.state._Currency = template.money || 10;
+      this.state._CurrMul = 1;
     }
   },
   METHODS: {
@@ -17302,11 +17475,17 @@ var Currency = exports.Currency = {
     },
     getMoreMoney: function getMoreMoney(n) {
       this.state._Currency += n;
+    },
+    setCurrMul: function setCurrMul(newMul) {
+      this.state._CurrMUl = newmul;
+    },
+    getCurrMul: function getCurrMul() {
+      return this.state._CurrMul;
     }
   },
   LISTENERS: {
     'defeats': function defeats(evtData) {
-      this.getMoreMoney(evtData.target.getYield());
+      this.getMoreMoney(Math.ceil(evtData.target.getYield() * this.getCurrMul()));
     }
   }
 };
@@ -17323,7 +17502,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.EntityFactory = undefined;
 
-var _entity = __webpack_require__(135);
+var _entity = __webpack_require__(98);
 
 var _factory = __webpack_require__(345);
 
@@ -17468,6 +17647,164 @@ var Factory = exports.Factory = function () {
 
   return Factory;
 }();
+
+/***/ }),
+/* 346 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.customizeChar = customizeChar;
+
+var _entity = __webpack_require__(98);
+
+function customizeChar(num, avatar) {
+  console.log('in customize');
+  console.log('num = ' + num);
+
+  var con_sol = [21, 25, 27, 29, 30, 39, 42, 48, 50, 51, 57, 58, 59, 60, 62, 63, 65, 66, 67, 68, 69, 70, 72, 81];
+  var nob_gas = [2, 10, 18, 36, 54, 86];
+  var pre_sol = [31, 32, 44, 45, 46, 47, 49, 52, 75, 76, 77, 78, 79, 83];
+  var rad_sol = [43, 61, 85, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103];
+  var rea_gas = [1, 7, 8, 17];
+  var rea_liq = [35];
+  var rea_sol = [3, 11, 12, 15, 19, 20, 37, 38, 53, 55, 56, 87, 88];
+  var stu_sol = [5, 6, 13, 14, 22, 23, 26, 28, 40, 41, 64, 71, 73, 74];
+  var tox_gas = [9];
+  var tox_liq = [80];
+  var tox_sol = [4, 16, 24, 33, 34, 82, 84];
+  var unk_unk = [104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118];
+
+  if (con_sol.includes(num)) {
+    console.log('in con_sol');
+    avatar.setHPMul(1.25 * 1.4);
+    avatar.setAEMul(0.75 * 1.4);
+    avatar.setSTRMul(1.2);
+    avatar.setPERMul(0.8 * 1.2);
+    avatar.setENDMul(1.4 * 1.2);
+    avatar.setCRMMul(0.8 * 1.2);
+    //avatar.setINTMul(1);
+    avatar.setAGIMul(0.8 * 0.6);
+    avatar.setLUKMul(0.6);
+  } else if (rad_sol.includes(num)) {
+    console.log('in rad_sol');
+    avatar.setHPMul(1.25 * 0.75);
+    avatar.setAEMul(0.75 * 1.25);
+    avatar.setSTRMul(1.2 * 0.8);
+    avatar.setPERMul(0.8 * 0.8);
+    avatar.setENDMul(1.4 * 0.8);
+    avatar.setCRMMul(0.8 * 1.4);
+    avatar.setINTMul(1.4);
+    avatar.setAGIMul(0.8 * 1.4);
+    avatar.setLUKMul(1.6);
+  } else if (unk_unk.includes(num)) {
+    console.log('in unk_unk');
+    avatar.setLUKMul(9);
+  } else if (pre_sol.includes(num)) {
+    console.log('in pre_sol');
+    avatar.setHPMul(1.25 * 0.75);
+    avatar.setAEMul(0.75 * 1.2);
+    avatar.setSTRMul(1.2 * 0.8);
+    avatar.setPERMul(0.8);
+    avatar.setENDMul(1.4 * 0.8);
+    avatar.setCRMMul(0.8 * 1.4);
+    avatar.setINTMul(1.1);
+    avatar.setAGIMul(0.8);
+    avatar.setLUKMul(1.4);
+  } else if (stu_sol.includes(num)) {
+    console.log('in stu_sol');
+    avatar.setHPMul(1.25 * 2);
+    avatar.setAEMul(0.75 * 0.5);
+    avatar.setSTRMul(1.2 * 1.75);
+    avatar.setPERMul(0.8 * 0.8);
+    avatar.setENDMul(1.4 * 1.5);
+    avatar.setCRMMul(0.8 * 0.8);
+    avatar.setINTMul(0.5);
+    avatar.setAGIMul(0.8 * 0.8);
+    //avatar.setLUKMul(1);
+  } else if (rea_sol.includes(num)) {
+    console.log('in rea_sol');
+    avatar.setHPMul(1.25 * 0.8);
+    avatar.setAEMul(0.75 * 1.6);
+    avatar.setSTRMul(1.2);
+    avatar.setPERMul(0.8 * 1.2);
+    avatar.setENDMul(1.4 * 0.5);
+    avatar.setCRMMul(0.8 * 1.2);
+    avatar.setINTMul(1.2);
+    avatar.setAGIMul(0.8);
+    avatar.setLUKMul(1.2);
+  } else if (tox_sol.includes(num)) {
+    console.log('in tox_sol');
+    avatar.setHPMul(1.25);
+    avatar.setAEMul(0.75 * 1.2);
+    avatar.setSTRMul(1.2);
+    avatar.setPERMul(0.8 * 1.4);
+    avatar.setENDMul(1.4);
+    avatar.setCRMMul(0.8 * 0.8);
+    avatar.setINTMul(1.4);
+    avatar.setAGIMul(0.8);
+    avatar.setLUKMul(0.8);
+  } else if (nob_gas.includes(num)) {
+    console.log('in nob_gas');
+    avatar.setHPMul(0.75 * 0.9);
+    avatar.setAEMul(1.25 * 0.9);
+    avatar.setSTRMul(0.6 * 0.9);
+    avatar.setPERMul(1.4 * 0.9);
+    avatar.setENDMul(0.6 * 0.9);
+    avatar.setCRMMul(1.2 * 1.5);
+    avatar.setINTMul(0.9);
+    avatar.setAGIMul(1.2 * 0.9);
+    avatar.setLUKMul(2);
+  } else if (rea_gas.includes(num)) {
+    console.log('in rea_gas');
+    avatar.setHPMul(0.75 * 0.8);
+    avatar.setAEMul(1.25 * 1.6);
+    avatar.setSTRMul(0.6);
+    avatar.setPERMul(1.4 * 1.2);
+    avatar.setENDMul(0.6 * 0.5);
+    avatar.setCRMMul(1.2 * 1.5);
+    avatar.setINTMul(1.2);
+    avatar.setAGIMul(1.2);
+    avatar.setLUKMul(1.2);
+  } else if (rea_liq.includes(num)) {
+    console.log('in rea_liq');
+    avatar.setHPMul(0.8);
+    avatar.setAEMul(1.6);
+    //avatar.setSTRMul(1);
+    avatar.setPERMul(1.2);
+    avatar.setENDMul(0.5);
+    avatar.setCRMMul(1.5);
+    avatar.setINTMul(1.2);
+    //avatar.setAGIMul(1);
+    avatar.setLUKMul(1.2);
+  } else if (tox_gas.includes(num)) {
+    console.log('in tox_gas');
+    avatar.setHPMul(0.75);
+    avatar.setAEMul(1.25 * 1.2);
+    avatar.setSTRMul(0.6);
+    avatar.setPERMul(1.4 * 1.4);
+    avatar.setENDMul(0.6);
+    avatar.setCRMMul(1.2 * 0.8);
+    avatar.setINTMul(1.4);
+    avatar.setAGIMul(1.2);
+    avatar.setLUKMul(0.8);
+  } else if (tox_liq.includes(num)) {
+    console.log('in tox_liq');
+    //avatar.setHPMul(1);
+    avatar.setAEMul(1.2);
+    //avatar.setSTRMul(1);
+    avatar.setPERMul(1.4);
+    //avatar.setENDMul(1);
+    avatar.setCRMMul(0.8);
+    avatar.setINTMul(1.4);
+    //avatar.setAGIMul(1);
+    avatar.setLUKMul(0.8);
+  }
+} // a database for all the element information
 
 /***/ })
 /******/ ]);

@@ -164,7 +164,7 @@ export let HitPoints = {
       }
     },
     'levelUp': function() {
-      this.setMaxHP(Math.ceil(this.getMaxHP() * this.getHPMul()));
+      this.setMaxHP(Math.ceil(this.getMaxHP() + 2*this.getHPMul()));
       this.setHP(this.getMaxHP());
       if (this.getName() =='avatar') {
         Message.send("Leveled up!");
@@ -226,7 +226,7 @@ export let Aether = {
   },
   LISTENERS: {
     'levelUp': function() {
-      this.setMaxAE(Math.ceil(this.getMaxAE() * this.getAEMul()));
+      this.setMaxAE(Math.ceil(this.getMaxAE() + 2*this.getAEMul()));
       this.setAE(this.getMaxAE());
     },
     'turnTaken': function(evtData) {
@@ -471,7 +471,7 @@ export let Special = {
       if (this.state._SP.str + delta <= 0) {
         this.state._SP.str = 0;
       } else {
-        this.state._SP.str += Math.ceil(delta*this.getSTRMul());
+        this.state._SP.str = (1*this.getSTR() + delta*this.getSTRMul()).toFixed(2);
       }
     },
 
@@ -495,7 +495,7 @@ export let Special = {
       if (this.state._SP.per + delta <= 0) {
         this.state._SP.per = 0;
       } else {
-        this.state._SP.per += Math.ceil(delta*this.getPERMul());
+        this.state._SP.per = (1*this.getPER() + delta*this.getPERMul()).toFixed(2);
       }
     },
 
@@ -519,7 +519,7 @@ export let Special = {
       if (this.state._SP.end + delta <= 0) {
         this.state._SP.end = 0;
       } else {
-        this.state._SP.end += Math.ceil(delta*this.getENDMul());
+        this.state._SP.end == (this.getEND()*1 + delta*this.getENDMul()).toFixed(2);
       }
     },
 
@@ -543,7 +543,7 @@ export let Special = {
       if (this.state._SP.crm + delta <= 0) {
         this.state._SP.crm = 0;
       } else {
-        this.state._SP.crm += Math.ceil(delta*this.getCRMMul());
+        this.state._SP.crm = (1*this.getCRM() + delta*this.getCRMMul()).toFixed(2);
       }
     },
 
@@ -567,7 +567,7 @@ export let Special = {
       if (this.state._SP.int + delta <= 0) {
         this.state._SP.int = 0;
       } else {
-        this.state._SP.int += Math.ceil(delta*this.getINTMul());
+        this.state._SP.int = (1*this.getINT() + delta*this.getINTMul()).toFixed(2);
       }
     },
 
@@ -591,7 +591,7 @@ export let Special = {
       if (this.state._SP.agi + delta <= 0) {
         this.state._SP.agi = 0;
       } else {
-        this.state._SP.agi += Math.ceil(delta*this.getAGIMul());
+        this.state._SP.agi == (1*this.getAGI() + delta*this.getAGIMul()).toFixed(2);
       }
     },
 
@@ -615,7 +615,7 @@ export let Special = {
       if (this.state._SP.luk + delta <= 0) {
         this.state._SP.luk = 0;
       } else {
-        this.state._SP.luk += Math.ceil(delta*this.getLUKMul());
+        this.state._SP.luk = (1*this.getLUK() + delta*this.getLUKMul()).toFixed(2);
       }
     },
 
