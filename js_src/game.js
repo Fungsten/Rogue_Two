@@ -97,7 +97,7 @@ export let Game = {
     DATASTORE.GAME = this;
     //console.log("using random seed "+this._randomSeed);
     //ROT.RNG.setSeed(this._randomSeed);
-    this.modes.play.setupNewGame();
+    this.modes.customize.chooseElement();
 
     // initTiming();
   },
