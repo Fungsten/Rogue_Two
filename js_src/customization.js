@@ -2,58 +2,9 @@
 
 import {Entity} from './entity.js';
 
-export class Customizer {
-  constructor() {
-    this.hpMul = 1;
-    this.aeMul = 1;
-    this.strMul = 1;
-    this.perMul = 1;
-    this.endMul = 1;
-    this.crmMul = 1;
-    this.intMul = 1;
-    this.agiMul = 1;
-    this.lukMul = 1;
-  }
-
-  changeHpMul(newMul) {
-    this.hpMul = newMul;
-  }
-
-  changeAeMul(newMul) {
-    this.aeMul = newMul;
-  }
-
-  changeStrMul(newMul) {
-    this.strMul = newMul;
-  }
-
-  changePerMul(newMul) {
-    this.perMul = newMul;
-  }
-
-  changeEndMul(newMul) {
-    this.endMul = newMul;
-  }
-
-  changeCrmMul(newMul) {
-    this.crmMul = newMul;
-  }
-
-  changeIntMul(newMul) {
-    this.intMul = newMul;
-  }
-
-  changeAgiMul(newMul) {
-    this.agiMul = newMul;
-  }
-
-  changeLukMul(newMul) {
-    this.lukMul = newMul;
-  }
-}
-
-export function customizeChar(num, ent) {
-  let mc = new Customizer();
+export function customizeChar(num, avatar) {
+  console.log('in customize');
+  console.log('num = ' + num);
 
   let con_sol = [21, 25, 27, 29, 30, 39, 42, 48, 50, 51, 57, 58, 59, 60, 62, 63, 65, 66, 67, 68, 69, 70, 72, 81];
   let nob_gas = [2, 10, 18, 36, 54, 86];
@@ -68,129 +19,140 @@ export function customizeChar(num, ent) {
   let tox_sol = [4, 16, 24, 33, 34, 82, 84];
   let unk_unk = [104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118];
 
-  if (num in con_sol) {
-    mc.changeHpMul(1.25*1.4);
-    mc.changeAeMul(0.75*1.4);
-    mc.changeStrMul(1.2);
-    mc.changePerMul(0.8*1.2);
-    mc.changeEndMul(1.4*1.2);
-    mc.changeCrmMul(0.8*1.2);
-    //mc.changeIntMul(1);
-    mc.changeAgiMul(0.8*0.6);
-    mc.changeLukMul(0.6);
-    return;
-  } else if (num in rad_sol) {
-    mc.changeHpMul(1.25*0.75);
-    mc.changeAeMul(0.75*1.25);
-    mc.changeStrMul(1.2*0.8);
-    mc.changePerMul(0.8*0.8);
-    mc.changeEndMul(1.4*0.8);
-    mc.changeCrmMul(0.8*1.4);
-    mc.changeIntMul(1.4);
-    mc.changeAgiMul(0.8*1.4);
-    mc.changeLukMul(1.6);
-    return;
-  } else if (num in unk_unk) {
-    mc.changeLukMul(9);
-    return;
-  } else if (num in pre_sol) {
-    mc.changeHpMul(1.25*0.75);
-    mc.changeAeMul(0.75*1.2);
-    mc.changeStrMul(1.2*0.8);
-    mc.changePerMul(0.8);
-    mc.changeEndMul(1.4*0.8);
-    mc.changeCrmMul(0.8*1.4);
-    mc.changeIntMul(1.1);
-    mc.changeAgiMul(0.8);
-    mc.changeLukMul(1.4);
-    return;
-  } else if (num in stu_sol) {
-    mc.changeHpMul(1.25*2);
-    mc.changeAeMul(0.75*0.5);
-    mc.changeStrMul(1.2*1.75);
-    mc.changePerMul(0.8*0.8);
-    mc.changeEndMul(1.4*1.5);
-    mc.changeCrmMul(0.8*0.8);
-    mc.changeIntMul(0.5);
-    mc.changeAgiMul(0.8*0.8);
-    //mc.changeLukMul(1);
-    return;
-  } else if (num in rea_sol) {
-    mc.changeHpMul(1.25*0.8);
-    mc.changeAeMul(0.75*1.6);
-    mc.changeStrMul(1.2);
-    mc.changePerMul(0.8*1.2);
-    mc.changeEndMul(1.4*0.5);
-    mc.changeCrmMul(0.8*1.2);
-    mc.changeIntMul(1.2);
-    mc.changeAgiMul(0.8);
-    mc.changeLukMul(1.2);
-    return;
-  } else if (num in tox_sol) {
-    mc.changeHpMul(1.25);
-    mc.changeAeMul(0.75*1.2);
-    mc.changeStrMul(1.2);
-    mc.changePerMul(0.8*1.4);
-    mc.changeEndMul(1.4);
-    mc.changeCrmMul(0.8*0.8);
-    mc.changeIntMul(1.4);
-    mc.changeAgiMul(0.8);
-    mc.changeLukMul(0.8);
-    return;
-  } else if (num in nob_gas) {
-    mc.changeHpMul(0.75*0.9);
-    mc.changeAeMul(1.25*0.9);
-    mc.changeStrMul(0.6*0.9);
-    mc.changePerMul(1.4*0.9);
-    mc.changeEndMul(0.6*0.9);
-    mc.changeCrmMul(1.2*1.5);
-    mc.changeIntMul(0.9);
-    mc.changeAgiMul(1.2*0.9);
-    mc.changeLukMul(2);
-    return;
-  } else if (num in rea_gas) {
-    mc.changeHpMul(0.75*0.8);
-    mc.changeAeMul(1.25*1.6);
-    mc.changeStrMul(0.6);
-    mc.changePerMul(1.4*1.2);
-    mc.changeEndMul(0.6*0.5);
-    mc.changeCrmMul(1.2*1.5);
-    mc.changeIntMul(1.2);
-    mc.changeAgiMul(1.2);
-    mc.changeLukMul(1.2);
-    return;
-  } else if (num in rea_liq) {
-    mc.changeHpMul(0.8);
-    mc.changeAeMul(1.6);
-    //mc.changeStrMul(1);
-    mc.changePerMul(1.2);
-    mc.changeEndMul(0.5);
-    mc.changeCrmMul(1.5);
-    mc.changeIntMul(1.2);
-    //mc.changeAgiMul(1);
-    mc.changeLukMul(1.2);
-    return;
-  } else if (num in tox_gas) {
-    mc.changeHpMul(0.75);
-    mc.changeAeMul(1.25*1.2);
-    mc.changeStrMul(0.6);
-    mc.changePerMul(1.4*1.4);
-    mc.changeEndMul(0.6);
-    mc.changeCrmMul(1.2*0.8);
-    mc.changeIntMul(1.4);
-    mc.changeAgiMul((1.2);
-    mc.changeLukMul(0.8);
-    return;
-  } else if (num in tox_liq) {
-    //mc.changeHpMul(1);
-    mc.changeAeMul(1.2);
-    //mc.changeStrMul(1);
-    mc.changePerMul(1.4);
-    //mc.changeEndMul(1);
-    mc.changeCrmMul(0.8);
-    mc.changeIntMul(1.4);
-    //mc.changeAgiMul(1);
-    mc.changeLukMul(0.8);
-    return;
+  if (con_sol.includes(num)) {
+    console.log('in con_sol');
+    avatar.setHPMul(1.25*1.4);
+    avatar.setAEMul(0.75*1.4);
+    avatar.setSTRMul(1.2);
+    avatar.setPERMul(0.8*1.2);
+    avatar.setENDMul(1.4*1.2);
+    avatar.setCRMMul(0.8*1.2);
+    //avatar.setINTMul(1);
+    avatar.setAGIMul(0.8*0.6);
+    avatar.setLUKMul(0.6);
+  }
+  else if (rad_sol.includes(num)) {
+    console.log('in rad_sol');
+    avatar.setHPMul(1.25*0.75);
+    avatar.setAEMul(0.75*1.25);
+    avatar.setSTRMul(1.2*0.8);
+    avatar.setPERMul(0.8*0.8);
+    avatar.setENDMul(1.4*0.8);
+    avatar.setCRMMul(0.8*1.4);
+    avatar.setINTMul(1.4);
+    avatar.setAGIMul(0.8*1.4);
+    avatar.setLUKMul(1.6);
+  }
+  else if (unk_unk.includes(num)) {
+    console.log('in unk_unk');
+    avatar.setLUKMul(9);
+  }
+  else if (pre_sol.includes(num)) {
+    console.log('in pre_sol');
+    avatar.setHPMul(1.25*0.75);
+    avatar.setAEMul(0.75*1.2);
+    avatar.setSTRMul(1.2*0.8);
+    avatar.setPERMul(0.8);
+    avatar.setENDMul(1.4*0.8);
+    avatar.setCRMMul(0.8*1.4);
+    avatar.setINTMul(1.1);
+    avatar.setAGIMul(0.8);
+    avatar.setLUKMul(1.4);
+  }
+  else if (stu_sol.includes(num)) {
+    console.log('in stu_sol');
+    avatar.setHPMul(1.25*2);
+    avatar.setAEMul(0.75*0.5);
+    avatar.setSTRMul(1.2*1.75);
+    avatar.setPERMul(0.8*0.8);
+    avatar.setENDMul(1.4*1.5);
+    avatar.setCRMMul(0.8*0.8);
+    avatar.setINTMul(0.5);
+    avatar.setAGIMul(0.8*0.8);
+    //avatar.setLUKMul(1);
+  }
+  else if (rea_sol.includes(num)) {
+    console.log('in rea_sol');
+    avatar.setHPMul(1.25*0.8);
+    avatar.setAEMul(0.75*1.6);
+    avatar.setSTRMul(1.2);
+    avatar.setPERMul(0.8*1.2);
+    avatar.setENDMul(1.4*0.5);
+    avatar.setCRMMul(0.8*1.2);
+    avatar.setINTMul(1.2);
+    avatar.setAGIMul(0.8);
+    avatar.setLUKMul(1.2);
+  }
+  else if (tox_sol.includes(num)) {
+    console.log('in tox_sol');
+    avatar.setHPMul(1.25);
+    avatar.setAEMul(0.75*1.2);
+    avatar.setSTRMul(1.2);
+    avatar.setPERMul(0.8*1.4);
+    avatar.setENDMul(1.4);
+    avatar.setCRMMul(0.8*0.8);
+    avatar.setINTMul(1.4);
+    avatar.setAGIMul(0.8);
+    avatar.setLUKMul(0.8);
+  }
+  else if (nob_gas.includes(num)) {
+    console.log('in nob_gas');
+    avatar.setHPMul(0.75*0.9);
+    avatar.setAEMul(1.25*0.9);
+    avatar.setSTRMul(0.6*0.9);
+    avatar.setPERMul(1.4*0.9);
+    avatar.setENDMul(0.6*0.9);
+    avatar.setCRMMul(1.2*1.5);
+    avatar.setINTMul(0.9);
+    avatar.setAGIMul(1.2*0.9);
+    avatar.setLUKMul(2);
+  }
+  else if (rea_gas.includes(num)) {
+    console.log('in rea_gas');
+    avatar.setHPMul(0.75*0.8);
+    avatar.setAEMul(1.25*1.6);
+    avatar.setSTRMul(0.6);
+    avatar.setPERMul(1.4*1.2);
+    avatar.setENDMul(0.6*0.5);
+    avatar.setCRMMul(1.2*1.5);
+    avatar.setINTMul(1.2);
+    avatar.setAGIMul(1.2);
+    avatar.setLUKMul(1.2);
+  }
+  else if (rea_liq.includes(num)) {
+    console.log('in rea_liq');
+    avatar.setHPMul(0.8);
+    avatar.setAEMul(1.6);
+    //avatar.setSTRMul(1);
+    avatar.setPERMul(1.2);
+    avatar.setENDMul(0.5);
+    avatar.setCRMMul(1.5);
+    avatar.setINTMul(1.2);
+    //avatar.setAGIMul(1);
+    avatar.setLUKMul(1.2);
+  }
+  else if (tox_gas.includes(num)) {
+    console.log('in tox_gas');
+    avatar.setHPMul(0.75);
+    avatar.setAEMul(1.25*1.2);
+    avatar.setSTRMul(0.6);
+    avatar.setPERMul(1.4*1.4);
+    avatar.setENDMul(0.6);
+    avatar.setCRMMul(1.2*0.8);
+    avatar.setINTMul(1.4);
+    avatar.setAGIMul(1.2);
+    avatar.setLUKMul(0.8);
+  }
+  else if (tox_liq.includes(num)) {
+    console.log('in tox_liq');
+    //avatar.setHPMul(1);
+    avatar.setAEMul(1.2);
+    //avatar.setSTRMul(1);
+    avatar.setPERMul(1.4);
+    //avatar.setENDMul(1);
+    avatar.setCRMMul(0.8);
+    avatar.setINTMul(1.4);
+    //avatar.setAGIMul(1);
+    avatar.setLUKMul(0.8);
   }
 }
