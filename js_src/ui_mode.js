@@ -48,7 +48,7 @@ export class StartupMode extends UIMode { //defines how an object exists
 
     //test
     display.drawText(2,3,"Welcome to ");
-    display.drawText(2,5," _______  _______ _________          _______  _______ ");
+    display.drawText(3,5," _______  _______ _________          _______  _______ ");
     display.drawText(2,6,"(  ___  )(  ____ \\\\__   __/|\\     /|(  ____ \\(  ____ )");
     display.drawText(2,7,"| (   ) || (    \\/   ) (   | )   ( || (    \\/| (    )|");
     display.drawText(2,8,"| (___) || (__       | |   | (___) || (__    | (____)|");
