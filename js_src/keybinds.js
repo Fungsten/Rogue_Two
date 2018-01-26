@@ -65,6 +65,11 @@ let KEY_SETS = {
     'LOAD_GAME': ['key:l','key:L'],
     'CANCEL': ['key:Escape'],
   },
+  
+  'customize': {
+    'YES': ['key:y','key:Y'],
+    'NO': ['key:n','key:N'],
+  },
 
   'play': {
     'TO_PERSISTENCE': ['key:Escape'],
