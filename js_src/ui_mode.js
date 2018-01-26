@@ -222,6 +222,9 @@ export class PlayMode extends UIMode {
 
     let a = EntityFactory.create("avatar");
     this.game.globalAvatar = a;
+
+    a.setSTRMul(1.2);
+
     m.addEntityAtRandPos(a);
     // let b = EntityFactory.create("Brady");
 
