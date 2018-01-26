@@ -198,13 +198,17 @@ export class AvatarCreateMode extends UIMode {
   }
 
   chooseElement() {
-    this.currNum = Math.ceil(ROT.RNG.getUniform() * 118);
+    this.random = ROT.RNG.getUniform();
+    console.log('this.random');
+    console.log(this.random);
+    this.currNum = Math.ceil( this.random * 118);
     console.log('this.currNum');
     console.log(this.currNum);
     Message.send("Press Y for yes or N for no.");
   }
 
   render(display) {
+    display.clear();
     this.chooseElement();
     display.drawText(2,5, "Here is a number: " + this.currNum);
     display.drawText(2,7, "Do you like it?");
@@ -221,7 +225,8 @@ export class AvatarCreateMode extends UIMode {
         customizeChar(this.currNum,this.game.globalAvatar);
         console.log('global avatar:');
         console.dir(this.game.globalAvatar);
-        this.game.modes.play.enter();
+        this.game.modes.play.setupNewGame();
+        this.game.switchMode('play');
         return false;
       }
       if (input == COMMAND.NO) {
@@ -243,7 +248,6 @@ export class PlayMode extends UIMode {
     super.enter();
     //this.game.isPlaying = true;
     setKey(['play','movement','interact']);
-    this.setupNewGame();
   }
 
   toJSON() {
@@ -275,6 +279,23 @@ export class PlayMode extends UIMode {
     // };
 
     let a = this.game.globalAvatar;
+    a.setMaxHP(Math.ceil(a.getMaxHP() * a.getHPMul()));
+    a.setHP(a.getMaxHP());
+
+    console.log('max AE: '+ a.getMaxAE());
+    console.log('AE mul: '+ a.getAEMul());
+    console.log('multiplied: '+ a.getMaxAE()*a.getAEMul());
+    console.log('ceil: '+Math.ceil(a.getMaxAE() * a.getAEMul()));
+    a.setMaxAE(Math.ceil(a.getMaxAE() * a.getAEMul()));
+    a.setAE(a.getMaxAE());
+
+    a.setSTR((a.getSTR() * a.getSTRMul()).toFixed(2));
+    a.setPER((a.getPER() * a.getPERMul()).toFixed(2));
+    a.setEND((a.getEND() * a.getENDMul()).toFixed(2));
+    a.setCRM((a.getCRM() * a.getCRMMul()).toFixed(2));
+    a.setINT((a.getINT() * a.getINTMul()).toFixed(2));
+    a.setAGI((a.getAGI() * a.getAGIMul()).toFixed(2));
+    a.setLUK((a.getLUK() * a.getLUKMul()).toFixed(2));
 
     m.addEntityAtRandPos(a);
     // let b = EntityFactory.create("Brady");
