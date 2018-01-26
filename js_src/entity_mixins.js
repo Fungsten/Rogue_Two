@@ -143,6 +143,7 @@ export let HitPoints = {
       // do any initialization
       this.state._HP.maxHP = template.maxHP || 1;
       this.state._HP.curHP = template.curHP || this.state._HP.maxHP;
+      this.state._Hp.hpMul = 1;
     }
   },
   METHODS: {
@@ -170,6 +171,14 @@ export let HitPoints = {
 
     getMaxHP: function(max) {
       return this.state._HP.maxHP;
+    },
+
+    setHpMul: function(newMul) {
+      this.state._HP.hpMul = newMul;
+    },
+
+    getHpMul: function() {
+      return this.state._HP.hpMul;
     }
   },
   LISTENERS: {
@@ -191,7 +200,7 @@ export let HitPoints = {
       }
     },
     'levelUp': function() {
-      this.setMaxHP(this.getMaxHP() + 2);
+      this.setMaxHP(Math.Ceil(this.getMaxHP() * this.getHPMul()));
       this.setHP(this.getMaxHP());
     },
     'turnTaken': function(evtData) {
@@ -216,6 +225,7 @@ export let Aether = {
       // do any initialization
       this.state._AE.maxAE = template.maxAE || 1;
       this.state._AE.curAE = template.curAE || this.state._AE.maxAE;
+      this.state._AE.AEmul = 1;
     }
   },
   METHODS: {
@@ -238,11 +248,19 @@ export let Aether = {
 
     getMaxAE: function(max) {
       return this.state._AE.maxAE;
+    },
+
+    setAEMul: function(newMul) {
+      this.state._AE.AEMul = newMul;
+    },
+
+    getAEMul: function() {
+      return this.state._AE.AEMul;
     }
   },
   LISTENERS: {
     'levelUp': function() {
-      this.setMaxAE(Math.ceil(this.getMaxAE() * 1.01));
+      this.setMaxAE(Math.ceil(this.getMaxAE() * this.getAEMul()));
       this.setAE(this.getMaxAE());
     },
     'turnTaken': function(evtData) {
@@ -277,7 +295,8 @@ export let MeleeAttacker = {
     },
     setMeleeDamage: function(n) {
       this.state._MeleeAttacker.meleeDamage = n;
-    }
+    },
+
   },
   LISTENERS: {
     'bumpEntity': function(evtData) {
@@ -289,7 +308,7 @@ export let MeleeAttacker = {
       // evtData.target.raiseMixinEvent('damaged', {src: this, damageAmount: this.getMeleeDamage()});
       // console.log("ATTACK");
       if (this.getName() == 'avatar' && evtData.target.getName() != 'Door') {
-        this.state.bumped = true;
+        //this.state.bumped = true;
         this.setTarget(evtData.target);
 
         Message.send("What would you like to do to " + evtData.target.getName() + "?\n" +
@@ -300,7 +319,7 @@ export let MeleeAttacker = {
                       "m. Cancel");
         // this.handleInput(eventType,evt);
       } else if (this.getName() == 'avatar' && evtData.target.getName() == 'Door') {
-        this.state.bumped = true;
+        //this.state.bumped = true;
         this.setTarget(evtData.target);
 
         Message.send("You've found the door \n" +
@@ -454,22 +473,36 @@ export let Special = {
     stateNameSpace: '_SP',
     stateModel: {
       str: 0,
+      strMul: 0,
       per: 0,
+      perMul: 0,
       end: 0,
+      endMul: 0,
       crm: 0,
+      crmMul: 0,
       int: 0,
+      intMul: 0,
       agi: 0,
+      agiMul: 0,
       luk: 0,
+      lukMul: 0,
     },
     initialize: function(template) {
       // do any initialization
       this.state._SP.str = template.str || 1;
+      this.state._SP.strMul = 1;
       this.state._SP.per = template.per || 1;
+      this.state._SP.perMul = 1;
       this.state._SP.end = template.end || 1;
+      this.state._SP.endMul = 1;
       this.state._SP.crm = template.crm || 1;
+      this.state._SP.crmMul = 1;
       this.state._SP.int = template.int || 1;
+      this.state._SP.intMul = 1;
       this.state._SP.agi = template.agi || 1;
+      this.state._SP.agiMul = 1;
       this.state._SP.luk = template.luk || 1;
+      this.state._SP.lukMul = 1;
     }
   },
   METHODS: {
@@ -477,77 +510,170 @@ export let Special = {
       this.state._SP.str = newSTR;
     },
 
+    getSTR: function() {
+      return this.state._SP.str;
+    },
+
+    setSTRMul: function(newMul) {
+      this.state._SP.strMul = newMul;
+    },
+
+    getSTRMul: function() {
+      return this.state._SP.strMul;
+    },
+
     changeSTR: function(delta) {
       if (this.state._SP.str + delta <= 0) {
         this.state._SP.str = 0;
       } else {
-        this.state._SP.str += delta;
+        this.state._SP.str += Math.ceil(delta*this.getSTRMul());
       }
     },
+
+    setPER: function(newPER) {
+      this.state._SP.per = newPER;
+    },
+
+    getPER: function() {
+      return this.state._SP.per;
+    },
+
+    setPERMul: function(newMul) {
+      this.state._SP.perMul = newMul;
+    },
+
+    getPERMul: function() {
+      return this.state._SP.perMul;
+    },
+
     changePER: function(delta) {
       if (this.state._SP.per + delta <= 0) {
         this.state._SP.per = 0;
       } else {
-        this.state._SP.per += delta;
+        this.state._SP.per += Math.ceil(delta*this.getPERMul());
       }
     },
+
+    setEND: function(newEND) {
+      this.state._SP.end = newEND;
+    },
+
+    getEND: function() {
+      return this.state._SP.end;
+    },
+
+    setENDMul: function(newMul) {
+      this.state._SP.endMul = newMul;
+    },
+
+    getENDMul: function() {
+      return this.state._SP.endMul;
+    },
+
     changeEND: function(delta) {
       if (this.state._SP.end + delta <= 0) {
         this.state._SP.end = 0;
       } else {
-        this.state._SP.end += delta;
+        this.state._SP.end += Math.ceil(delta*this.getENDMul());
       }
     },
+
+    setCRM: function(newCRM) {
+      this.state._SP.crm = newCRM;
+    },
+
+    getCRM: function() {
+      return this.state._SP.crm;
+    },
+
+    setCRMMul: function(newMul) {
+      this.state._SP.crmMul = newMul;
+    },
+
+    getCRMMul: function() {
+      return this.state._SP.crmMul;
+    },
+
     changeCRM: function(delta) {
       if (this.state._SP.crm + delta <= 0) {
         this.state._SP.crm = 0;
       } else {
-        this.state._SP.crm += delta;
+        this.state._SP.crm += Math.ceil(delta*this.getCRMMul());
       }
     },
+
+    setINT: function(newINT) {
+      this.state._SP.str = newINT;
+    },
+
+    getINT: function() {
+      return this.state._SP.str;
+    },
+
+    setINTMul: function(newMul) {
+      this.state._SP.strMul = newMul;
+    },
+
+    getINTMul: function() {
+      return this.state._SP.strMul;
+    },
+
     changeINT: function(delta) {
       if (this.state._SP.int + delta <= 0) {
         this.state._SP.int = 0;
       } else {
-        this.state._SP.int += delta;
+        this.state._SP.int += Math.ceil(delta*this.getINTMul());
       }
     },
+
+    setAGI: function(newAGI) {
+      this.state._SP.agi = newAGI;
+    },
+
+    getAGI: function() {
+      return this.state._SP.agi;
+    },
+
+    setAGIMul: function(newMul) {
+      this.state._SP.agiMul = newMul;
+    },
+
+    getAGIMul: function() {
+      return this.state._SP.agiMul;
+    },
+
     changeAGI: function(delta) {
       if (this.state._SP.agi + delta <= 0) {
         this.state._SP.agi = 0;
       } else {
-        this.state._SP.agi += delta;
+        this.state._SP.agi += Math.ceil(delta*this.getAGIMul());
       }
     },
+
+    setLUK: function(newLUK) {
+      this.state._SP.luk = newLUK;
+    },
+
+    getLUK: function() {
+      return this.state._SP.luk;
+    },
+
+    setLUKMul: function(newMul) {
+      this.state._SP.lukMul = newMul;
+    },
+
+    getLUKMul: function() {
+      return this.state._SP.lukMul;
+    },
+
     changeLUK: function(delta) {
       if (this.state._SP.luk + delta <= 0) {
         this.state._SP.luk = 0;
       } else {
-        this.state._SP.luk += delta;
+        this.state._SP.luk += Math.ceil(delta*this.getLUKMul());
       }
     },
 
-    getSTR: function() {
-      return this.state._SP.str;
-    },
-    getPER: function() {
-      return this.state._SP.per;
-    },
-    getEND: function() {
-      return this.state._SP.end;
-    },
-    getCRM: function() {
-      return this.state._SP.crm;
-    },
-    getINT: function() {
-      return this.state._SP.int;
-    },
-    getAGI: function() {
-      return this.state._SP.agi;
-    },
-    getLUK: function() {
-      return this.state._SP.luk;
-    },
   },
   LISTENERS: {
     'levelUp': function() {
@@ -619,6 +745,7 @@ export let Currency = {
     },
     initialize: function(template) {
       this.state._Currency = template.money || 10;
+      this.state._CurrMul = 1;
     }
   },
   METHODS: {
@@ -627,11 +754,17 @@ export let Currency = {
     },
     getMoreMoney: function(n) {
       this.state._Currency += n;
+    },
+    setCurrMul: function(newMul) {
+      this.state._CurrMUl = newmul;
+    },
+    getCurrMul: function() {
+      return this.state._CurrMul;
     }
   },
   LISTENERS: {
     'defeats': function(evtData) {
-      this.getMoreMoney(evtData.target.getYield());
+      this.getMoreMoney(Math.ceil(evtData.target.getYield()*this.getMul()));
     }
   }
 };

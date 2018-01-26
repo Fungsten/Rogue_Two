@@ -59,6 +59,11 @@ let KEY_SETS = {
     'HELP': ['key:h'],
   },
 
+  'customize': {
+    'YES': ['key:y','key:Y'],
+    'NO': ['key:n','key:N'],
+  },
+
   'persistence': {
     'NEW_GAME': ['key:n','key:N'],
     'SAVE_GAME': ['key:s','key:S'],

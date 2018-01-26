@@ -2,6 +2,8 @@
 
 import ROT from 'rot-js';
 import {Game} from './game.js';
+import {UIMode} from './ui_mode_base.js';
+import {Customize} from './ui_layer.js';
 import {MapMaker} from './map.js';
 import {Message} from './message.js';
 import {MixableSymbol} from './mixable_symbol.js';
@@ -10,33 +12,34 @@ import {Entity} from './entity.js';
 import {EntityFactory} from './entitiesspawn.js';
 import {SCHEDULER, TIME_ENGINE, initTiming} from './timing.js';
 import {COMMAND, getInput, setKey} from './keybinds.js';
+import {customizeChar} from './customization.js';
 
-class UIMode {
-  constructor(thegame) {
-    console.log("created "+this.constructor.name);
-    this.game = thegame;
-  }
-
-  enter() {
-    console.log("entered "+this.constructor.name);
-  } //do something when entering this state
-  exit() {
-    console.log("exitted "+this.constructor.name);
-  } //do something when leaving this state
-  handleInput(eventType, evt) {
-    console.log("handling input for "+this.constructor.name);
-    console.log(`event type is ${eventType}`);
-    console.dir(evt);
-    return false;
-  } //take input from user / player
-  render(display) {
-    console.log("rendering "+this.constructor.name);
-    display.drawText(2,2,"rendering "+this.constructor.name);
-  } //render
-  renderAvatar(display) {
-    display.clear();
-  }
-}
+// class UIMode {
+//   constructor(thegame) {
+//     console.log("created "+this.constructor.name);
+//     this.game = thegame;
+//   }
+//
+//   enter() {
+//     console.log("entered "+this.constructor.name);
+//   } //do something when entering this state
+//   exit() {
+//     console.log("exitted "+this.constructor.name);
+//   } //do something when leaving this state
+//   handleInput(eventType, evt) {
+//     console.log("handling input for "+this.constructor.name);
+//     console.log(`event type is ${eventType}`);
+//     console.dir(evt);
+//     return false;
+//   } //take input from user / player
+//   render(display) {
+//     console.log("rendering "+this.constructor.name);
+//     display.drawText(2,2,"rendering "+this.constructor.name);
+//   } //render
+//   renderAvatar(display) {
+//     display.clear();
+//   }
+// }
 
 //-----------------------------------------------------
 //-----------------------------------------------------
@@ -59,8 +62,6 @@ export class StartupMode extends UIMode { //defines how an object exists
 
   handleInput(eventType, evt) {
     if (eventType == "keyup") {
-      // console.log("what is this");
-      // console.dir(this);
       this.game.switchMode('persistence');
       return true;
     }
@@ -73,9 +74,6 @@ export class StartupMode extends UIMode { //defines how an object exists
 export class PersistenceMode extends UIMode {
   enter() {
     super.enter();
-    // if (window.localStorage.getItem("roguetwogame")){
-    //   this.game.hasSaved = true;
-    // }
     setKey('persistence');
   }
 
@@ -89,7 +87,6 @@ export class PersistenceMode extends UIMode {
     if (this.game.hasSaved){
       display.drawText(33,4,"L to load previously saved game");
     }
-
   }
 
   handleInput(eventType,evt) {
@@ -150,11 +147,6 @@ export class PersistenceMode extends UIMode {
 
     for (let entityID in state.ENTITIES) {
       let entState = JSON.parse(state.ENTITIES[entityID]);
-      console.log("state.ENTITIES: ");
-      console.log(state.ENTITIES);
-      console.log("The entState is: ");
-      console.log(entState.name);
-      // DATASTORE.ENTITIES
       EntityFactory.create(entState.name, entState);
     }
 
@@ -221,6 +213,8 @@ export class PlayMode extends UIMode {
     initTiming();
 
     let a = EntityFactory.create("avatar");
+    let custom = new Customize(this.game, this, a);
+    this.game.addUILayer(custom);
     m.addEntityAtRandPos(a);
     // let b = EntityFactory.create("Brady");
 
@@ -286,11 +280,6 @@ export class PlayMode extends UIMode {
         this.game.switchMode('persistence');
         return true;
       }
-
-      // if (input == COMMAND.MESSAGES) {
-      //   this.game.switchMode('messages');
-      //   return true;
-      // }
 
       //upper left
       if (input == COMMAND.UL) {
@@ -397,7 +386,7 @@ export class PlayMode extends UIMode {
         this.getAvatar().raiseMixinEvent('attacks', {actor: this.getAvatar(), target: this.getAvatar().state.activeTarget});
         this.getAvatar().raiseMixinEvent('turnTaken', {'timeUsed': 1});
         this.getAvatar().raiseMixinEvent('attackUsed');
-        this.getAvatar().state.activeTarget.raiseMixinEvent('damaged', {src: this.getAvatar(), damageAmount: this.getAvatar().getMeleeDamage()});
+        this.getAvatar().state.activeTarget.raiseMixinEvent('damaged', {src: this.getAvatar(), damageAmount: Math.ceil(this.getAvatar().getMeleeDamage() * this.getAvatar().getSTRMul())});
         this.getAvatar().setTarget('');
         this.getAvatar().raiseMixinEvent('playerHasMoved');
         return true;
@@ -408,8 +397,8 @@ export class PlayMode extends UIMode {
 
         if (this.getAvatar().state.activeTarget.getMoney() != 0) {
           Message.send("You stole " + this.getAvatar().state.activeTarget.getMoney() + " credits.");
-          this.getAvatar().getMoreMoney(this.getAvatar().state.activeTarget.getMoney());
-          this.getAvatar().state.activeTarget.getMoreMoney(this.getAvatar().state.activeTarget.getMoney() * -1);
+          this.getAvatar().getMoreMoney(Math.ceil(this.getAvatar().state.activeTarget.getMoney() * this.getAvatar().getCurrMul()));
+          this.getAvatar().state.activeTarget.getMoreMoney(this.getAvatar().state.activeTarget.getMoney() * this.getAvatar().getCurrMul() * -1);
           this.getAvatar().gainExp(50 * (this.getAvatar().state.activeTarget.getLevel() + 1));
 
 

@@ -25,7 +25,7 @@ export let Game = {
     }
 
   },
-  curMode: '',
+  curModeStack: [],
   modes: {
     startup: '',
     persistence: '',
@@ -77,12 +77,32 @@ export let Game = {
 
 
   switchMode: function(newModeName) {
-    if (this.curMode) {
-      this.curMode.exit();
+    if (this.curModeStack.length > 0) {
+      this.removeAllUILayers();
+      this.curModeStack[0].exit();
     }
-    this.curMode = this.modes[newModeName];
-    if (this.curMode) {
-      this.curMode.enter();
+    this.curModeStack[0] = this.modes[newModeName];
+    this.curModeStack[0].enter();
+    this.render();
+  },
+
+  addUILayer: function(layer) {
+    this.curModeStack.unshift(layer);
+    this.curModeStack[0].enter();
+    this.render();
+  },
+
+  removeUILayer: function() {
+    if (this.curModeStack.length > 0 && this.curModeStack[0].isLayer()) {
+      this.curModeStack[0].exit();
+      this.curModeStack.shift();
+    }
+    this.render();
+  },
+  
+  removeAllUILayers: function() {
+    while (this.curModeStack.length > 0 && this.curModeStack[0].isLayer()) {
+      this.removeUILayer();
     }
   },
 
